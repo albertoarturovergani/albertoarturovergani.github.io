@@ -1,0 +1,154 @@
+{
+  "items": [
+    {
+      "id": "computational-models",
+      "label": "Computational Models",
+      "count": 26
+    },
+    {
+      "id": "cognitive-decline",
+      "label": "Cognitive Decline",
+      "count": 25
+    },
+    {
+      "id": "eeg",
+      "label": "EEG",
+      "count": 23
+    },
+    {
+      "id": "cerebellum",
+      "label": "Cerebellum",
+      "count": 19
+    },
+    {
+      "id": "schizophrenia",
+      "label": "Schizophrenia",
+      "count": 16
+    },
+    {
+      "id": "visual-attention",
+      "label": "Visual Attention",
+      "count": 16
+    },
+    {
+      "id": "machine-learning",
+      "label": "Machine Learning",
+      "count": 12
+    },
+    {
+      "id": "neuroimaging",
+      "label": "Neuroimaging",
+      "count": 12
+    },
+    {
+      "id": "alzheimer-disease",
+      "label": "Alzheimer’s Disease",
+      "count": 11
+    },
+    {
+      "id": "neural-dynamics",
+      "label": "Neural Dynamics",
+      "count": 10
+    },
+    {
+      "id": "erp",
+      "label": "ERP",
+      "count": 9
+    },
+    {
+      "id": "history-of-neuroscience",
+      "label": "History of Neuroscience",
+      "count": 9
+    },
+    {
+      "id": "neuroengineering",
+      "label": "Neuroengineering",
+      "count": 9
+    },
+    {
+      "id": "brain-stimulation",
+      "label": "Brain Stimulation",
+      "count": 8
+    },
+    {
+      "id": "clustering",
+      "label": "Clustering",
+      "count": 8
+    },
+    {
+      "id": "fmri",
+      "label": "fMRI",
+      "count": 8
+    },
+    {
+      "id": "soft-clustering",
+      "label": "Soft Clustering",
+      "count": 8
+    },
+    {
+      "id": "dopamine",
+      "label": "Dopamine",
+      "count": 7
+    },
+    {
+      "id": "atrophy",
+      "label": "Atrophy",
+      "count": 6
+    },
+    {
+      "id": "predictive-modelling",
+      "label": "Predictive Modelling",
+      "count": 6
+    },
+    {
+      "id": "brain-resilience",
+      "label": "Brain Resilience",
+      "count": 5
+    },
+    {
+      "id": "digital-twins",
+      "label": "Digital Twins",
+      "count": 5
+    },
+    {
+      "id": "neurodevelopment",
+      "label": "Neurodevelopment",
+      "count": 5
+    },
+    {
+      "id": "epilepsy",
+      "label": "Epilepsy",
+      "count": 4
+    },
+    {
+      "id": "spiking-networks",
+      "label": "Spiking Networks",
+      "count": 4
+    },
+    {
+      "id": "functional-connectivity",
+      "label": "Functional Connectivity",
+      "count": 3
+    },
+    {
+      "id": "tms-eeg",
+      "label": "TMS–EEG",
+      "count": 3
+    },
+    {
+      "id": "neural-networks",
+      "label": "Neural Networks",
+      "count": 2
+    },
+    {
+      "id": "autism",
+      "label": "Autism",
+      "count": 1
+    },
+    {
+      "id": "dosimetry",
+      "label": "Dosimetry",
+      "count": 1
+    }
+  ]
+}

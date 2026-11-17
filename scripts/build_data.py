@@ -22,6 +22,8 @@ BIB = ROOT / 'vergani_scholar.bib'
 OUT = ROOT / 'data' / 'publications.json'
 OVERRIDES_FILE = ROOT / 'content' / 'status.json'
 TOPICS_FILE = ROOT / 'content' / 'topics.json'
+WORDCLOUD_FILE = ROOT / 'content' / 'wordcloud.json'
+WORDCLOUD_OUTPUT = ROOT / 'data' / 'wordcloud.json'
 
 TOPICS = {'neuroscience', 'computer-science', 'history', 'neuroengineering', 'education', 'brain-modelling', 'machine-learning', 'eeg', 'neuroimaging', 'cerebellum', 'cognitive-decline', 'schizophrenia', 'brain-stimulation', 'spiking-networks', 'dopamine', 'neurodevelopment', 'other'}
 
@@ -295,6 +297,47 @@ def normalize(entry: dict[str, str], overrides: dict, topic_overrides: dict) -> 
     return item
 
 
+
+def build_wordcloud(items: list[dict]) -> None:
+    """Build an editable, clickable research word cloud from the bibliography.
+
+    The weight of each concept is the number of distinct matching records,
+    not raw text frequency. A work can belong to several concepts.
+    """
+    if not WORDCLOUD_FILE.exists():
+        raise FileNotFoundError('Missing word cloud specification: ' + str(WORDCLOUD_FILE))
+    config = json.loads(WORDCLOUD_FILE.read_text(encoding='utf-8'))
+    concepts = config.get('concepts', [])
+    if not isinstance(concepts, list) or not concepts:
+        raise ValueError('Word cloud must contain a nonempty concepts list')
+    seen = set()
+    for item in items:
+        item['keywords'] = []
+    output = []
+    for concept in concepts:
+        key = concept['id']
+        if not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', key) or key in seen:
+            raise ValueError('Invalid or duplicate word cloud id: ' + str(key))
+        seen.add(key)
+        label = concept['label']
+        topic_codes = set(concept.get('topics', []))
+        if topic_codes - TOPICS:
+            raise ValueError('Unknown topic codes for keyword: ' + key)
+        pattern = re.compile(concept.get('pattern', r'(?!)'), flags=re.I)
+        match_count = 0
+        for item in items:
+            searchable_content = ' '.join(str(item.get(k, '')) for k in ('title', 'venue'))
+            if topic_codes.intersection(item.get('topics', [])) or pattern.search(searchable_content):
+                item['keywords'].append(key)
+                match_count += 1
+        if match_count:
+            output.append({'id': key, 'label': label, 'count': match_count})
+    output.sort(key=lambda c: (-c['count'], c['label'].casefold()))
+    WORDCLOUD_OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    WORDCLOUD_OUTPUT.write_text(json.dumps({'items': output}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    print('Word cloud:', len(output), 'terms linked to', len(items), 'bibliographic records')
+
+
 def main() -> int:
     entries = parse_bib(BIB.read_text(encoding='utf-8'))
     overrides = json.loads(OVERRIDES_FILE.read_text(encoding='utf-8')) if OVERRIDES_FILE.exists() else {}
@@ -318,6 +361,7 @@ def main() -> int:
     not_found = set(topic_overrides) - set(unique)
     if not_found:
         print('WARNING: topic metadata has unused keys: ' + ', '.join(sorted(not_found)), file=sys.stderr)
+    build_wordcloud(normalized)
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps({'items': normalized}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     from collections import Counter

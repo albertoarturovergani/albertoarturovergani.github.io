@@ -16,6 +16,13 @@
         "neuroengineering",
         "eeg",
         "brain-stimulation"
+      ],
+      "keywords": [
+        "eeg",
+        "visual-attention",
+        "neuroengineering",
+        "brain-stimulation",
+        "tms-eeg"
       ]
     },
     {
@@ -36,6 +43,12 @@
         "brain-modelling",
         "cerebellum",
         "brain-stimulation"
+      ],
+      "keywords": [
+        "computational-models",
+        "cerebellum",
+        "neuroengineering",
+        "brain-stimulation"
       ]
     },
     {
@@ -54,6 +67,12 @@
         "neuroengineering",
         "brain-stimulation",
         "neurodevelopment"
+      ],
+      "keywords": [
+        "neuroengineering",
+        "brain-stimulation",
+        "neurodevelopment",
+        "epilepsy"
       ]
     },
     {
@@ -71,6 +90,11 @@
         "neuroscience",
         "computer-science",
         "brain-modelling"
+      ],
+      "keywords": [
+        "computational-models",
+        "neural-dynamics",
+        "digital-twins"
       ]
     },
     {
@@ -87,6 +111,9 @@
       "topics": [
         "neuroscience",
         "history"
+      ],
+      "keywords": [
+        "history-of-neuroscience"
       ]
     },
     {
@@ -103,6 +130,9 @@
       "topics": [
         "neuroscience",
         "history"
+      ],
+      "keywords": [
+        "history-of-neuroscience"
       ]
     },
     {
@@ -120,6 +150,12 @@
         "neuroscience",
         "eeg",
         "cognitive-decline"
+      ],
+      "keywords": [
+        "cognitive-decline",
+        "eeg",
+        "visual-attention",
+        "alzheimer-disease"
       ]
     },
     {
@@ -139,6 +175,12 @@
         "neuroengineering",
         "eeg",
         "brain-stimulation"
+      ],
+      "keywords": [
+        "eeg",
+        "neuroengineering",
+        "brain-stimulation",
+        "tms-eeg"
       ]
     },
     {
@@ -156,6 +198,9 @@
         "computer-science",
         "education",
         "machine-learning"
+      ],
+      "keywords": [
+        "machine-learning"
       ]
     },
     {
@@ -171,6 +216,9 @@
       "note": "",
       "topics": [
         "history"
+      ],
+      "keywords": [
+        "history-of-neuroscience"
       ]
     },
     {
@@ -187,6 +235,10 @@
       "topics": [
         "neuroscience",
         "cognitive-decline"
+      ],
+      "keywords": [
+        "cognitive-decline",
+        "alzheimer-disease"
       ]
     },
     {
@@ -204,6 +256,11 @@
         "neuroscience",
         "cerebellum",
         "schizophrenia"
+      ],
+      "keywords": [
+        "cerebellum",
+        "schizophrenia",
+        "predictive-modelling"
       ]
     },
     {
@@ -223,6 +280,12 @@
         "brain-modelling",
         "cerebellum",
         "schizophrenia"
+      ],
+      "keywords": [
+        "computational-models",
+        "cerebellum",
+        "schizophrenia",
+        "atrophy"
       ]
     },
     {
@@ -241,6 +304,12 @@
         "computer-science",
         "eeg",
         "neurodevelopment"
+      ],
+      "keywords": [
+        "eeg",
+        "neurodevelopment",
+        "functional-connectivity",
+        "autism"
       ]
     },
     {
@@ -260,6 +329,16 @@
         "eeg",
         "brain-stimulation",
         "neurodevelopment"
+      ],
+      "keywords": [
+        "eeg",
+        "neural-dynamics",
+        "neuroengineering",
+        "brain-stimulation",
+        "neurodevelopment",
+        "epilepsy",
+        "tms-eeg",
+        "functional-connectivity"
       ]
     },
     {
@@ -280,6 +359,13 @@
         "brain-modelling",
         "cerebellum",
         "brain-stimulation"
+      ],
+      "keywords": [
+        "computational-models",
+        "cerebellum",
+        "neuroengineering",
+        "brain-stimulation",
+        "dosimetry"
       ]
     },
     {
@@ -300,6 +386,12 @@
         "cerebellum",
         "schizophrenia",
         "dopamine"
+      ],
+      "keywords": [
+        "computational-models",
+        "cerebellum",
+        "schizophrenia",
+        "dopamine"
       ]
     },
     {
@@ -316,6 +408,9 @@
       "topics": [
         "neuroscience",
         "cognitive-decline"
+      ],
+      "keywords": [
+        "cognitive-decline"
       ]
     },
     {
@@ -331,6 +426,9 @@
       "note": "",
       "topics": [
         "history"
+      ],
+      "keywords": [
+        "history-of-neuroscience"
       ]
     },
     {
@@ -349,6 +447,12 @@
         "computer-science",
         "brain-modelling",
         "cognitive-decline"
+      ],
+      "keywords": [
+        "computational-models",
+        "cognitive-decline",
+        "alzheimer-disease",
+        "digital-twins"
       ]
     },
     {
@@ -367,6 +471,13 @@
         "eeg",
         "neuroimaging",
         "cognitive-decline"
+      ],
+      "keywords": [
+        "cognitive-decline",
+        "eeg",
+        "visual-attention",
+        "neuroimaging",
+        "erp"
       ]
     },
     {
@@ -384,6 +495,10 @@
         "neuroscience",
         "computer-science",
         "eeg"
+      ],
+      "keywords": [
+        "eeg",
+        "neural-dynamics"
       ]
     },
     {
@@ -400,6 +515,9 @@
       "topics": [
         "neuroscience",
         "history"
+      ],
+      "keywords": [
+        "history-of-neuroscience"
       ]
     },
     {
@@ -418,6 +536,13 @@
         "computer-science",
         "brain-modelling",
         "cognitive-decline"
+      ],
+      "keywords": [
+        "computational-models",
+        "cognitive-decline",
+        "alzheimer-disease",
+        "atrophy",
+        "digital-twins"
       ]
     },
     {
@@ -435,6 +560,10 @@
         "neuroscience",
         "history",
         "neuroengineering"
+      ],
+      "keywords": [
+        "neuroengineering",
+        "history-of-neuroscience"
       ]
     },
     {
@@ -453,6 +582,10 @@
         "computer-science",
         "brain-modelling",
         "cerebellum"
+      ],
+      "keywords": [
+        "computational-models",
+        "cerebellum"
       ]
     },
     {
@@ -468,6 +601,10 @@
       "note": "Presented at the Second MNESYS Meeting on Neural Plasticity and Connectivity, Naples, 24–25 September 2025",
       "topics": [
         "neuroscience",
+        "cerebellum",
+        "schizophrenia"
+      ],
+      "keywords": [
         "cerebellum",
         "schizophrenia"
       ]
@@ -489,6 +626,12 @@
         "brain-modelling",
         "cerebellum",
         "schizophrenia"
+      ],
+      "keywords": [
+        "computational-models",
+        "cerebellum",
+        "schizophrenia",
+        "brain-resilience"
       ]
     },
     {
@@ -507,6 +650,12 @@
         "cerebellum",
         "schizophrenia",
         "dopamine"
+      ],
+      "keywords": [
+        "cerebellum",
+        "schizophrenia",
+        "neural-dynamics",
+        "dopamine"
       ]
     },
     {
@@ -524,6 +673,12 @@
         "neuroscience",
         "cerebellum",
         "schizophrenia",
+        "dopamine"
+      ],
+      "keywords": [
+        "cerebellum",
+        "schizophrenia",
+        "neural-dynamics",
         "dopamine"
       ]
     },
@@ -544,6 +699,13 @@
         "brain-modelling",
         "cerebellum",
         "schizophrenia"
+      ],
+      "keywords": [
+        "computational-models",
+        "cerebellum",
+        "schizophrenia",
+        "neural-dynamics",
+        "brain-resilience"
       ]
     },
     {
@@ -563,6 +725,12 @@
         "brain-modelling",
         "cerebellum",
         "schizophrenia"
+      ],
+      "keywords": [
+        "computational-models",
+        "cerebellum",
+        "schizophrenia",
+        "brain-resilience"
       ]
     },
     {
@@ -581,6 +749,13 @@
         "computer-science",
         "brain-modelling",
         "cognitive-decline"
+      ],
+      "keywords": [
+        "computational-models",
+        "cognitive-decline",
+        "alzheimer-disease",
+        "atrophy",
+        "digital-twins"
       ]
     },
     {
@@ -599,6 +774,13 @@
         "eeg",
         "cerebellum",
         "schizophrenia",
+        "dopamine"
+      ],
+      "keywords": [
+        "eeg",
+        "cerebellum",
+        "schizophrenia",
+        "neural-dynamics",
         "dopamine"
       ]
     },
@@ -619,6 +801,12 @@
         "brain-modelling",
         "cerebellum",
         "schizophrenia"
+      ],
+      "keywords": [
+        "computational-models",
+        "cerebellum",
+        "schizophrenia",
+        "atrophy"
       ]
     },
     {
@@ -634,6 +822,11 @@
       "note": "Presented at the Second MNESYS Meeting on Neural Plasticity and Connectivity, Naples, 24–25 September 2025",
       "topics": [
         "neuroscience",
+        "cerebellum",
+        "schizophrenia",
+        "dopamine"
+      ],
+      "keywords": [
         "cerebellum",
         "schizophrenia",
         "dopamine"
@@ -656,6 +849,12 @@
         "brain-modelling",
         "cerebellum",
         "schizophrenia"
+      ],
+      "keywords": [
+        "computational-models",
+        "cerebellum",
+        "schizophrenia",
+        "brain-resilience"
       ]
     },
     {
@@ -675,6 +874,12 @@
         "brain-modelling",
         "cerebellum",
         "schizophrenia"
+      ],
+      "keywords": [
+        "computational-models",
+        "cerebellum",
+        "schizophrenia",
+        "brain-resilience"
       ]
     },
     {
@@ -692,6 +897,11 @@
         "neuroscience",
         "computer-science",
         "brain-modelling",
+        "cerebellum",
+        "schizophrenia"
+      ],
+      "keywords": [
+        "computational-models",
         "cerebellum",
         "schizophrenia"
       ]
@@ -712,6 +922,12 @@
         "neuroengineering",
         "brain-stimulation",
         "neurodevelopment"
+      ],
+      "keywords": [
+        "neuroengineering",
+        "brain-stimulation",
+        "neurodevelopment",
+        "epilepsy"
       ]
     },
     {
@@ -730,6 +946,12 @@
         "neuroengineering",
         "brain-stimulation",
         "neurodevelopment"
+      ],
+      "keywords": [
+        "neuroengineering",
+        "brain-stimulation",
+        "neurodevelopment",
+        "epilepsy"
       ]
     },
     {
@@ -745,6 +967,9 @@
       "note": "",
       "topics": [
         "neuroscience",
+        "dopamine"
+      ],
+      "keywords": [
         "dopamine"
       ]
     },
@@ -763,6 +988,10 @@
         "neuroscience",
         "history",
         "eeg"
+      ],
+      "keywords": [
+        "eeg",
+        "history-of-neuroscience"
       ]
     },
     {
@@ -780,6 +1009,10 @@
         "neuroscience",
         "history",
         "brain-modelling"
+      ],
+      "keywords": [
+        "computational-models",
+        "history-of-neuroscience"
       ]
     },
     {
@@ -799,6 +1032,13 @@
         "brain-modelling",
         "eeg",
         "cognitive-decline"
+      ],
+      "keywords": [
+        "computational-models",
+        "cognitive-decline",
+        "eeg",
+        "alzheimer-disease",
+        "atrophy"
       ]
     },
     {
@@ -816,6 +1056,12 @@
         "neuroscience",
         "eeg",
         "cognitive-decline"
+      ],
+      "keywords": [
+        "cognitive-decline",
+        "eeg",
+        "visual-attention",
+        "erp"
       ]
     },
     {
@@ -834,6 +1080,12 @@
         "computer-science",
         "eeg",
         "cognitive-decline"
+      ],
+      "keywords": [
+        "cognitive-decline",
+        "eeg",
+        "alzheimer-disease",
+        "predictive-modelling"
       ]
     },
     {
@@ -849,6 +1101,9 @@
       "note": "",
       "topics": [
         "neuroscience",
+        "cognitive-decline"
+      ],
+      "keywords": [
         "cognitive-decline"
       ]
     },
@@ -867,6 +1122,12 @@
         "neuroscience",
         "eeg",
         "cognitive-decline"
+      ],
+      "keywords": [
+        "cognitive-decline",
+        "eeg",
+        "visual-attention",
+        "erp"
       ]
     },
     {
@@ -886,6 +1147,12 @@
         "brain-modelling",
         "cerebellum",
         "schizophrenia"
+      ],
+      "keywords": [
+        "computational-models",
+        "cerebellum",
+        "schizophrenia",
+        "atrophy"
       ]
     },
     {
@@ -904,6 +1171,12 @@
         "computer-science",
         "machine-learning",
         "cognitive-decline"
+      ],
+      "keywords": [
+        "cognitive-decline",
+        "machine-learning",
+        "alzheimer-disease",
+        "predictive-modelling"
       ]
     },
     {
@@ -923,6 +1196,12 @@
         "eeg",
         "neuroimaging",
         "cognitive-decline"
+      ],
+      "keywords": [
+        "cognitive-decline",
+        "eeg",
+        "neuroimaging",
+        "alzheimer-disease"
       ]
     },
     {
@@ -940,6 +1219,10 @@
         "neuroscience",
         "computer-science",
         "brain-modelling",
+        "dopamine"
+      ],
+      "keywords": [
+        "computational-models",
         "dopamine"
       ]
     },
@@ -959,6 +1242,12 @@
         "computer-science",
         "machine-learning",
         "cognitive-decline"
+      ],
+      "keywords": [
+        "cognitive-decline",
+        "machine-learning",
+        "alzheimer-disease",
+        "predictive-modelling"
       ]
     },
     {
@@ -976,6 +1265,12 @@
         "neuroscience",
         "eeg",
         "cognitive-decline"
+      ],
+      "keywords": [
+        "cognitive-decline",
+        "eeg",
+        "visual-attention",
+        "neural-dynamics"
       ]
     },
     {
@@ -993,6 +1288,12 @@
         "neuroscience",
         "eeg",
         "cognitive-decline"
+      ],
+      "keywords": [
+        "cognitive-decline",
+        "eeg",
+        "visual-attention",
+        "erp"
       ]
     },
     {
@@ -1010,6 +1311,12 @@
         "neuroscience",
         "eeg",
         "cognitive-decline"
+      ],
+      "keywords": [
+        "cognitive-decline",
+        "eeg",
+        "visual-attention",
+        "erp"
       ]
     },
     {
@@ -1027,6 +1334,11 @@
         "neuroscience",
         "eeg",
         "cognitive-decline"
+      ],
+      "keywords": [
+        "cognitive-decline",
+        "eeg",
+        "erp"
       ]
     },
     {
@@ -1044,6 +1356,12 @@
         "neuroscience",
         "eeg",
         "cognitive-decline"
+      ],
+      "keywords": [
+        "cognitive-decline",
+        "eeg",
+        "visual-attention",
+        "erp"
       ]
     },
     {
@@ -1060,6 +1378,11 @@
       "topics": [
         "computer-science",
         "machine-learning"
+      ],
+      "keywords": [
+        "machine-learning",
+        "clustering",
+        "soft-clustering"
       ]
     },
     {
@@ -1077,6 +1400,11 @@
         "neuroscience",
         "eeg",
         "cognitive-decline"
+      ],
+      "keywords": [
+        "cognitive-decline",
+        "eeg",
+        "visual-attention"
       ]
     },
     {
@@ -1094,6 +1422,13 @@
         "neuroscience",
         "eeg",
         "cognitive-decline"
+      ],
+      "keywords": [
+        "cognitive-decline",
+        "eeg",
+        "visual-attention",
+        "neural-dynamics",
+        "erp"
       ]
     },
     {
@@ -1113,6 +1448,13 @@
         "brain-modelling",
         "eeg",
         "cognitive-decline"
+      ],
+      "keywords": [
+        "computational-models",
+        "cognitive-decline",
+        "eeg",
+        "alzheimer-disease",
+        "digital-twins"
       ]
     },
     {
@@ -1130,6 +1472,11 @@
         "neuroscience",
         "eeg",
         "cognitive-decline"
+      ],
+      "keywords": [
+        "cognitive-decline",
+        "eeg",
+        "erp"
       ]
     },
     {
@@ -1147,6 +1494,11 @@
         "neuroscience",
         "computer-science",
         "brain-modelling"
+      ],
+      "keywords": [
+        "computational-models",
+        "visual-attention",
+        "predictive-modelling"
       ]
     },
     {
@@ -1164,6 +1516,13 @@
         "neuroscience",
         "computer-science",
         "brain-modelling",
+        "spiking-networks"
+      ],
+      "keywords": [
+        "computational-models",
+        "visual-attention",
+        "history-of-neuroscience",
+        "predictive-modelling",
         "spiking-networks"
       ]
     },
@@ -1183,6 +1542,11 @@
         "computer-science",
         "brain-modelling",
         "spiking-networks"
+      ],
+      "keywords": [
+        "computational-models",
+        "spiking-networks",
+        "neural-networks"
       ]
     },
     {
@@ -1200,6 +1564,12 @@
         "neuroscience",
         "computer-science",
         "neuroimaging"
+      ],
+      "keywords": [
+        "visual-attention",
+        "machine-learning",
+        "neuroimaging",
+        "fmri"
       ]
     },
     {
@@ -1218,6 +1588,11 @@
         "computer-science",
         "brain-modelling",
         "spiking-networks"
+      ],
+      "keywords": [
+        "computational-models",
+        "spiking-networks",
+        "neural-networks"
       ]
     },
     {
@@ -1236,6 +1611,10 @@
         "computer-science",
         "brain-modelling",
         "spiking-networks"
+      ],
+      "keywords": [
+        "computational-models",
+        "spiking-networks"
       ]
     },
     {
@@ -1253,6 +1632,10 @@
         "neuroscience",
         "computer-science",
         "neuroimaging"
+      ],
+      "keywords": [
+        "neuroimaging",
+        "fmri"
       ]
     },
     {
@@ -1269,6 +1652,11 @@
       "topics": [
         "computer-science",
         "machine-learning"
+      ],
+      "keywords": [
+        "machine-learning",
+        "clustering",
+        "soft-clustering"
       ]
     },
     {
@@ -1287,6 +1675,13 @@
         "computer-science",
         "machine-learning",
         "neuroimaging"
+      ],
+      "keywords": [
+        "machine-learning",
+        "neuroimaging",
+        "clustering",
+        "fmri",
+        "soft-clustering"
       ]
     },
     {
@@ -1304,6 +1699,11 @@
         "neuroscience",
         "computer-science",
         "neuroimaging"
+      ],
+      "keywords": [
+        "visual-attention",
+        "neuroimaging",
+        "fmri"
       ]
     },
     {
@@ -1320,6 +1720,11 @@
       "topics": [
         "computer-science",
         "machine-learning"
+      ],
+      "keywords": [
+        "machine-learning",
+        "clustering",
+        "soft-clustering"
       ]
     },
     {
@@ -1338,6 +1743,13 @@
         "computer-science",
         "machine-learning",
         "neuroimaging"
+      ],
+      "keywords": [
+        "machine-learning",
+        "neuroimaging",
+        "clustering",
+        "fmri",
+        "soft-clustering"
       ]
     },
     {
@@ -1356,6 +1768,16 @@
         "computer-science",
         "machine-learning",
         "neuroimaging"
+      ],
+      "keywords": [
+        "visual-attention",
+        "machine-learning",
+        "neuroimaging",
+        "clustering",
+        "neural-dynamics",
+        "fmri",
+        "soft-clustering",
+        "functional-connectivity"
       ]
     },
     {
@@ -1373,6 +1795,10 @@
         "neuroscience",
         "computer-science",
         "neuroimaging"
+      ],
+      "keywords": [
+        "neuroimaging",
+        "fmri"
       ]
     },
     {
@@ -1389,6 +1815,11 @@
       "topics": [
         "computer-science",
         "machine-learning"
+      ],
+      "keywords": [
+        "machine-learning",
+        "clustering",
+        "soft-clustering"
       ]
     },
     {
@@ -1407,6 +1838,13 @@
         "computer-science",
         "machine-learning",
         "neuroimaging"
+      ],
+      "keywords": [
+        "machine-learning",
+        "neuroimaging",
+        "clustering",
+        "fmri",
+        "soft-clustering"
       ]
     },
     {
@@ -1423,6 +1861,9 @@
       "topics": [
         "neuroscience",
         "computer-science",
+        "neuroimaging"
+      ],
+      "keywords": [
         "neuroimaging"
       ]
     },
@@ -1441,6 +1882,9 @@
         "neuroscience",
         "computer-science",
         "neuroimaging"
+      ],
+      "keywords": [
+        "neuroimaging"
       ]
     },
     {
@@ -1457,7 +1901,8 @@
       "topics": [
         "neuroscience",
         "computer-science"
-      ]
+      ],
+      "keywords": []
     },
     {
       "id": "vergani2012bscthesis",
@@ -1472,6 +1917,9 @@
       "note": "",
       "topics": [
         "neuroscience",
+        "cognitive-decline"
+      ],
+      "keywords": [
         "cognitive-decline"
       ]
     }

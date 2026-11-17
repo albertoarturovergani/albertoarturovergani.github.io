@@ -69,3 +69,11 @@ The Full CV includes all 16 public repositories in `cv.html#github-repositories`
 ## Publication topic preset
 
 All subject tags except History of Science are checked when the Publications page opens; its eight history-tagged entries remain accessible when History of Science is selected. There is no visible "All except" or "All including" preset button. Tags are non-exclusive.
+
+## Interactive research keyword cloud
+
+The homepage replaces the three research-area cards with a stylized, brain-shaped SVG word cloud. It uses **30 clickable topics**, including **Epilepsy**, compiled from bibliography topics and the titles/venues of the research outputs. The text size is determined by the number of **distinct matching bibliographic records**, not raw occurrences of a word in a single article or a subjective importance score. A paper may count toward several words.
+
+**To curate the vocabulary:** edit `content/wordcloud.json`. Each concept has `id`, `label`, a list of subject `topics` and an optional regular-expression `pattern`. Be conservative about scientific associations. Committing that file or adding new BibTeX records triggers the GitHub Actions build, which regenerates `data/wordcloud.json` (counts) and keyword matches within `data/publications.json`. **Do not edit these generated data files manually.**
+
+Clicking a word opens `publications.html?keyword=<slug>`, which displays the matching records even when they belong to History of Science (ordinarily excluded by the default topic preset). Visitors can then clear the research focus and return to the normal publication list. On narrow devices the same keywords are presented as accessible clickable chips instead of shrinking the SVG text.

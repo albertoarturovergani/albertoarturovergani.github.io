@@ -100,14 +100,15 @@ function renderBibliography(items) {
   let yearFilter = 'all';
   let query = '';
   const params = new URLSearchParams(window.location.search);
+  let keyword = params.get('keyword') || '';
   const requested = params.get('topics') ?? params.get('topic');
   const validTopics = new Set(items.flatMap(item => item.topics || []));
   const defaultTopics = new Set(Object.keys(TOPIC_NAMES).filter(code => code !== 'history' && validTopics.has(code)));
   const legacyAll = params.get('view') === 'all';
   const selectedTopics = requested === null ?
-    new Set(legacyAll ? validTopics : defaultTopics) :
+    new Set(keyword ? [] : (legacyAll ? validTopics : defaultTopics)) :
     new Set(requested.split(',').filter(code => validTopics.has(code)));
-  const explicitTopicFilter = requested !== null || legacyAll;
+  let explicitTopicFilter = requested !== null || legacyAll;
   let tagMatch = params.get('match') === 'all' ? 'all' : 'any';
   matchSelect.value = tagMatch;
   let refs = new Set((params.get('refs') || '').split(',').map(s => s.trim()).filter(Boolean));
@@ -161,6 +162,7 @@ function renderBibliography(items) {
   }
   function setFilter(value) { filter = value; styleButtons(typeButtons, 'filter', filter); update(); }
   function setTopic(value) {
+    explicitTopicFilter = true;
     if (value === 'history' && !selectedTopics.has('history') && isDefaultTopicSelection()) {
       selectedTopics.clear(); selectedTopics.add('history');
     } else if (selectedTopics.has(value)) selectedTopics.delete(value);
@@ -168,10 +170,12 @@ function renderBibliography(items) {
     styleTopics(); updateUrl(); update();
   }
   function clearTopics() {
+    explicitTopicFilter = true;
     selectedTopics.clear(); styleTopics(); updateUrl(); update();
   }
   function reset() {
-    query = ''; yearFilter = 'all'; refs = new Set();
+    query = ''; keyword = ''; explicitTopicFilter = false;
+    yearFilter = 'all'; refs = new Set();
     input.value = ''; yearSelect.value = 'all';
     filter = 'all'; tagMatch = 'any'; selectedTopics.clear();
     defaultTopics.forEach(code => selectedTopics.add(code));
@@ -185,9 +189,10 @@ function renderBibliography(items) {
   function update() {
     const matching = items.filter(item => {
       if (refs.size && !refs.has(item.id)) return false;
+      if (keyword && !(item.keywords || []).includes(keyword)) return false;
       if (filter !== 'all' && item.type !== filter) return false;
       const tags = item.topics || [];
-      if (!(refs.size && !explicitTopicFilter)) {
+      if (!((refs.size || keyword) && !explicitTopicFilter)) {
         if (!selectedTopics.size) return false;
         if (!selectedTopics.has('history') && tags.includes('history')) return false;
         const selection = [...selectedTopics];
@@ -203,9 +208,10 @@ function renderBibliography(items) {
     resultCount.textContent = `${matching.length} ${matching.length === 1 ? 'record' : 'records'} shown`;
     if (context) {
       context.replaceChildren();
-      if (refs.size) {
-        context.append(makeEl('span', '', `Selected references from the CV (${refs.size})`));
-        const showAll = makeEl('button', 'context-clear', 'Show complete bibliography');
+      if (refs.size || keyword) {
+        const keywordName = keyword ? keyword.replace(/-/g, ' ').replace(/\b\w/g, x => x.toUpperCase()) : '';
+        context.append(makeEl('span', '', keyword ? `Research keyword: ${keywordName}` : `Selected references from the CV (${refs.size})`));
+        const showAll = makeEl('button', 'context-clear', 'Clear research focus');
         showAll.type = 'button';
         showAll.addEventListener('click', reset);
         context.append(showAll);
