@@ -1,17 +1,23 @@
 {
   "Lionti2027AuditoryArtifact": [
     "neuroscience",
-    "neuroengineering"
+    "neuroengineering",
+    "eeg",
+    "brain-stimulation"
   ],
   "DeGrazia2027InSilicoCerebellarTMS": [
     "neuroscience",
     "computer-science",
+    "neuroengineering",
     "brain-modelling",
-    "neuroengineering"
+    "cerebellum",
+    "brain-stimulation"
   ],
   "Peroni2027SCN1A": [
     "neuroscience",
-    "neuroengineering"
+    "neuroengineering",
+    "brain-stimulation",
+    "neurodevelopment"
   ],
   "fabbrizzi2026digitaltwin": [
     "neuroscience",
@@ -19,58 +25,81 @@
     "brain-modelling"
   ],
   "Vergani_2026_Matteucci": [
+    "neuroscience",
     "history"
   ],
   "vergani2026lombroso": [
+    "neuroscience",
     "history"
   ],
   "amato2026gender": [
-    "neuroscience"
+    "neuroscience",
+    "eeg",
+    "cognitive-decline"
   ],
   "vergani2026effective": [
     "neuroscience",
     "computer-science",
-    "neuroengineering"
+    "neuroengineering",
+    "eeg",
+    "brain-stimulation"
   ],
   "Vrizzietal2026": [
     "computer-science",
-    "education"
+    "education",
+    "machine-learning"
   ],
   "rizzaLocatelli": [
     "history"
   ],
   "mazzeo2026towards": [
-    "neuroscience"
+    "neuroscience",
+    "cognitive-decline"
   ],
   "Faris2026_cellalterations_prep": [
-    "neuroscience"
+    "neuroscience",
+    "cerebellum",
+    "schizophrenia"
   ],
   "vergani_2026_SZ1": [
     "neuroscience",
     "computer-science",
-    "brain-modelling"
+    "brain-modelling",
+    "cerebellum",
+    "schizophrenia"
   ],
   "amato2026normative": [
     "neuroscience",
-    "computer-science"
+    "computer-science",
+    "eeg",
+    "neurodevelopment"
   ],
   "Lomi2026GRIN": [
     "neuroscience",
-    "neuroengineering"
+    "neuroengineering",
+    "eeg",
+    "brain-stimulation",
+    "neurodevelopment"
   ],
   "conforti2026prinNEATMOVE": [
     "neuroscience",
     "computer-science",
+    "neuroengineering",
     "brain-modelling",
-    "neuroengineering"
+    "cerebellum",
+    "brain-stimulation"
   ],
   "Vergani2026DeepNuclei": [
     "neuroscience",
     "computer-science",
-    "brain-modelling"
+    "brain-modelling",
+    "cerebellum",
+    "schizophrenia",
+    "dopamine"
   ],
   "Mazzeo2025": [
-    "neuroscience"
+    "neuroscience",
+    "cognitive-decline"
   ],
   "vergani2025hill": [
     "history"
@@ -78,174 +107,261 @@
   "amato2025digital": [
     "neuroscience",
     "computer-science",
-    "brain-modelling"
+    "brain-modelling",
+    "cognitive-decline"
   ],
   "vergani2025erp": [
-    "neuroscience"
+    "neuroscience",
+    "eeg",
+    "neuroimaging",
+    "cognitive-decline"
   ],
   "taddeini2025extended": [
     "neuroscience",
-    "computer-science"
+    "computer-science",
+    "eeg"
   ],
   "vergani2025galvani": [
+    "neuroscience",
     "history"
   ],
   "amato2025personalized": [
     "neuroscience",
     "computer-science",
-    "brain-modelling"
+    "brain-modelling",
+    "cognitive-decline"
   ],
   "vergani2025stein": [
-    "history"
+    "neuroscience",
+    "history",
+    "neuroengineering"
   ],
   "degrazia2025cns": [
     "neuroscience",
     "computer-science",
-    "brain-modelling"
+    "brain-modelling",
+    "cerebellum"
   ],
   "farisMnesis2025dopamineA": [
-    "neuroscience"
+    "neuroscience",
+    "cerebellum",
+    "schizophrenia"
   ],
   "VerganiEbrains2025SchizoCerebellum": [
     "neuroscience",
     "computer-science",
-    "brain-modelling"
+    "brain-modelling",
+    "cerebellum",
+    "schizophrenia"
   ],
   "faris2025cerebellar": [
-    "neuroscience"
+    "neuroscience",
+    "cerebellum",
+    "schizophrenia",
+    "dopamine"
   ],
   "Faris2025CerebellarDopamine": [
-    "neuroscience"
+    "neuroscience",
+    "cerebellum",
+    "schizophrenia",
+    "dopamine"
   ],
   "vergani2025dcp25": [
     "neuroscience",
     "computer-science",
-    "brain-modelling"
+    "brain-modelling",
+    "cerebellum",
+    "schizophrenia"
   ],
   "vergani2025neurobridge": [
     "neuroscience",
     "computer-science",
-    "brain-modelling"
+    "brain-modelling",
+    "cerebellum",
+    "schizophrenia"
   ],
   "amato2025cns": [
     "neuroscience",
     "computer-science",
-    "brain-modelling"
+    "brain-modelling",
+    "cognitive-decline"
   ],
   "Faris2025_SIF": [
-    "neuroscience"
+    "neuroscience",
+    "eeg",
+    "cerebellum",
+    "schizophrenia",
+    "dopamine"
   ],
   "vergani2025mnesys": [
     "neuroscience",
     "computer-science",
-    "brain-modelling"
+    "brain-modelling",
+    "cerebellum",
+    "schizophrenia"
   ],
   "farisMnesis2025dopamineB": [
-    "neuroscience"
+    "neuroscience",
+    "cerebellum",
+    "schizophrenia",
+    "dopamine"
   ],
   "vergani2025cobrain": [
     "neuroscience",
     "computer-science",
-    "brain-modelling"
+    "brain-modelling",
+    "cerebellum",
+    "schizophrenia"
   ],
   "vergani2025cns": [
     "neuroscience",
     "computer-science",
-    "brain-modelling"
+    "brain-modelling",
+    "cerebellum",
+    "schizophrenia"
   ],
   "vergani2025saccadic": [
     "neuroscience",
     "computer-science",
-    "brain-modelling"
+    "brain-modelling",
+    "cerebellum",
+    "schizophrenia"
   ],
   "peroni2025eccn": [
     "neuroscience",
-    "neuroengineering"
+    "neuroengineering",
+    "brain-stimulation",
+    "neurodevelopment"
   ],
   "Peroni2025TMS_SCN1A": [
     "neuroscience",
-    "neuroengineering"
+    "neuroengineering",
+    "brain-stimulation",
+    "neurodevelopment"
   ],
   "taddeini2024dopaminergic": [
-    "neuroscience"
+    "neuroscience",
+    "dopamine"
   ],
   "vergani2024hans": [
-    "history"
+    "neuroscience",
+    "history",
+    "eeg"
   ],
   "vergani2024louis": [
-    "history"
+    "neuroscience",
+    "history",
+    "brain-modelling"
   ],
   "amato2024personalized": [
     "neuroscience",
     "computer-science",
-    "brain-modelling"
+    "brain-modelling",
+    "eeg",
+    "cognitive-decline"
   ],
   "Vergani2024FENS": [
-    "neuroscience"
+    "neuroscience",
+    "eeg",
+    "cognitive-decline"
   ],
   "amato2024predicting": [
     "neuroscience",
-    "computer-science"
+    "computer-science",
+    "eeg",
+    "cognitive-decline"
   ],
   "vergani2024eventSINDEM": [
-    "neuroscience"
+    "neuroscience",
+    "cognitive-decline"
   ],
   "vergani2024eventSIPF": [
-    "neuroscience"
+    "neuroscience",
+    "eeg",
+    "cognitive-decline"
   ],
   "vergani2024erice": [
     "neuroscience",
     "computer-science",
-    "brain-modelling"
+    "brain-modelling",
+    "cerebellum",
+    "schizophrenia"
   ],
   "mazzeo2023machine": [
     "neuroscience",
-    "computer-science"
+    "computer-science",
+    "machine-learning",
+    "cognitive-decline"
   ],
   "lassi2023degradation": [
     "neuroscience",
-    "computer-science"
+    "computer-science",
+    "eeg",
+    "neuroimaging",
+    "cognitive-decline"
   ],
   "ortone2023dopamine": [
     "neuroscience",
     "computer-science",
-    "brain-modelling"
+    "brain-modelling",
+    "dopamine"
   ],
   "Mazzeo2023": [
     "neuroscience",
-    "computer-science"
+    "computer-science",
+    "machine-learning",
+    "cognitive-decline"
   ],
   "vergani2023electrophysiology": [
-    "neuroscience"
+    "neuroscience",
+    "eeg",
+    "cognitive-decline"
   ],
   "vergani2023erpsSIPF": [
-    "neuroscience"
+    "neuroscience",
+    "eeg",
+    "cognitive-decline"
   ],
   "vergani2023erpsSINDEM": [
-    "neuroscience"
+    "neuroscience",
+    "eeg",
+    "cognitive-decline"
   ],
   "vergani2023p300": [
-    "neuroscience"
+    "neuroscience",
+    "eeg",
+    "cognitive-decline"
   ],
   "vergani2023study": [
-    "neuroscience"
+    "neuroscience",
+    "eeg",
+    "cognitive-decline"
   ],
   "vergani2022solving": [
-    "computer-science"
+    "computer-science",
+    "machine-learning"
   ],
   "vergani2022electrophysiological": [
-    "neuroscience"
+    "neuroscience",
+    "eeg",
+    "cognitive-decline"
   ],
   "vergani2022event": [
-    "neuroscience"
+    "neuroscience",
+    "eeg",
+    "cognitive-decline"
   ],
   "amato2022eeg": [
     "neuroscience",
     "computer-science",
-    "brain-modelling"
+    "brain-modelling",
+    "eeg",
+    "cognitive-decline"
   ],
   "vergani2022temporal": [
-    "neuroscience"
+    "neuroscience",
+    "eeg",
+    "cognitive-decline"
   ],
   "vergani2021modulation": [
     "neuroscience",
@@ -255,77 +371,99 @@
   "vergani2021simulating": [
     "neuroscience",
     "computer-science",
-    "brain-modelling"
+    "brain-modelling",
+    "spiking-networks"
   ],
   "huyck2020hot": [
     "neuroscience",
     "computer-science",
-    "brain-modelling"
+    "brain-modelling",
+    "spiking-networks"
   ],
   "vergani2020resting": [
     "neuroscience",
-    "computer-science"
+    "computer-science",
+    "neuroimaging"
   ],
   "vergani2020critical": [
     "neuroscience",
     "computer-science",
-    "brain-modelling"
+    "brain-modelling",
+    "spiking-networks"
   ],
   "huyck2020hotPoster": [
     "neuroscience",
     "computer-science",
-    "brain-modelling"
+    "brain-modelling",
+    "spiking-networks"
   ],
   "temporal_classes_RS-fMRI": [
     "neuroscience",
-    "computer-science"
+    "computer-science",
+    "neuroimaging"
   ],
   "gonella2019cloud": [
-    "computer-science"
+    "computer-science",
+    "machine-learning"
   ],
   "martinelli2019comparison": [
     "neuroscience",
-    "computer-science"
+    "computer-science",
+    "machine-learning",
+    "neuroimaging"
   ],
   "binaghi2018computation": [
     "neuroscience",
-    "computer-science"
+    "computer-science",
+    "neuroimaging"
   ],
   "vergani2018soft": [
-    "computer-science"
+    "computer-science",
+    "machine-learning"
   ],
   "vergani2018clustering": [
     "neuroscience",
-    "computer-science"
+    "computer-science",
+    "machine-learning",
+    "neuroimaging"
   ],
   "vergani2018resting": [
     "neuroscience",
-    "computer-science"
+    "computer-science",
+    "machine-learning",
+    "neuroimaging"
   ],
   "vergani2018contributions": [
     "neuroscience",
-    "computer-science"
+    "computer-science",
+    "neuroimaging"
   ],
   "binaghi2017accuracy": [
-    "computer-science"
+    "computer-science",
+    "machine-learning"
   ],
   "vergani2017cluster": [
     "neuroscience",
-    "computer-science"
+    "computer-science",
+    "machine-learning",
+    "neuroimaging"
   ],
   "vergani2017quantitative": [
     "neuroscience",
-    "computer-science"
+    "computer-science",
+    "neuroimaging"
   ],
   "vergani2016fsl": [
     "neuroscience",
-    "computer-science"
+    "computer-science",
+    "neuroimaging"
   ],
   "vergani2014mscthesis": [
     "neuroscience",
     "computer-science"
   ],
   "vergani2012bscthesis": [
-    "neuroscience"
+    "neuroscience",
+    "cognitive-decline"
   ]
 }

@@ -126,3 +126,18 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{line-height:1.16}h1,h2{letter-spacing:-.04em}h2
 @media(max-width:580px){.education-card{grid-template-columns:58px 1fr;gap:13px;padding:20px 15px}.education-year{font-size:21px}.education-card h3{font-size:19px}.education-more .text-link{margin:7px 0 0}.featured-topic-links{gap:7px}.featured-topic-links a{font-size:11px}.topic-filter-block{padding:15px}.topic-filter-intro,.type-filter-intro{display:block}.topic-filter-intro p:last-child,.type-filter-intro p:last-child{margin-top:4px}.cv-hero h1{font-size:clamp(39px,9vw,55px)}.cv-hero .pub-hero-intro{font-size:12px}.cv-main>h2{font-size:30px}.cv-main>h3{font-size:19px}.cv-main .cv-pair{grid-template-columns:80px minmax(0,1fr);gap:10px}.cv-main .cv-pair dt{font-size:10px}.cv-main .cv-pair dd,.cv-main p,.cv-main li{font-size:12px}.cv-main ul{padding-left:19px}}
 
 .cv-main [style*="color: blue"]{color:var(--teal)!important}
+
+/* Site update metadata and overlapping publication tags */
+.site-update-bar{background:#eef4f0;border-bottom:1px solid #dce7df;color:#55716b;font-size:11px;font-weight:650;letter-spacing:.018em}
+.site-update-inner{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:30px;padding-top:5px;padding-bottom:5px}
+.site-update-inner time{color:#214e48;font-weight:850}
+.site-update-inner>span:last-child{font-size:10px;font-weight:550;color:#80938b}
+.topic-more{margin-top:13px;border-top:1px solid #dce8e0;padding-top:11px}
+.topic-more summary{color:#226d62;font-size:12px;font-weight:800;cursor:pointer;list-style:revert}
+.topic-more .filter-pills{padding-top:14px}
+.tag-match-tools{margin-top:17px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:12px;color:#46635c}
+.tag-match-tools select{border:1px solid #cedbd2;border-radius:6px;background:#fff;color:#29544b;padding:8px 12px;font:inherit;font-weight:700;max-width:100%;min-height:37px}
+.tag-match-tools select:disabled{opacity:.55;cursor:not-allowed}
+.bib-topic-tag{appearance:none;border:1px solid transparent;cursor:pointer;font-family:inherit;text-align:left}
+.bib-topic-tag:hover,.bib-topic-tag:focus-visible{border-color:#6caa98;background:#e1f1e6;color:#164a41}
+@media(max-width:580px){.site-update-inner{font-size:10px;min-height:32px}.site-update-inner>span:last-child{display:none}.tag-match-tools{align-items:stretch;flex-direction:column;gap:6px}.tag-match-tools select{width:100%}}

@@ -43,7 +43,7 @@ function renderFeatured(items) {
   const target = document.getElementById('featured-publications');
   if (!target) return;
   const selected = items.filter(p => p.type === 'journal' &&
-    p.status === 'Journal article' && p.url && p.title.length > 45).slice(0, 3);
+    p.status === 'Journal article' && !(p.topics || []).includes('history') && p.url && p.title.length > 45).slice(0, 3);
   target.replaceChildren();
   if (!selected.length) {
     target.append(makeEl('p', 'loading-message', 'See the full bibliography for the latest research outputs.'));
@@ -65,13 +65,23 @@ function renderFeatured(items) {
 }
 
 const TOPIC_NAMES = Object.freeze({
-  neuroscience: 'Neuroscience',
-  'computer-science': 'Computer science & AI',
-  history: 'History of science',
-  'brain-modelling': 'Brain modelling',
-  neuroengineering: 'Neuroengineering',
-  education: 'Education & outreach',
-  other: 'Other / interdisciplinary'
+  "neuroscience": "Neuroscience",
+  "computer-science": "Computer science & AI",
+  "history": "History of science",
+  "brain-modelling": "Brain modelling & digital twins",
+  "neuroengineering": "Neuroengineering",
+  "education": "Education & outreach",
+  "machine-learning": "Machine learning & clustering",
+  "eeg": "EEG & electrophysiology",
+  "neuroimaging": "MRI & fMRI",
+  "cerebellum": "Cerebellum",
+  "cognitive-decline": "Alzheimer's & cognitive decline",
+  "schizophrenia": "Schizophrenia",
+  "brain-stimulation": "Brain stimulation & TMS",
+  "spiking-networks": "Spiking & neuromorphic networks",
+  "dopamine": "Dopamine & basal ganglia",
+  "neurodevelopment": "Neurodevelopment & epilepsy",
+  "other": "Other / interdisciplinary"
 });
 
 function renderBibliography(items) {
@@ -79,6 +89,7 @@ function renderBibliography(items) {
   if (!target) return;
   const typeButtons = [...document.querySelectorAll('[data-filter]')];
   const topicButtons = [...document.querySelectorAll('[data-topic]')];
+  const matchSelect = document.getElementById('topic-match-mode');
   const input = document.getElementById('publication-search');
   const yearSelect = document.getElementById('publication-year');
   const resultCount = document.getElementById('publication-result-count');
@@ -89,11 +100,15 @@ function renderBibliography(items) {
   let yearFilter = 'all';
   let query = '';
   const params = new URLSearchParams(window.location.search);
-  let topic = Object.hasOwn(TOPIC_NAMES, params.get('topic')) ? params.get('topic') : 'all';
+  const requested = params.get('topics') || params.get('topic') || '';
+  const selectedTopics = new Set(requested.split(',').filter(code => Object.hasOwn(TOPIC_NAMES, code)));
+  let browseMode = selectedTopics.size ? 'selected' : (params.get('view') === 'all' ? 'all' : 'default');
+  let tagMatch = params.get('match') === 'all' ? 'all' : 'any';
+  matchSelect.value = tagMatch;
   let refs = new Set((params.get('refs') || '').split(',').map(s => s.trim()).filter(Boolean));
 
   const counts = { all: items.length, journal: 0, conference: 0, preprint: 0, thesis: 0 };
-  const topicCounts = { all: items.length };
+  const topicCounts = { all: items.length, default: items.filter(item => !(item.topics || []).includes('history')).length };
   for (const item of items) {
     counts[item.type] = (counts[item.type] || 0) + 1;
     for (const tag of (item.topics || ['other'])) {
@@ -117,14 +132,52 @@ function renderBibliography(items) {
       button.setAttribute('aria-pressed', String(active));
     });
   }
+  function styleTopics() {
+    topicButtons.forEach(button => {
+      const code = button.dataset.topic;
+      const active = code === 'default' ? browseMode === 'default' :
+        code === 'all' ? browseMode === 'all' : browseMode === 'selected' && selectedTopics.has(code);
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-pressed', String(active));
+    });
+    matchSelect.disabled = browseMode !== 'selected' || selectedTopics.size < 2;
+    const more = document.querySelector('.topic-more');
+    if (more && browseMode === 'selected' && [...selectedTopics].some(code =>
+      [...more.querySelectorAll('[data-topic]')].some(button => button.dataset.topic === code))) {
+      more.open = true;
+    }
+  }
+  function updateUrl() {
+    if (!window.history?.replaceState) return;
+    const url = new URL(window.location.href);
+    for (const key of ['topic','topics','match','view']) url.searchParams.delete(key);
+    if (browseMode === 'all') url.searchParams.set('view','all');
+    if (browseMode === 'selected') {
+      url.searchParams.set('topics',[...selectedTopics].join(','));
+      if (tagMatch === 'all') url.searchParams.set('match','all');
+    }
+    window.history.replaceState({}, '', url.pathname + url.search + url.hash);
+  }
   function setFilter(value) { filter = value; styleButtons(typeButtons, 'filter', filter); update(); }
-  function setTopic(value) { topic = value; styleButtons(topicButtons, 'topic', topic); update(); }
+  function setTopic(value) {
+    if (value === 'default' || value === 'all') {
+      browseMode = value; selectedTopics.clear();
+    } else {
+      if (browseMode !== 'selected') selectedTopics.clear();
+      browseMode = 'selected';
+      if (selectedTopics.has(value)) selectedTopics.delete(value);
+      else selectedTopics.add(value);
+      if (!selectedTopics.size) browseMode = 'default';
+    }
+    styleTopics(); updateUrl(); update();
+  }
   function reset() {
     query = ''; yearFilter = 'all'; refs = new Set();
     input.value = ''; yearSelect.value = 'all';
-    filter = 'all'; topic = 'all';
+    filter = 'all'; browseMode = 'default'; tagMatch = 'any'; selectedTopics.clear();
+    matchSelect.value = tagMatch;
     styleButtons(typeButtons, 'filter', filter);
-    styleButtons(topicButtons, 'topic', topic);
+    styleTopics();
     if (window.history?.replaceState) window.history.replaceState({}, '', window.location.pathname);
     update();
     input.focus();
@@ -133,14 +186,20 @@ function renderBibliography(items) {
     const matching = items.filter(item => {
       if (refs.size && !refs.has(item.id)) return false;
       if (filter !== 'all' && item.type !== filter) return false;
-      if (topic !== 'all' && !(item.topics || []).includes(topic)) return false;
+      const tags = item.topics || [];
+      if (browseMode === 'default' && !refs.size && tags.includes('history')) return false;
+      if (browseMode === 'selected') {
+        const selection = [...selectedTopics];
+        if (tagMatch === 'all' && !selection.every(code => tags.includes(code))) return false;
+        if (tagMatch === 'any' && !selection.some(code => tags.includes(code))) return false;
+      }
       if (yearFilter !== 'all' && String(item.year) !== yearFilter) return false;
       const haystack = [item.id, item.title, item.authors, item.venue,
         item.year, item.status, ...(item.topics || []).map(t => TOPIC_NAMES[t] || t)].join(' ');
       return searchable(haystack).includes(query);
     });
     target.replaceChildren();
-    resultCount.textContent = `${matching.length} ${matching.length === 1 ? 'record' : 'records'} shown`;
+    resultCount.textContent = `${matching.length} ${matching.length === 1 ? 'record' : 'records'} shown${browseMode === 'default' && !refs.size ? ' · History of science excluded by default' : ''}`;
     if (context) {
       context.replaceChildren();
       if (refs.size) {
@@ -190,7 +249,10 @@ function renderBibliography(items) {
         if (p.venue) content.append(makeEl('p', 'bib-venue', p.venue));
         const topicLine = makeEl('div', 'bib-topic-tags');
         (p.topics || []).forEach(code => {
-          const tag = makeEl('span', 'bib-topic-tag', TOPIC_NAMES[code] || code);
+          const tag = makeEl('button', 'bib-topic-tag', TOPIC_NAMES[code] || code);
+          tag.type = 'button';
+          tag.title = 'Filter by ' + (TOPIC_NAMES[code] || code);
+          tag.addEventListener('click', () => setTopic(code));
           topicLine.append(tag);
         });
         if (topicLine.childNodes.length) content.append(topicLine);
@@ -207,10 +269,14 @@ function renderBibliography(items) {
   }
   typeButtons.forEach(button => button.addEventListener('click', () => setFilter(button.dataset.filter)));
   topicButtons.forEach(button => button.addEventListener('click', () => setTopic(button.dataset.topic)));
+  matchSelect.addEventListener('change', () => {
+    tagMatch = matchSelect.value === 'all' ? 'all' : 'any';
+    updateUrl(); update();
+  });
   input.addEventListener('input', () => { query = searchable(input.value.trim()); update(); });
   yearSelect.addEventListener('change', () => { yearFilter = yearSelect.value; update(); });
   styleButtons(typeButtons, 'filter', filter);
-  styleButtons(topicButtons, 'topic', topic);
+  styleTopics();
   update();
   if (window.location.hash.startsWith('#pub-')) {
     requestAnimationFrame(() => document.getElementById(decodeURIComponent(window.location.hash.slice(1)))?.scrollIntoView());
@@ -238,6 +304,24 @@ async function initializePublications() {
   }
 }
 
-document.getElementById('current-year').textContent = new Date().getFullYear();
+
+async function initializeSiteUpdateDate() {
+  const targets = document.querySelectorAll('[data-last-updated]');
+  if (!targets.length) return;
+  try {
+    const response = await fetch('data/site-meta.json', { cache: 'no-cache' });
+    if (!response.ok) throw new Error('Missing site update metadata');
+    const data = await response.json();
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(data.last_updated || '')) throw new Error('Invalid date');
+    const date = new Date(data.last_updated + 'T12:00:00Z');
+    const label = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+    targets.forEach(node => { node.textContent = label; node.setAttribute('datetime', data.last_updated); });
+  } catch (error) {
+    targets.forEach(node => { node.textContent = 'date unavailable'; });
+  }
+}
+
+document.getElementById('current-year')?.replaceChildren(String(new Date().getFullYear()));
 initializeNavigation();
 initializePublications();
+initializeSiteUpdateDate();

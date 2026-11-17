@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 import re
+import subprocess
 import shutil
 import sys
 import unicodedata
@@ -23,7 +24,7 @@ OUT = ROOT / 'data' / 'publications.json'
 OVERRIDES_FILE = ROOT / 'content' / 'status.json'
 TOPICS_FILE = ROOT / 'content' / 'topics.json'
 
-TOPICS = {'neuroscience', 'computer-science', 'history', 'brain-modelling', 'neuroengineering', 'education', 'other'}
+TOPICS = {'neuroscience', 'computer-science', 'history', 'neuroengineering', 'education', 'brain-modelling', 'machine-learning', 'eeg', 'neuroimaging', 'cerebellum', 'cognitive-decline', 'schizophrenia', 'brain-stimulation', 'spiking-networks', 'dopamine', 'neurodevelopment', 'other'}
 
 KIND = {
     'article': 'journal',
@@ -203,7 +204,27 @@ def infer_topics(entry: dict[str, str]) -> list[str]:
         found.append('history')
     if re.search(r'education|outreach|train(?:ing)? researchers|teaching|learning programme',t):
         found.append('education')
-    return found or ['other']
+    if re.search(r'machine learning|artificial intelligence|soft classif|cluster|fuzzy|competitive learning|k-means',t):
+        found.append('machine-learning')
+    if re.search(r'\beeg\b|electrophysiol|event.related potential|\berps?\b|\bp300\b|microstates',t):
+        found.append('eeg')
+    if re.search(r'\bfmri\b|functional mri|neuroimag|neuroradiolog|brain atlas',t):
+        found.append('neuroimaging')
+    if re.search(r'cerebell|deep nuclei|saccadic dysmetria',t):
+        found.append('cerebellum')
+    if re.search(r'alzheimer|dementia|cognitive decline|subjective cognitive|mild cognitive impairment|\bmci\b|\bscd\b',t):
+        found.append('cognitive-decline')
+    if re.search(r'schizophren|psychosis',t):
+        found.append('schizophrenia')
+    if re.search(r'\btms\b|rtms|transcranial|brain stimulation',t):
+        found.append('brain-stimulation')
+    if re.search(r'spiking|neuromorph|bump attractor',t):
+        found.append('spiking-networks')
+    if re.search(r'dopamin|parkinson|basal ganglia|antipsychotic',t):
+        found.append('dopamine')
+    if re.search(r'neurodevelop|autism|epilep|\bscn1a\b|\bgrin\b',t):
+        found.append('neurodevelopment')
+    return list(dict.fromkeys(found)) or ['other']
 
 
 def assigned_topics(entry: dict[str, str], topic_overrides: dict) -> list[str]:
@@ -300,6 +321,11 @@ def main() -> int:
         print('WARNING: topic metadata has unused keys: ' + ', '.join(sorted(not_found)), file=sys.stderr)
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps({'items': normalized}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    try:
+        commit_date = subprocess.check_output(['git', 'log', '-1', '--format=%cs'], cwd=ROOT, text=True, stderr=subprocess.DEVNULL).strip()
+    except (OSError, subprocess.CalledProcessError):
+        commit_date = date.today().isoformat()
+    (ROOT / 'data' / 'site-meta.json').write_text(json.dumps({'last_updated': commit_date}, indent=2) + '\n', encoding='utf-8')
     from collections import Counter
     print('Built', OUT.relative_to(ROOT), 'with', len(normalized), 'items:', dict(Counter(p['type'] for p in normalized)))
     missing = [p['id'] for p in normalized if not p['title'] or not p['year']]

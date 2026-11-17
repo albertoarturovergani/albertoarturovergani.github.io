@@ -19,7 +19,7 @@ The CV page includes original content, thesis details and activities from the La
 3. To manually assign subject tags, update `content/topics.json`, e.g. `"my2027paper": ["neuroscience", "computer-science"]`. You can use several tags for one paper. Existing records have been manually classified using their scientific topics; new records receive an automatic **suggestion** based on keywords until reviewed. Never treat the keyword fallback as an authoritative discipline classification.
 4. Commit the changes. **GitHub Actions regenerates `data/publications.json` and deploys the pages**. The bibliography can be found via search or the subject links on the homepage.
 
-Subjects currently offered (internal codes): `neuroscience`, `computer-science`, `history`, `brain-modelling`, `neuroengineering`, `education`, and `other` (shown only if needed). Subject counts overlap and should not be added together. Type filters (journal / conference / preprint / thesis) and year filters are independent of the subject filter.
+Subjects use multiple overlapping labels (Neuroscience, Computer Science & AI, History of Science, Neuroengineering, Brain Modelling, Education), plus more specific tags for EEG, MRI/fMRI, Machine Learning, Cerebellum, Alzheimer’s and Cognitive Decline, Schizophrenia, Brain Stimulation/TMS, Spiking Networks, Dopamine/Basal Ganglia, and Neurodevelopment/Epilepsy. Subject counts overlap and must not be summed. Visitors can select multiple tags and match ANY (OR) or ALL (AND). **The default archive view includes all publication types, but excludes records tagged `history`**. The buttons All including history or History of Science make those records available.
 
 New works are **not automatically harvested** from journals, Google Scholar or ORCID: add a BibTeX entry to trigger the automated publication refresh. Verify DOI, category and acceptance status. Some references in the supplied CV are labelled as submitted or planned for 2027; they are not represented as peer-reviewed publications.
 
@@ -47,3 +47,9 @@ Open `http://localhost:8000`.
 ## Source / accuracy notes
 
 The original BibTeX was cleaned to **84 unique entries**: 26 journal items, 50 conference entries, 5 preprints/working papers, 3 theses. The manually maintained *Scientific Outcomes* totals in the original CV do not exactly match this sum. Status and subject data come from the source record and conservative manual curation, not from live publisher verification. The source also includes time-limited appointments and future records; review dates and affiliations before using the website as an official CV.
+
+## Site update date and bibliometrics
+
+The narrow bar at the top of each page shows **Last updated**, generated from the most recent Git commit on `main` during the GitHub Pages build. The date changes when you commit edits to the repository; it is not recalculated on every visit.
+
+Google Scholar and Scopus metrics in `cv.html` are **manual, dated snapshots**. To update citations, H-index or other figures, edit `cv.html` and the date alongside them, then commit. No Google Scholar or Scopus scraping, keys, API requests or daily metrics jobs are involved. The date at the top indicates the site's last update, not the day bibliometric data was measured.

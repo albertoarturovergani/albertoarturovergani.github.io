@@ -13,7 +13,9 @@
       "note": "Conference abstract",
       "topics": [
         "neuroscience",
-        "neuroengineering"
+        "neuroengineering",
+        "eeg",
+        "brain-stimulation"
       ]
     },
     {
@@ -30,8 +32,10 @@
       "topics": [
         "neuroscience",
         "computer-science",
+        "neuroengineering",
         "brain-modelling",
-        "neuroengineering"
+        "cerebellum",
+        "brain-stimulation"
       ]
     },
     {
@@ -47,7 +51,9 @@
       "note": "Conference abstract",
       "topics": [
         "neuroscience",
-        "neuroengineering"
+        "neuroengineering",
+        "brain-stimulation",
+        "neurodevelopment"
       ]
     },
     {
@@ -79,6 +85,7 @@
       "url": "http://dx.doi.org/10.1007/s00415-026-13728-x",
       "note": "",
       "topics": [
+        "neuroscience",
         "history"
       ]
     },
@@ -94,6 +101,7 @@
       "url": "https://doi.org/10.1007/s00415-026-13854-6",
       "note": "",
       "topics": [
+        "neuroscience",
         "history"
       ]
     },
@@ -109,7 +117,9 @@
       "url": "https://doi.org/10.1002/trc2.70245",
       "note": "",
       "topics": [
-        "neuroscience"
+        "neuroscience",
+        "eeg",
+        "cognitive-decline"
       ]
     },
     {
@@ -126,7 +136,9 @@
       "topics": [
         "neuroscience",
         "computer-science",
-        "neuroengineering"
+        "neuroengineering",
+        "eeg",
+        "brain-stimulation"
       ]
     },
     {
@@ -142,7 +154,8 @@
       "note": "Version 1; peer review: awaiting peer review",
       "topics": [
         "computer-science",
-        "education"
+        "education",
+        "machine-learning"
       ]
     },
     {
@@ -172,7 +185,8 @@
       "url": "",
       "note": "",
       "topics": [
-        "neuroscience"
+        "neuroscience",
+        "cognitive-decline"
       ]
     },
     {
@@ -187,7 +201,9 @@
       "url": "https://doi.org/10.5281/zenodo.19337132",
       "note": "",
       "topics": [
-        "neuroscience"
+        "neuroscience",
+        "cerebellum",
+        "schizophrenia"
       ]
     },
     {
@@ -204,7 +220,9 @@
       "topics": [
         "neuroscience",
         "computer-science",
-        "brain-modelling"
+        "brain-modelling",
+        "cerebellum",
+        "schizophrenia"
       ]
     },
     {
@@ -220,7 +238,9 @@
       "note": "",
       "topics": [
         "neuroscience",
-        "computer-science"
+        "computer-science",
+        "eeg",
+        "neurodevelopment"
       ]
     },
     {
@@ -236,7 +256,10 @@
       "note": "Conference abstract, December 2–4, 2026",
       "topics": [
         "neuroscience",
-        "neuroengineering"
+        "neuroengineering",
+        "eeg",
+        "brain-stimulation",
+        "neurodevelopment"
       ]
     },
     {
@@ -253,8 +276,10 @@
       "topics": [
         "neuroscience",
         "computer-science",
+        "neuroengineering",
         "brain-modelling",
-        "neuroengineering"
+        "cerebellum",
+        "brain-stimulation"
       ]
     },
     {
@@ -271,7 +296,10 @@
       "topics": [
         "neuroscience",
         "computer-science",
-        "brain-modelling"
+        "brain-modelling",
+        "cerebellum",
+        "schizophrenia",
+        "dopamine"
       ]
     },
     {
@@ -286,7 +314,8 @@
       "url": "",
       "note": "",
       "topics": [
-        "neuroscience"
+        "neuroscience",
+        "cognitive-decline"
       ]
     },
     {
@@ -318,7 +347,8 @@
       "topics": [
         "neuroscience",
         "computer-science",
-        "brain-modelling"
+        "brain-modelling",
+        "cognitive-decline"
       ]
     },
     {
@@ -333,7 +363,10 @@
       "url": "https://doi.org/10.1101/2024.01.30.577910",
       "note": "",
       "topics": [
-        "neuroscience"
+        "neuroscience",
+        "eeg",
+        "neuroimaging",
+        "cognitive-decline"
       ]
     },
     {
@@ -349,7 +382,8 @@
       "note": "",
       "topics": [
         "neuroscience",
-        "computer-science"
+        "computer-science",
+        "eeg"
       ]
     },
     {
@@ -364,6 +398,7 @@
       "url": "",
       "note": "",
       "topics": [
+        "neuroscience",
         "history"
       ]
     },
@@ -381,7 +416,8 @@
       "topics": [
         "neuroscience",
         "computer-science",
-        "brain-modelling"
+        "brain-modelling",
+        "cognitive-decline"
       ]
     },
     {
@@ -396,7 +432,9 @@
       "url": "",
       "note": "",
       "topics": [
-        "history"
+        "neuroscience",
+        "history",
+        "neuroengineering"
       ]
     },
     {
@@ -413,7 +451,8 @@
       "topics": [
         "neuroscience",
         "computer-science",
-        "brain-modelling"
+        "brain-modelling",
+        "cerebellum"
       ]
     },
     {
@@ -428,7 +467,9 @@
       "url": "",
       "note": "Presented at the Second MNESYS Meeting on Neural Plasticity and Connectivity, Naples, 24–25 September 2025",
       "topics": [
-        "neuroscience"
+        "neuroscience",
+        "cerebellum",
+        "schizophrenia"
       ]
     },
     {
@@ -445,7 +486,9 @@
       "topics": [
         "neuroscience",
         "computer-science",
-        "brain-modelling"
+        "brain-modelling",
+        "cerebellum",
+        "schizophrenia"
       ]
     },
     {
@@ -460,7 +503,10 @@
       "url": "",
       "note": "Poster presentation",
       "topics": [
-        "neuroscience"
+        "neuroscience",
+        "cerebellum",
+        "schizophrenia",
+        "dopamine"
       ]
     },
     {
@@ -475,7 +521,10 @@
       "url": "",
       "note": "November 15–19",
       "topics": [
-        "neuroscience"
+        "neuroscience",
+        "cerebellum",
+        "schizophrenia",
+        "dopamine"
       ]
     },
     {
@@ -492,7 +541,9 @@
       "topics": [
         "neuroscience",
         "computer-science",
-        "brain-modelling"
+        "brain-modelling",
+        "cerebellum",
+        "schizophrenia"
       ]
     },
     {
@@ -509,7 +560,9 @@
       "topics": [
         "neuroscience",
         "computer-science",
-        "brain-modelling"
+        "brain-modelling",
+        "cerebellum",
+        "schizophrenia"
       ]
     },
     {
@@ -526,7 +579,8 @@
       "topics": [
         "neuroscience",
         "computer-science",
-        "brain-modelling"
+        "brain-modelling",
+        "cognitive-decline"
       ]
     },
     {
@@ -541,7 +595,11 @@
       "url": "",
       "note": "",
       "topics": [
-        "neuroscience"
+        "neuroscience",
+        "eeg",
+        "cerebellum",
+        "schizophrenia",
+        "dopamine"
       ]
     },
     {
@@ -558,7 +616,9 @@
       "topics": [
         "neuroscience",
         "computer-science",
-        "brain-modelling"
+        "brain-modelling",
+        "cerebellum",
+        "schizophrenia"
       ]
     },
     {
@@ -573,7 +633,10 @@
       "url": "",
       "note": "Presented at the Second MNESYS Meeting on Neural Plasticity and Connectivity, Naples, 24–25 September 2025",
       "topics": [
-        "neuroscience"
+        "neuroscience",
+        "cerebellum",
+        "schizophrenia",
+        "dopamine"
       ]
     },
     {
@@ -590,7 +653,9 @@
       "topics": [
         "neuroscience",
         "computer-science",
-        "brain-modelling"
+        "brain-modelling",
+        "cerebellum",
+        "schizophrenia"
       ]
     },
     {
@@ -607,7 +672,9 @@
       "topics": [
         "neuroscience",
         "computer-science",
-        "brain-modelling"
+        "brain-modelling",
+        "cerebellum",
+        "schizophrenia"
       ]
     },
     {
@@ -624,7 +691,9 @@
       "topics": [
         "neuroscience",
         "computer-science",
-        "brain-modelling"
+        "brain-modelling",
+        "cerebellum",
+        "schizophrenia"
       ]
     },
     {
@@ -640,7 +709,9 @@
       "note": "",
       "topics": [
         "neuroscience",
-        "neuroengineering"
+        "neuroengineering",
+        "brain-stimulation",
+        "neurodevelopment"
       ]
     },
     {
@@ -656,7 +727,9 @@
       "note": "Presented at the 36th International Epilepsy Congress. Available at: r̆lhttps://lisbonvenues.pt/en/events/ccl-en/36th-international-epilepsy-congress/",
       "topics": [
         "neuroscience",
-        "neuroengineering"
+        "neuroengineering",
+        "brain-stimulation",
+        "neurodevelopment"
       ]
     },
     {
@@ -671,7 +744,8 @@
       "url": "",
       "note": "",
       "topics": [
-        "neuroscience"
+        "neuroscience",
+        "dopamine"
       ]
     },
     {
@@ -686,7 +760,9 @@
       "url": "https://doi.org/10.1152/advan.00119.2024",
       "note": "",
       "topics": [
-        "history"
+        "neuroscience",
+        "history",
+        "eeg"
       ]
     },
     {
@@ -701,7 +777,9 @@
       "url": "https://doi.org/10.1007/s00415-024-12705-6",
       "note": "",
       "topics": [
-        "history"
+        "neuroscience",
+        "history",
+        "brain-modelling"
       ]
     },
     {
@@ -718,7 +796,9 @@
       "topics": [
         "neuroscience",
         "computer-science",
-        "brain-modelling"
+        "brain-modelling",
+        "eeg",
+        "cognitive-decline"
       ]
     },
     {
@@ -733,7 +813,9 @@
       "url": "",
       "note": "",
       "topics": [
-        "neuroscience"
+        "neuroscience",
+        "eeg",
+        "cognitive-decline"
       ]
     },
     {
@@ -749,7 +831,9 @@
       "note": "",
       "topics": [
         "neuroscience",
-        "computer-science"
+        "computer-science",
+        "eeg",
+        "cognitive-decline"
       ]
     },
     {
@@ -764,7 +848,8 @@
       "url": "",
       "note": "",
       "topics": [
-        "neuroscience"
+        "neuroscience",
+        "cognitive-decline"
       ]
     },
     {
@@ -779,7 +864,9 @@
       "url": "",
       "note": "",
       "topics": [
-        "neuroscience"
+        "neuroscience",
+        "eeg",
+        "cognitive-decline"
       ]
     },
     {
@@ -796,7 +883,9 @@
       "topics": [
         "neuroscience",
         "computer-science",
-        "brain-modelling"
+        "brain-modelling",
+        "cerebellum",
+        "schizophrenia"
       ]
     },
     {
@@ -812,7 +901,9 @@
       "note": "",
       "topics": [
         "neuroscience",
-        "computer-science"
+        "computer-science",
+        "machine-learning",
+        "cognitive-decline"
       ]
     },
     {
@@ -828,7 +919,10 @@
       "note": "",
       "topics": [
         "neuroscience",
-        "computer-science"
+        "computer-science",
+        "eeg",
+        "neuroimaging",
+        "cognitive-decline"
       ]
     },
     {
@@ -845,7 +939,8 @@
       "topics": [
         "neuroscience",
         "computer-science",
-        "brain-modelling"
+        "brain-modelling",
+        "dopamine"
       ]
     },
     {
@@ -861,7 +956,9 @@
       "note": "",
       "topics": [
         "neuroscience",
-        "computer-science"
+        "computer-science",
+        "machine-learning",
+        "cognitive-decline"
       ]
     },
     {
@@ -876,7 +973,9 @@
       "url": "",
       "note": "",
       "topics": [
-        "neuroscience"
+        "neuroscience",
+        "eeg",
+        "cognitive-decline"
       ]
     },
     {
@@ -891,7 +990,9 @@
       "url": "",
       "note": "",
       "topics": [
-        "neuroscience"
+        "neuroscience",
+        "eeg",
+        "cognitive-decline"
       ]
     },
     {
@@ -906,7 +1007,9 @@
       "url": "",
       "note": "",
       "topics": [
-        "neuroscience"
+        "neuroscience",
+        "eeg",
+        "cognitive-decline"
       ]
     },
     {
@@ -921,7 +1024,9 @@
       "url": "",
       "note": "",
       "topics": [
-        "neuroscience"
+        "neuroscience",
+        "eeg",
+        "cognitive-decline"
       ]
     },
     {
@@ -936,7 +1041,9 @@
       "url": "",
       "note": "",
       "topics": [
-        "neuroscience"
+        "neuroscience",
+        "eeg",
+        "cognitive-decline"
       ]
     },
     {
@@ -951,7 +1058,8 @@
       "url": "",
       "note": "",
       "topics": [
-        "computer-science"
+        "computer-science",
+        "machine-learning"
       ]
     },
     {
@@ -966,7 +1074,9 @@
       "url": "",
       "note": "",
       "topics": [
-        "neuroscience"
+        "neuroscience",
+        "eeg",
+        "cognitive-decline"
       ]
     },
     {
@@ -981,7 +1091,9 @@
       "url": "",
       "note": "",
       "topics": [
-        "neuroscience"
+        "neuroscience",
+        "eeg",
+        "cognitive-decline"
       ]
     },
     {
@@ -998,7 +1110,9 @@
       "topics": [
         "neuroscience",
         "computer-science",
-        "brain-modelling"
+        "brain-modelling",
+        "eeg",
+        "cognitive-decline"
       ]
     },
     {
@@ -1013,7 +1127,9 @@
       "url": "",
       "note": "",
       "topics": [
-        "neuroscience"
+        "neuroscience",
+        "eeg",
+        "cognitive-decline"
       ]
     },
     {
@@ -1047,7 +1163,8 @@
       "topics": [
         "neuroscience",
         "computer-science",
-        "brain-modelling"
+        "brain-modelling",
+        "spiking-networks"
       ]
     },
     {
@@ -1064,7 +1181,8 @@
       "topics": [
         "neuroscience",
         "computer-science",
-        "brain-modelling"
+        "brain-modelling",
+        "spiking-networks"
       ]
     },
     {
@@ -1080,7 +1198,8 @@
       "note": "",
       "topics": [
         "neuroscience",
-        "computer-science"
+        "computer-science",
+        "neuroimaging"
       ]
     },
     {
@@ -1097,7 +1216,8 @@
       "topics": [
         "neuroscience",
         "computer-science",
-        "brain-modelling"
+        "brain-modelling",
+        "spiking-networks"
       ]
     },
     {
@@ -1114,7 +1234,8 @@
       "topics": [
         "neuroscience",
         "computer-science",
-        "brain-modelling"
+        "brain-modelling",
+        "spiking-networks"
       ]
     },
     {
@@ -1130,7 +1251,8 @@
       "note": "",
       "topics": [
         "neuroscience",
-        "computer-science"
+        "computer-science",
+        "neuroimaging"
       ]
     },
     {
@@ -1145,7 +1267,8 @@
       "url": "https://doi.org/10.1007/978-3-030-12544-8_7",
       "note": "",
       "topics": [
-        "computer-science"
+        "computer-science",
+        "machine-learning"
       ]
     },
     {
@@ -1161,7 +1284,9 @@
       "note": "",
       "topics": [
         "neuroscience",
-        "computer-science"
+        "computer-science",
+        "machine-learning",
+        "neuroimaging"
       ]
     },
     {
@@ -1177,7 +1302,8 @@
       "note": "",
       "topics": [
         "neuroscience",
-        "computer-science"
+        "computer-science",
+        "neuroimaging"
       ]
     },
     {
@@ -1192,7 +1318,8 @@
       "url": "https://doi.org/10.1109/FUZZ-IEEE.2018.8491581",
       "note": "",
       "topics": [
-        "computer-science"
+        "computer-science",
+        "machine-learning"
       ]
     },
     {
@@ -1208,7 +1335,9 @@
       "note": "",
       "topics": [
         "neuroscience",
-        "computer-science"
+        "computer-science",
+        "machine-learning",
+        "neuroimaging"
       ]
     },
     {
@@ -1224,7 +1353,9 @@
       "note": "",
       "topics": [
         "neuroscience",
-        "computer-science"
+        "computer-science",
+        "machine-learning",
+        "neuroimaging"
       ]
     },
     {
@@ -1240,7 +1371,8 @@
       "note": "",
       "topics": [
         "neuroscience",
-        "computer-science"
+        "computer-science",
+        "neuroimaging"
       ]
     },
     {
@@ -1255,7 +1387,8 @@
       "url": "https://doi.org/10.1109/FUZZ-IEEE.2017.8015427",
       "note": "",
       "topics": [
-        "computer-science"
+        "computer-science",
+        "machine-learning"
       ]
     },
     {
@@ -1271,7 +1404,9 @@
       "note": "",
       "topics": [
         "neuroscience",
-        "computer-science"
+        "computer-science",
+        "machine-learning",
+        "neuroimaging"
       ]
     },
     {
@@ -1287,7 +1422,8 @@
       "note": "",
       "topics": [
         "neuroscience",
-        "computer-science"
+        "computer-science",
+        "neuroimaging"
       ]
     },
     {
@@ -1303,7 +1439,8 @@
       "note": "",
       "topics": [
         "neuroscience",
-        "computer-science"
+        "computer-science",
+        "neuroimaging"
       ]
     },
     {
@@ -1334,7 +1471,8 @@
       "url": "https://doi.org/10.13140/RG.2.2.28011.72483",
       "note": "",
       "topics": [
-        "neuroscience"
+        "neuroscience",
+        "cognitive-decline"
       ]
     }
   ]
