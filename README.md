@@ -2,15 +2,15 @@
 
 Public site: **https://albertoarturovergani.github.io**
 
-This is a lightweight static site hosted by GitHub Pages. It includes the complete CV structure transcribed from `cv_noImage26.tex` in the supplied Overleaf archive (17 November 2026), a search-ready bibliography from `vergani_scholar.bib`, and scientific Brain Art projects. No portrait or personal signature is included.
+This is a lightweight static site hosted by GitHub Pages. It includes the complete CV structure maintained as the academic web CV (November 2026), a search-ready bibliography from `vergani_scholar.bib`, and scientific Brain Art projects. No portrait or personal signature is included.
 
 ## Pages
 
 - `index.html` — homepage with research areas, recent publications, academic path, **all four education qualifications**, recognition, science/art and contact links.
-- `cv.html` — **full academic CV**, respecting the original Overleaf order: Introduction; Prizes, Proposals and Fellowships; Academic Information (Positions, Collaborations, Visiting periods, Teaching, Tutoring, Commissions, Memberships, Chairing, Event Organization, Journals Engagement, References, Education); Presentations (Talks, Posters, Seminars); Continuous learning (Workshops, Schools, Courses); Extra Information (Programming skills, Third mission, other academic and non-academic activities); Neuroscience Art; Scientific Outcomes.
+- `cv.html` — **full academic CV**, with the same section structure as the research CV: Introduction; Prizes, Proposals and Fellowships; Academic Information (Positions, Collaborations, Visiting periods, Teaching, Tutoring, Commissions, Memberships, Chairing, Event Organization, Journals Engagement, References, Education); Presentations (Talks, Posters, Seminars); Continuous learning (Workshops, Schools, Courses); Extra Information (Programming skills, Third mission, other academic and non-academic activities); Neuroscience Art; Scientific Outcomes.
 - `publications.html` — complete BibTeX-based bibliography, filterable by **topic, publication type and year**, with text search. Topics can overlap.
 
-The CV page includes original content, thesis details and activities from the LaTeX source, rather than only the abbreviated homepage timeline. Its `Scientific Outcomes` metrics are a **dated historical snapshot**, not a live feed. Bibliography counts are generated separately to avoid presenting historical counts as current. Contact information for third-party academic referees is intentionally omitted from the public page.
+The CV page includes original content, thesis details and activities from the full CV, rather than only the abbreviated homepage timeline. Its `Scientific Outcomes` metrics are a **dated historical snapshot**, not a live feed. Bibliography counts are generated separately to avoid presenting historical counts as current. Contact information for third-party academic referees is intentionally omitted from the public page.
 
 ## Add or update a publication
 
@@ -25,7 +25,7 @@ New works are **not automatically harvested** from journals, Google Scholar or O
 
 ## Update the CV or homepage
 
-- `cv.html` is a publication-safe rendering of the Overleaf LaTeX supplied on 17 November 2026. When the CV changes, you can update this file, or share a more recent Overleaf source for a new conversion. The full original ZIP, personal photograph, signature and private drafting files **are not committed**.
+- `cv.html` is the detailed HTML curriculum. When the CV changes, edit this file in GitHub or supply a revised source for conversion. The full original ZIP, personal photograph, signature and private drafting files **are not committed**.
 - `index.html` contains the featured education cards, current position and career summary. Keep this homepage in sync with the detailed CV.
 - `assets/style.css` and `assets/main.js` contain styling, menu and filtering. The three `assets/*.webp` files are the author's neuroscience artwork, **not** personal photographs.
 
@@ -53,3 +53,13 @@ The original BibTeX was cleaned to **84 unique entries**: 26 journal items, 50 c
 The narrow bar at the top of each page shows **Last updated**, generated from the most recent Git commit on `main` during the GitHub Pages build. The date changes when you commit edits to the repository; it is not recalculated on every visit.
 
 Google Scholar and Scopus metrics in `cv.html` are **manual, dated snapshots**. To update citations, H-index or other figures, edit `cv.html` and the date alongside them, then commit. No Google Scholar or Scopus scraping, keys, API requests or daily metrics jobs are involved. The date at the top indicates the site's last update, not the day bibliometric data was measured.
+
+## Downloadable PDF version of the CV
+
+A visitor-facing **Download full CV (PDF)** link is available on `cv.html` and near Education on `index.html`. The linked file is `assets/Alberto_Arturo_Vergani_CV.pdf`, currently a 23-page A4 rendering of the complete CV (as of 17 November 2026, without a personal portrait). It keeps the education, appointments, awards, talks, continuing training, research activities and art sections.
+
+**Maintenance:** Updating `cv.html` does not automatically regenerate the PDF. Replace the PDF in `assets/` when the CV changes. You can also ask ChatGPT to regenerate it and update the repository. The site's Last updated date is the website commit date; it is not a guarantee that citation counts or the PDF were refreshed on that date.
+
+## Visual style and domain
+
+The site uses a warm orange/terracotta accent palette, with no portrait photograph. It is currently available at the free `albertoarturovergani.github.io` address. A separately registered personal domain can later be added through Settings → Pages after its DNS records have been configured and ownership verified. Keeping a custom domain still requires renewing its registration; do not change the CNAME or DNS until that decision is made.
