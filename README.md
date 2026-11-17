@@ -72,7 +72,7 @@ All subject tags except History of Science are checked when the Publications pag
 
 ## Interactive research keyword cloud
 
-The homepage replaces the three research-area cards with a stylized, brain-shaped SVG word cloud. It uses **30 clickable topics**, including **Epilepsy**, compiled from bibliography topics and the titles/venues of the research outputs. The text size is determined by the number of **distinct matching bibliographic records**, not raw occurrences of a word in a single article or a subjective importance score. A paper may count toward several words.
+The homepage replaces the three research-area cards with a free-floating, randomly arranged SVG word cloud, without a brain outline or a prominent section heading. It uses **30 clickable topics**, including **Epilepsy**, compiled from bibliography topics and the titles/venues of the research outputs. The text size is determined by the number of **distinct matching bibliographic records**, not raw occurrences of a word in a single article or a subjective importance score. A paper may count toward several words.
 
 **To curate the vocabulary:** edit `content/wordcloud.json`. Each concept has `id`, `label`, a list of subject `topics` and an optional regular-expression `pattern`. Be conservative about scientific associations. Committing that file or adding new BibTeX records triggers the GitHub Actions build, which regenerates `data/wordcloud.json` (counts) and keyword matches within `data/publications.json`. **Do not edit these generated data files manually.**
 

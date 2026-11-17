@@ -1,4 +1,4 @@
-/* Interactive research cloud. The matching records and frequencies are generated
+/* Interactive research word cloud. The matching records and frequencies are generated
    from the maintained bibliography: no external service or runtime dependency. */
 'use strict';
 
@@ -16,24 +16,35 @@
   const escapeForUrl = id => 'publications.html?keyword=' + encodeURIComponent(id);
   const makeSvg = tag => document.createElementNS(SVG_NS, tag);
 
-  // A conservative inner region keeps every text label within the brain shape.
-  const insideBrain = (x, y) => {
-    const dx = (x - 550) / 417;
-    const dy = (y - 337) / 234;
-    return dx * dx + dy * dy <= 0.97;
-  };
-  function fits(x, y, w, h, occupied) {
-    const a = {left: x - w / 2 - 4, right: x + w / 2 + 4,
-      top: y - h / 2 - 2, bottom: y + h / 2 + 2};
-    for (const corner of [[a.left,a.top],[a.right,a.top],[a.left,a.bottom],[a.right,a.bottom]]) {
-      if (!insideBrain(corner[0],corner[1])) return false;
+  // Stable pseudo-random positions create a free-form word cloud, without
+  // any enclosing silhouette. Collision checks keep the links legible.
+  function hashWord(word) {
+    let hash = 2166136261;
+    for (let i = 0; i < word.length; i++) {
+      hash = Math.imul(hash ^ word.charCodeAt(i), 16777619);
     }
-    for (const box of occupied) {
-      if (a.left < box.right && a.right > box.left && a.top < box.bottom && a.bottom > box.top) {
-        return false;
-      }
-    }
-    return a;
+    return hash >>> 0;
+  }
+  function randomSequence(seed) {
+    let state = seed >>> 0;
+    return () => {
+      state = (Math.imul(1664525, state) + 1013904223) >>> 0;
+      return state / 4294967296;
+    };
+  }
+  function fits(x, y, width, height, occupied) {
+    const box = {
+      left: x - width / 2 - 6,
+      right: x + width / 2 + 6,
+      top: y - height / 2 - 4,
+      bottom: y + height / 2 + 4
+    };
+    if (box.left < 24 || box.right > 1076 ||
+        box.top < 20 || box.bottom > 650) return null;
+    if (occupied.some(other => box.left < other.right &&
+        box.right > other.left && box.top < other.bottom &&
+        box.bottom > other.top)) return null;
+    return box;
   }
 
   function render(items) {
@@ -48,7 +59,7 @@
 
     for (let i = 0; i < sorted.length; i++) {
       const item = sorted[i];
-      const font = 13 + 18 * Math.pow(Math.log1p(item.count) / Math.log1p(max), .92);
+      const font = 17 + 24 * Math.pow(Math.log1p(item.count) / Math.log1p(max), .92);
       const mobileLink = document.createElement('a');
       mobileLink.className = 'brain-cloud-chip';
       mobileLink.href = escapeForUrl(item.id);
@@ -61,8 +72,8 @@
       smallScreen.append(mobileLink);
 
       let placed = false;
-      for (const scale of [1, .94, .88, .82, .76, .70, .64, .60]) {
-        const size = Math.max(13, font * scale);
+      for (const scale of [1, .95, .9, .85, .8, .75, .7, .65]) {
+        const size = Math.max(16, font * scale);
         const text = makeSvg('text');
         text.textContent = item.label;
         text.setAttribute('font-size', size.toFixed(1));
@@ -73,18 +84,17 @@
         wordsGroup.append(text);
         const measured = typeof text.getComputedTextLength === 'function'
           ? text.getComputedTextLength() : 0;
-        const width = Math.max(measured, item.label.length * size * .54);
-        const height = size * 1.15;
+        const width = Math.max(measured * 1.03, item.label.length * size * .6);
+        const height = size * 1.16;
 
         let position = null;
-        for (let trial = 0; trial < 8000; trial++) {
-          const angle = (trial * 2.3999632) + (i * .217);
-          const radius = Math.sqrt((trial + .5) / 8000);
-          const x = 550 + Math.cos(angle) * radius * 406;
-          const y = 337 + Math.sin(angle) * radius * 224;
-          const box = fits(x,y,width,height,occupied);
+        const random = randomSequence((hashWord(item.id) + i * 31) >>> 0);
+        for (let trial = 0; trial < 4200; trial++) {
+          const x = 60 + random() * 980;
+          const y = 52 + random() * 566;
+          const box = fits(x, y, width, height, occupied);
           if (box) {
-            position = {x,y,box};
+            position = {x, y, box};
             break;
           }
         }
