@@ -10,7 +10,11 @@
       "venue": "7th International Brain Stimulation Conference",
       "doi": "",
       "url": "",
-      "note": "Conference abstract"
+      "note": "Conference abstract",
+      "topics": [
+        "neuroscience",
+        "neuroengineering"
+      ]
     },
     {
       "id": "DeGrazia2027InSilicoCerebellarTMS",
@@ -22,7 +26,13 @@
       "venue": "7th International Brain Stimulation Conference",
       "doi": "",
       "url": "https://www.elsevier.com/events/conferences/all/international-brain-stimulation-conference",
-      "note": "Abstract submitted to the 7th International Brain Stimulation Conference. Marialaura De Grazia and Alberto A. Vergani contributed equally to this work and share first authorship"
+      "note": "Abstract submitted to the 7th International Brain Stimulation Conference. Marialaura De Grazia and Alberto A. Vergani contributed equally to this work and share first authorship",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling",
+        "neuroengineering"
+      ]
     },
     {
       "id": "Peroni2027SCN1A",
@@ -34,7 +44,11 @@
       "venue": "7th International Brain Stimulation Conference",
       "doi": "",
       "url": "",
-      "note": "Conference abstract"
+      "note": "Conference abstract",
+      "topics": [
+        "neuroscience",
+        "neuroengineering"
+      ]
     },
     {
       "id": "fabbrizzi2026digitaltwin",
@@ -46,7 +60,12 @@
       "venue": "PLOS Digital Health",
       "doi": "10.1371/journal.pdig.0001445",
       "url": "https://doi.org/10.1371/journal.pdig.0001445",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling"
+      ]
     },
     {
       "id": "Vergani_2026_Matteucci",
@@ -58,7 +77,10 @@
       "venue": "Journal of Neurology",
       "doi": "10.1007/s00415-026-13728-x",
       "url": "http://dx.doi.org/10.1007/s00415-026-13728-x",
-      "note": ""
+      "note": "",
+      "topics": [
+        "history"
+      ]
     },
     {
       "id": "vergani2026lombroso",
@@ -70,7 +92,10 @@
       "venue": "Journal of Neurology",
       "doi": "10.1007/s00415-026-13854-6",
       "url": "https://doi.org/10.1007/s00415-026-13854-6",
-      "note": ""
+      "note": "",
+      "topics": [
+        "history"
+      ]
     },
     {
       "id": "amato2026gender",
@@ -82,7 +107,10 @@
       "venue": "Alzheimer's & Dementia: Translational Research & Clinical Interventions",
       "doi": "10.1002/trc2.70245",
       "url": "https://doi.org/10.1002/trc2.70245",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience"
+      ]
     },
     {
       "id": "vergani2026effective",
@@ -94,7 +122,12 @@
       "venue": "Journal of Neural Engineering",
       "doi": "10.1088/1741-2552/ae668e",
       "url": "https://iopscience.iop.org/article/10.1088/1741-2552/ae668e/meta",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "neuroengineering"
+      ]
     },
     {
       "id": "Vrizzietal2026",
@@ -106,7 +139,11 @@
       "venue": "Open Research Europe",
       "doi": "10.12688/openreseurope.20225.1",
       "url": "https://doi.org/10.12688/openreseurope.20225.1",
-      "note": "Version 1; peer review: awaiting peer review"
+      "note": "Version 1; peer review: awaiting peer review",
+      "topics": [
+        "computer-science",
+        "education"
+      ]
     },
     {
       "id": "rizzaLocatelli",
@@ -118,7 +155,10 @@
       "venue": "Journal of Neurology",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "history"
+      ]
     },
     {
       "id": "mazzeo2026towards",
@@ -130,7 +170,10 @@
       "venue": "Journal of Alzheimer’s Disease",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience"
+      ]
     },
     {
       "id": "Faris2026_cellalterations_prep",
@@ -142,7 +185,10 @@
       "venue": "Zenodo",
       "doi": "10.5281/zenodo.19337133",
       "url": "https://doi.org/10.5281/zenodo.19337132",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience"
+      ]
     },
     {
       "id": "vergani_2026_SZ1",
@@ -154,7 +200,12 @@
       "venue": "Zenodo",
       "doi": "10.5281/zenodo.18813588",
       "url": "https://doi.org/10.5281/zenodo.18813588",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling"
+      ]
     },
     {
       "id": "amato2026normative",
@@ -166,7 +217,11 @@
       "venue": "medRxiv",
       "doi": "10.64898/2026.07.27.26359031",
       "url": "https://www.medrxiv.org/content/10.64898/2026.07.27.26359031v1",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science"
+      ]
     },
     {
       "id": "Lomi2026GRIN",
@@ -178,7 +233,11 @@
       "venue": "Transcranial Brain Stimulation in Cognitive Neuroscience Workshop (TBS-CNW 2026)",
       "doi": "",
       "url": "https://tbs-cnw.imtlucca.it/",
-      "note": "Conference abstract, December 2–4, 2026"
+      "note": "Conference abstract, December 2–4, 2026",
+      "topics": [
+        "neuroscience",
+        "neuroengineering"
+      ]
     },
     {
       "id": "conforti2026prinNEATMOVE",
@@ -190,7 +249,13 @@
       "venue": "Proceedings of the \"Massimo Grattarola\" Neuroengineering School",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling",
+        "neuroengineering"
+      ]
     },
     {
       "id": "Vergani2026DeepNuclei",
@@ -202,7 +267,12 @@
       "venue": "Proceedings of the Conference on Computational and Systems Neuroscience (COSYNE)",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling"
+      ]
     },
     {
       "id": "Mazzeo2025",
@@ -214,7 +284,10 @@
       "venue": "Annual Meeting American Academic of Neurology, 18-22 April 2026",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience"
+      ]
     },
     {
       "id": "vergani2025hill",
@@ -226,7 +299,10 @@
       "venue": "Journal of Neurology",
       "doi": "10.1007/s00415-025-12939-y",
       "url": "https://doi.org/10.1007/s00415-025-12939-y",
-      "note": ""
+      "note": "",
+      "topics": [
+        "history"
+      ]
     },
     {
       "id": "amato2025digital",
@@ -238,7 +314,12 @@
       "venue": "Alzheimer's Research & Therapy",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling"
+      ]
     },
     {
       "id": "vergani2025erp",
@@ -250,7 +331,10 @@
       "venue": "NeuroImage: Clinical",
       "doi": "10.1101/2024.01.30.577910",
       "url": "https://doi.org/10.1101/2024.01.30.577910",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience"
+      ]
     },
     {
       "id": "taddeini2025extended",
@@ -262,7 +346,11 @@
       "venue": "eNeuro",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science"
+      ]
     },
     {
       "id": "vergani2025galvani",
@@ -274,7 +362,10 @@
       "venue": "Journal of Neurology",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "history"
+      ]
     },
     {
       "id": "amato2025personalized",
@@ -286,7 +377,12 @@
       "venue": "Alzheimer's Research & Therapy",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling"
+      ]
     },
     {
       "id": "vergani2025stein",
@@ -298,7 +394,10 @@
       "venue": "Journal of Neurology",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "history"
+      ]
     },
     {
       "id": "degrazia2025cns",
@@ -310,7 +409,12 @@
       "venue": "Proceedings of the 34th Annual Computational Neuroscience Meeting (CNS*2025)",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling"
+      ]
     },
     {
       "id": "farisMnesis2025dopamineA",
@@ -322,7 +426,10 @@
       "venue": "Second MNESYS Meeting on Neural Plasticity and Connectivity",
       "doi": "",
       "url": "",
-      "note": "Presented at the Second MNESYS Meeting on Neural Plasticity and Connectivity, Naples, 24–25 September 2025"
+      "note": "Presented at the Second MNESYS Meeting on Neural Plasticity and Connectivity, Naples, 24–25 September 2025",
+      "topics": [
+        "neuroscience"
+      ]
     },
     {
       "id": "VerganiEbrains2025SchizoCerebellum",
@@ -334,7 +441,12 @@
       "venue": "EBRAINS Summit 2025",
       "doi": "",
       "url": "",
-      "note": "Presented at the EBRAINS Summit 2025, The Egg Conference Centre, Brussels, 8–11 December 2025"
+      "note": "Presented at the EBRAINS Summit 2025, The Egg Conference Centre, Brussels, 8–11 December 2025",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling"
+      ]
     },
     {
       "id": "faris2025cerebellar",
@@ -346,7 +458,10 @@
       "venue": "Society for Neuroscience Abstracts",
       "doi": "",
       "url": "",
-      "note": "Poster presentation"
+      "note": "Poster presentation",
+      "topics": [
+        "neuroscience"
+      ]
     },
     {
       "id": "Faris2025CerebellarDopamine",
@@ -358,7 +473,10 @@
       "venue": "Neuroscience 2025, Society for Neuroscience Annual Meeting",
       "doi": "",
       "url": "",
-      "note": "November 15–19"
+      "note": "November 15–19",
+      "topics": [
+        "neuroscience"
+      ]
     },
     {
       "id": "vergani2025dcp25",
@@ -370,7 +488,12 @@
       "venue": "Dynamics and Complexity Workshop (DCP25)",
       "doi": "",
       "url": "https://www.cissc.unipi.it/DCP/DCP25/",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling"
+      ]
     },
     {
       "id": "vergani2025neurobridge",
@@ -382,7 +505,12 @@
       "venue": "Neurobridge TNE Symposium",
       "doi": "",
       "url": "https://neurobridge-tne.github.io/",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling"
+      ]
     },
     {
       "id": "amato2025cns",
@@ -394,7 +522,12 @@
       "venue": "Proceedings of the 34th Annual Computational Neuroscience Meeting (CNS*2025)",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling"
+      ]
     },
     {
       "id": "Faris2025_SIF",
@@ -406,7 +539,10 @@
       "venue": "Proceedings of the 75textsuperscriptth Congresso Nazionale SIF",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience"
+      ]
     },
     {
       "id": "vergani2025mnesys",
@@ -418,7 +554,12 @@
       "venue": "Computational Neuroscience in MNESYS",
       "doi": "10.13140/RG.2.2.24207.50088",
       "url": "https://doi.org/10.13140/RG.2.2.24207.50088",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling"
+      ]
     },
     {
       "id": "farisMnesis2025dopamineB",
@@ -430,7 +571,10 @@
       "venue": "Second MNESYS Meeting on Neural Plasticity and Connectivity",
       "doi": "",
       "url": "",
-      "note": "Presented at the Second MNESYS Meeting on Neural Plasticity and Connectivity, Naples, 24–25 September 2025"
+      "note": "Presented at the Second MNESYS Meeting on Neural Plasticity and Connectivity, Naples, 24–25 September 2025",
+      "topics": [
+        "neuroscience"
+      ]
     },
     {
       "id": "vergani2025cobrain",
@@ -442,7 +586,12 @@
       "venue": "CoBrain Workshop at the Conference on Complex Systems (CCS 2025)",
       "doi": "",
       "url": "https://kgatica.github.io/CCS2025-CoBrain/#call-section",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling"
+      ]
     },
     {
       "id": "vergani2025cns",
@@ -454,7 +603,12 @@
       "venue": "Proceedings of the 34th Annual Computational Neuroscience Meeting (CNS*2025)",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling"
+      ]
     },
     {
       "id": "vergani2025saccadic",
@@ -466,7 +620,12 @@
       "venue": "XXXI SIPF Conference 2025, Società Italiana di Psicofisiologia e Neuroscienze Cognitive, Verona, Italy",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling"
+      ]
     },
     {
       "id": "peroni2025eccn",
@@ -478,7 +637,11 @@
       "venue": "Proceedings of the 20th European Conference on Clinical Neurophysiology (ECCN)",
       "doi": "",
       "url": "https://www.eccn2025-london.com",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "neuroengineering"
+      ]
     },
     {
       "id": "Peroni2025TMS_SCN1A",
@@ -490,7 +653,11 @@
       "venue": "36th International Epilepsy Congress",
       "doi": "",
       "url": "",
-      "note": "Presented at the 36th International Epilepsy Congress. Available at: r̆lhttps://lisbonvenues.pt/en/events/ccl-en/36th-international-epilepsy-congress/"
+      "note": "Presented at the 36th International Epilepsy Congress. Available at: r̆lhttps://lisbonvenues.pt/en/events/ccl-en/36th-international-epilepsy-congress/",
+      "topics": [
+        "neuroscience",
+        "neuroengineering"
+      ]
     },
     {
       "id": "taddeini2024dopaminergic",
@@ -502,7 +669,10 @@
       "venue": "Annals of Clinical and Translational Neurology",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience"
+      ]
     },
     {
       "id": "vergani2024hans",
@@ -514,7 +684,10 @@
       "venue": "Advances in Physiology Education",
       "doi": "10.1152/advan.00119.2024",
       "url": "https://doi.org/10.1152/advan.00119.2024",
-      "note": ""
+      "note": "",
+      "topics": [
+        "history"
+      ]
     },
     {
       "id": "vergani2024louis",
@@ -526,7 +699,10 @@
       "venue": "Journal of Neurology",
       "doi": "10.1007/s00415-024-12705-6",
       "url": "https://doi.org/10.1007/s00415-024-12705-6",
-      "note": ""
+      "note": "",
+      "topics": [
+        "history"
+      ]
     },
     {
       "id": "amato2024personalized",
@@ -538,7 +714,12 @@
       "venue": "Alzheimer's & Dementia: Diagnosis, Assessment & Disease Monitoring",
       "doi": "10.1002/dad2.12526",
       "url": "https://doi.org/10.1002/dad2.12526",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling"
+      ]
     },
     {
       "id": "Vergani2024FENS",
@@ -550,7 +731,10 @@
       "venue": "FENS Forum 2024",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience"
+      ]
     },
     {
       "id": "amato2024predicting",
@@ -562,7 +746,11 @@
       "venue": "Alzheimer's Association International Conference",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science"
+      ]
     },
     {
       "id": "vergani2024eventSINDEM",
@@ -574,7 +762,10 @@
       "venue": "SINdem Conference 2024, Società Italiana di Neurologia, sezione Demenze, Padova, Italy",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience"
+      ]
     },
     {
       "id": "vergani2024eventSIPF",
@@ -586,7 +777,10 @@
       "venue": "XXXII SIPF Conference 2024, Società Italiana di Psicofisologia e Neuroscienze Cognitive, Cesena, Italy",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience"
+      ]
     },
     {
       "id": "vergani2024erice",
@@ -598,7 +792,12 @@
       "venue": "IX School of Brain Cells and Circuits \"Camillo Golgi\", Erice, Italy",
       "doi": "10.13140/RG.2.2.17643.25125",
       "url": "https://doi.org/10.13140/RG.2.2.17643.25125",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling"
+      ]
     },
     {
       "id": "mazzeo2023machine",
@@ -610,7 +809,11 @@
       "venue": "Alzheimer's & Dementia",
       "doi": "10.1002/alz.082276",
       "url": "https://doi.org/10.1002/alz.082276",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science"
+      ]
     },
     {
       "id": "lassi2023degradation",
@@ -622,7 +825,11 @@
       "venue": "NeuroImage: Clinical",
       "doi": "10.1016/j.nicl.2023.103407",
       "url": "https://doi.org/10.1016/j.nicl.2023.103407",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science"
+      ]
     },
     {
       "id": "ortone2023dopamine",
@@ -634,7 +841,12 @@
       "venue": "PLOS Computational Biology",
       "doi": "10.1371/journal.pcbi.1010645",
       "url": "https://doi.org/10.1371/journal.pcbi.1010645",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling"
+      ]
     },
     {
       "id": "Mazzeo2023",
@@ -646,7 +858,11 @@
       "venue": "BMC Neurology",
       "doi": "10.1186/s12883-023-03347-8",
       "url": "http://dx.doi.org/10.1186/s12883-023-03347-8",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science"
+      ]
     },
     {
       "id": "vergani2023electrophysiology",
@@ -658,7 +874,10 @@
       "venue": "LIII SIN Conference 2023 (Società Italiana di Neurologia), Naples, Italy",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience"
+      ]
     },
     {
       "id": "vergani2023erpsSIPF",
@@ -670,7 +889,10 @@
       "venue": "XXXI SIPF 23 Conference (Italian Society of Psychophysiology and Cognitive Neuroscience)",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience"
+      ]
     },
     {
       "id": "vergani2023erpsSINDEM",
@@ -682,7 +904,10 @@
       "venue": "XVIII SINdem Conference (2023) (Società Italiana di Neurologia, sezione demenze)",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience"
+      ]
     },
     {
       "id": "vergani2023p300",
@@ -694,7 +919,10 @@
       "venue": "VIII GNB 2023 Conference (Italian National Group of Bioingeneering), Padua, Italy",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience"
+      ]
     },
     {
       "id": "vergani2023study",
@@ -706,7 +934,10 @@
       "venue": "LXII SNO 23 Conference (Congresso delle scienze neurologiche ospedaliere), Florence, Italy",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience"
+      ]
     },
     {
       "id": "vergani2022solving",
@@ -718,7 +949,10 @@
       "venue": "arXiv preprint arXiv:2211.08302",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "computer-science"
+      ]
     },
     {
       "id": "vergani2022electrophysiological",
@@ -730,7 +964,10 @@
       "venue": "SINdem Conference 2022, Società Italiana di Neurologia, sezione Demenze, Firenze, Italy",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience"
+      ]
     },
     {
       "id": "vergani2022event",
@@ -742,7 +979,10 @@
       "venue": "XXX SIPF Conference 2022, Società Italiana di Psicofisologia e Neuroscienze Cognitive, Udine, Italy",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience"
+      ]
     },
     {
       "id": "amato2022eeg",
@@ -754,7 +994,12 @@
       "venue": "31th Annual Computational Meeting: CNS*2022-Meeting, Melbourne, Australia",
       "doi": "10.1007/s10827-022-00841-9",
       "url": "https://doi.org/10.1007/s10827-022-00841-9",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling"
+      ]
     },
     {
       "id": "vergani2022temporal",
@@ -766,7 +1011,10 @@
       "venue": "FENS Forum 2022 (Federation of European Neuroscience Societies), Paris, France",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience"
+      ]
     },
     {
       "id": "vergani2021modulation",
@@ -778,7 +1026,12 @@
       "venue": "NeuroFrance Conference 2021",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling"
+      ]
     },
     {
       "id": "vergani2021simulating",
@@ -790,7 +1043,12 @@
       "venue": "Bernstein Conference 2021",
       "doi": "10.12751/nncn.bc2021.p094",
       "url": "https://doi.org/10.12751/nncn.bc2021.p094",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling"
+      ]
     },
     {
       "id": "huyck2020hot",
@@ -802,7 +1060,12 @@
       "venue": "Journal of Computational Neuroscience",
       "doi": "10.1007/s10827-020-00758-1",
       "url": "https://doi.org/10.1007/s10827-020-00758-1",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling"
+      ]
     },
     {
       "id": "vergani2020resting",
@@ -814,7 +1077,11 @@
       "venue": "Computer Methods in Biomechanics and Biomedical Engineering: Imaging & Visualization",
       "doi": "10.1080/21681163.2019.1636413",
       "url": "https://doi.org/10.1080/21681163.2019.1636413",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science"
+      ]
     },
     {
       "id": "vergani2020critical",
@@ -826,7 +1093,12 @@
       "venue": "arXiv preprint arXiv:2003.13365, 2020",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling"
+      ]
     },
     {
       "id": "huyck2020hotPoster",
@@ -838,7 +1110,12 @@
       "venue": "HBP Summit 2020",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science",
+        "brain-modelling"
+      ]
     },
     {
       "id": "temporal_classes_RS-fMRI",
@@ -850,7 +1127,11 @@
       "venue": "Proceedings of the 4th Human Brain Project Student Conference",
       "doi": "10.13140/RG.2.2.31612.67208",
       "url": "https://doi.org/10.13140/RG.2.2.31612.67208",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science"
+      ]
     },
     {
       "id": "gonella2019cloud",
@@ -862,7 +1143,10 @@
       "venue": "Lecture Notes in Computer Science",
       "doi": "10.1007/978-3-030-12544-8_7",
       "url": "https://doi.org/10.1007/978-3-030-12544-8_7",
-      "note": ""
+      "note": "",
+      "topics": [
+        "computer-science"
+      ]
     },
     {
       "id": "martinelli2019comparison",
@@ -874,7 +1158,11 @@
       "venue": "Lecture Notes in Computational Vision and Biomechanics",
       "doi": "10.1007/978-3-030-32040-9_18",
       "url": "https://doi.org/10.1007/978-3-030-32040-9_18",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science"
+      ]
     },
     {
       "id": "binaghi2018computation",
@@ -886,7 +1174,11 @@
       "venue": "Computer Methods in Biomechanics and Biomedical Engineering: Imaging & Visualization",
       "doi": "10.1080/21681163.2018.1501767",
       "url": "https://doi.org/10.1080/21681163.2018.1501767",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science"
+      ]
     },
     {
       "id": "vergani2018soft",
@@ -898,7 +1190,10 @@
       "venue": "2018 IEEE International Conference on Fuzzy Systems (FUZZ-IEEE)",
       "doi": "10.1109/FUZZ-IEEE.2018.8491581",
       "url": "https://doi.org/10.1109/FUZZ-IEEE.2018.8491581",
-      "note": ""
+      "note": "",
+      "topics": [
+        "computer-science"
+      ]
     },
     {
       "id": "vergani2018clustering",
@@ -910,7 +1205,11 @@
       "venue": "Lecture Notes in Computer Science",
       "doi": "10.1007/978-3-030-20805-9_12",
       "url": "https://doi.org/10.1007/978-3-030-20805-9_12",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science"
+      ]
     },
     {
       "id": "vergani2018resting",
@@ -922,7 +1221,11 @@
       "venue": "15th International Symposium on Computer Methods in Biomechanics and Biomedical Engineering and 3rd Conference on Imaging and Visualization",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science"
+      ]
     },
     {
       "id": "vergani2018contributions",
@@ -934,7 +1237,11 @@
       "venue": "University of Insubria, Varese, Italy",
       "doi": "10.13140/RG.2.2.19623.11689",
       "url": "https://doi.org/10.13140/RG.2.2.19623.11689",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science"
+      ]
     },
     {
       "id": "binaghi2017accuracy",
@@ -946,7 +1253,10 @@
       "venue": "2017 IEEE International Conference on Fuzzy Systems (FUZZ-IEEE)",
       "doi": "10.1109/FUZZ-IEEE.2017.8015427",
       "url": "https://doi.org/10.1109/FUZZ-IEEE.2017.8015427",
-      "note": ""
+      "note": "",
+      "topics": [
+        "computer-science"
+      ]
     },
     {
       "id": "vergani2017cluster",
@@ -958,7 +1268,11 @@
       "venue": "Lecture Notes in Computational Vision and Biomechanics",
       "doi": "10.1007/978-3-319-68195-5_7",
       "url": "https://doi.org/10.1007/978-3-319-68195-5_7",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science"
+      ]
     },
     {
       "id": "vergani2017quantitative",
@@ -970,7 +1284,11 @@
       "venue": "Proceedings of the 1th Human Brain Project Student Conference",
       "doi": "10.13140/RG.2.2.19458.49600",
       "url": "https://doi.org/10.13140/RG.2.2.19458.49600",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science"
+      ]
     },
     {
       "id": "vergani2016fsl",
@@ -982,7 +1300,11 @@
       "venue": "INCF Neuroinformatics Conference 2016, Reading, United Kingdom, 3 Sep - 4 Sep, 2016",
       "doi": "",
       "url": "",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science"
+      ]
     },
     {
       "id": "vergani2014mscthesis",
@@ -994,7 +1316,11 @@
       "venue": "University of Milan",
       "doi": "10.13140/RG.2.2.12912.23042",
       "url": "https://doi.org/10.13140/RG.2.2.12912.23042",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience",
+        "computer-science"
+      ]
     },
     {
       "id": "vergani2012bscthesis",
@@ -1006,7 +1332,10 @@
       "venue": "Vita-Salute San Raffaele University",
       "doi": "10.13140/RG.2.2.28011.72483",
       "url": "https://doi.org/10.13140/RG.2.2.28011.72483",
-      "note": ""
+      "note": "",
+      "topics": [
+        "neuroscience"
+      ]
     }
   ]
 }

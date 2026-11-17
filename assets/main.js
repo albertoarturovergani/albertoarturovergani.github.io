@@ -64,62 +64,102 @@ function renderFeatured(items) {
   });
 }
 
+const TOPIC_NAMES = Object.freeze({
+  neuroscience: 'Neuroscience',
+  'computer-science': 'Computer science & AI',
+  history: 'History of science',
+  'brain-modelling': 'Brain modelling',
+  neuroengineering: 'Neuroengineering',
+  education: 'Education & outreach',
+  other: 'Other / interdisciplinary'
+});
+
 function renderBibliography(items) {
   const target = document.getElementById('publication-list');
   if (!target) return;
   const typeButtons = [...document.querySelectorAll('[data-filter]')];
+  const topicButtons = [...document.querySelectorAll('[data-topic]')];
   const input = document.getElementById('publication-search');
   const yearSelect = document.getElementById('publication-year');
   const resultCount = document.getElementById('publication-result-count');
+  const context = document.getElementById('bib-context');
   const total = document.getElementById('total-publications');
+  if (total) total.textContent = String(items.length);
   let filter = 'all';
   let yearFilter = 'all';
   let query = '';
-  if (total) total.textContent = String(items.length);
+  const params = new URLSearchParams(window.location.search);
+  let topic = Object.hasOwn(TOPIC_NAMES, params.get('topic')) ? params.get('topic') : 'all';
+  let refs = new Set((params.get('refs') || '').split(',').map(s => s.trim()).filter(Boolean));
 
   const counts = { all: items.length, journal: 0, conference: 0, preprint: 0, thesis: 0 };
-  for (const item of items) counts[item.type] = (counts[item.type] || 0) + 1;
-  document.querySelectorAll('[data-count]').forEach(n => { n.textContent = counts[n.dataset.count] || 0; });
-  const years = [...new Set(items.map(p => p.year).filter(Boolean))].sort((a,b) => b-a);
-  for (const year of years) {
-    const option = new Option(String(year), String(year));
-    yearSelect.add(option);
+  const topicCounts = { all: items.length };
+  for (const item of items) {
+    counts[item.type] = (counts[item.type] || 0) + 1;
+    for (const tag of (item.topics || ['other'])) {
+      topicCounts[tag] = (topicCounts[tag] || 0) + 1;
+    }
   }
+  document.querySelectorAll('[data-count]').forEach(n => {
+    n.textContent = counts[n.dataset.count] || 0;
+  });
+  document.querySelectorAll('[data-topic-count]').forEach(n => {
+    n.textContent = topicCounts[n.dataset.topicCount] || 0;
+  });
+  const years = [...new Set(items.map(p => p.year).filter(Boolean))].sort((a,b) => b-a);
+  for (const year of years) yearSelect.add(new Option(String(year), String(year)));
+  topicButtons.forEach(b => { if (b.dataset.topic === 'other' && !topicCounts.other) b.hidden = true; });
 
-  function setFilter(value) {
-    filter = value;
-    typeButtons.forEach(button => {
-      const active = button.dataset.filter === value;
+  function styleButtons(buttons, dataName, selected) {
+    buttons.forEach(button => {
+      const active = button.dataset[dataName] === selected;
       button.classList.toggle('active', active);
       button.setAttribute('aria-pressed', String(active));
     });
-    update();
   }
+  function setFilter(value) { filter = value; styleButtons(typeButtons, 'filter', filter); update(); }
+  function setTopic(value) { topic = value; styleButtons(topicButtons, 'topic', topic); update(); }
   function reset() {
-    query = '';
-    yearFilter = 'all';
-    input.value = '';
-    yearSelect.value = 'all';
-    setFilter('all');
+    query = ''; yearFilter = 'all'; refs = new Set();
+    input.value = ''; yearSelect.value = 'all';
+    filter = 'all'; topic = 'all';
+    styleButtons(typeButtons, 'filter', filter);
+    styleButtons(topicButtons, 'topic', topic);
+    if (window.history?.replaceState) window.history.replaceState({}, '', window.location.pathname);
+    update();
     input.focus();
   }
   function update() {
     const matching = items.filter(item => {
+      if (refs.size && !refs.has(item.id)) return false;
       if (filter !== 'all' && item.type !== filter) return false;
+      if (topic !== 'all' && !(item.topics || []).includes(topic)) return false;
       if (yearFilter !== 'all' && String(item.year) !== yearFilter) return false;
-      return searchable([item.title, item.authors, item.venue, item.year, item.status].join(' ')).includes(query);
+      const haystack = [item.id, item.title, item.authors, item.venue,
+        item.year, item.status, ...(item.topics || []).map(t => TOPIC_NAMES[t] || t)].join(' ');
+      return searchable(haystack).includes(query);
     });
     target.replaceChildren();
     resultCount.textContent = `${matching.length} ${matching.length === 1 ? 'record' : 'records'} shown`;
+    if (context) {
+      context.replaceChildren();
+      if (refs.size) {
+        context.append(makeEl('span', '', `Selected references from the CV (${refs.size})`));
+        const showAll = makeEl('button', 'context-clear', 'Show complete bibliography');
+        showAll.type = 'button';
+        showAll.addEventListener('click', reset);
+        context.append(showAll);
+        context.hidden = false;
+      } else context.hidden = true;
+    }
     if (!matching.length) {
       const empty = makeEl('div', 'empty-results');
-      empty.append(makeEl('strong', '', 'No matching records'), makeEl('p', '', 'Try a different keyword, type, or year.'));
-      const button = makeEl('button', 'clear-filters', 'Clear filters');
+      empty.append(makeEl('strong', '', 'No matching records'),
+        makeEl('p', '', 'Try a different theme, keyword, type or year.'));
+      const button = makeEl('button', 'clear-filters', 'Clear all filters');
       button.type = 'button';
       button.addEventListener('click', reset);
-      empty.append(button);
-      target.append(empty);
-      return;
+      empty.append(button); target.append(empty); return;
     }
     const byYear = new Map();
     matching.forEach(item => {
@@ -133,10 +173,12 @@ function renderBibliography(items) {
       const list = makeEl('div', 'bib-year-items');
       publications.forEach(p => {
         const article = makeEl('article', 'bib-item');
+        article.id = `pub-${p.id.replace(/[^a-zA-Z0-9_-]/g, '-')}`;
         const content = makeEl('div', 'bib-item-content');
         const meta = makeEl('div', 'bib-item-meta');
         meta.append(makeEl('span', 'bib-category', TYPE_NAMES[p.type] || 'Research output'));
-        if (p.status && p.status !== TYPE_NAMES[p.type] && !(p.type === 'preprint' && p.status === 'Preprint / working paper')) {
+        if (p.status && p.status !== TYPE_NAMES[p.type] &&
+          !(p.type === 'preprint' && p.status === 'Preprint / working paper')) {
           meta.append(makeEl('span', 'bib-status', p.status));
         }
         content.append(meta);
@@ -146,6 +188,12 @@ function renderBibliography(items) {
         content.append(heading);
         if (p.authors) content.append(makeEl('p', 'bib-authors', p.authors));
         if (p.venue) content.append(makeEl('p', 'bib-venue', p.venue));
+        const topicLine = makeEl('div', 'bib-topic-tags');
+        (p.topics || []).forEach(code => {
+          const tag = makeEl('span', 'bib-topic-tag', TOPIC_NAMES[code] || code);
+          topicLine.append(tag);
+        });
+        if (topicLine.childNodes.length) content.append(topicLine);
         article.append(content);
         if (p.url) {
           const external = makeLink(p.url, '↗', 'bib-external');
@@ -154,14 +202,19 @@ function renderBibliography(items) {
         }
         list.append(article);
       });
-      group.append(list);
-      target.append(group);
+      group.append(list); target.append(group);
     }
   }
   typeButtons.forEach(button => button.addEventListener('click', () => setFilter(button.dataset.filter)));
+  topicButtons.forEach(button => button.addEventListener('click', () => setTopic(button.dataset.topic)));
   input.addEventListener('input', () => { query = searchable(input.value.trim()); update(); });
   yearSelect.addEventListener('change', () => { yearFilter = yearSelect.value; update(); });
+  styleButtons(typeButtons, 'filter', filter);
+  styleButtons(topicButtons, 'topic', topic);
   update();
+  if (window.location.hash.startsWith('#pub-')) {
+    requestAnimationFrame(() => document.getElementById(decodeURIComponent(window.location.hash.slice(1)))?.scrollIntoView());
+  }
 }
 
 async function initializePublications() {

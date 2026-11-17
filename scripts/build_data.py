@@ -21,6 +21,9 @@ ROOT = Path(__file__).resolve().parents[1]
 BIB = ROOT / 'vergani_scholar.bib'
 OUT = ROOT / 'data' / 'publications.json'
 OVERRIDES_FILE = ROOT / 'content' / 'status.json'
+TOPICS_FILE = ROOT / 'content' / 'topics.json'
+
+TOPICS = {'neuroscience', 'computer-science', 'history', 'brain-modelling', 'neuroengineering', 'education', 'other'}
 
 KIND = {
     'article': 'journal',
@@ -180,7 +183,39 @@ def safe_link(url: str) -> str:
     return u if u.lower().startswith(('https://', 'http://')) else ''
 
 
-def normalize(entry: dict[str, str], overrides: dict) -> dict:
+def infer_topics(entry: dict[str, str]) -> list[str]:
+    """Conservative fallback for NEW entries without curated topic assignments.
+
+    Existing works are explicitly tagged in content/topics.json. Review new
+    assignments; automatic keyword classification is not a scientific taxonomy.
+    """
+    t = tex_to_text(' '.join(entry.get(k, '') for k in ('title','journal','booktitle','keywords'))).casefold()
+    found = []
+    if re.search(r'(neuro\w*|brain\w*|cerebell\w*|\beeg\b|\btms\b|\bfmri\b|\bmri\b|cortical|neural|parkinson\w*|alzheimer\w*|dementia|schizophren\w*|epilep\w*|dopamin\w*|cogniti\w*|synapti\w*|microstates|ataxia|visual cortex|basal ganglia)', t):
+        found.append('neuroscience')
+    if re.search(r'algorithm|artificial intelligence|machine learning|digital twins?|fuzzy|clusters?|computational|numerical|simulat|spiking|neuromorph|neural network|network model|random matrix|deep learning',t):
+        found.append('computer-science')
+    if re.search(r'digital twins?|spiking|neuromorph|simulat|computational model|virtual brain|mechanistic model',t):
+        found.append('brain-modelling')
+    if re.search(r'\btms\b|stimulation|dosimetry|brain-computer interface|artifact correction',t):
+        found.append('neuroengineering')
+    if re.search(r'\bhistor(y|ical)\b|biograph|pioneer',t):
+        found.append('history')
+    if re.search(r'education|outreach|train(?:ing)? researchers|teaching|learning programme',t):
+        found.append('education')
+    return found or ['other']
+
+
+def assigned_topics(entry: dict[str, str], topic_overrides: dict) -> list[str]:
+    tags = topic_overrides.get(entry['key'])
+    if tags is None:
+        return infer_topics(entry)
+    if not isinstance(tags, list) or not tags or any(t not in TOPICS for t in tags):
+        raise ValueError('Invalid topic list for BibTeX key: ' + entry['key'])
+    return list(dict.fromkeys(tags))
+
+
+def normalize(entry: dict[str, str], overrides: dict, topic_overrides: dict) -> dict:
     typ = entry['entry_type']
     kind = KIND.get(typ, 'other')
     year_str = tex_to_text(entry.get('year', ''))
@@ -235,6 +270,7 @@ def normalize(entry: dict[str, str], overrides: dict) -> dict:
         'doi': doi if doi_link else '',
         'url': safe_link(ov.get('url', '')) or url,
         'note': note,
+        'topics': assigned_topics(entry, topic_overrides),
     }
     return item
 
@@ -242,6 +278,7 @@ def normalize(entry: dict[str, str], overrides: dict) -> dict:
 def main() -> int:
     entries = parse_bib(BIB.read_text(encoding='utf-8'))
     overrides = json.loads(OVERRIDES_FILE.read_text(encoding='utf-8')) if OVERRIDES_FILE.exists() else {}
+    topic_overrides = json.loads(TOPICS_FILE.read_text(encoding='utf-8')) if TOPICS_FILE.exists() else {}
     # A CV may have accidental duplicate keys. Deduplicate equivalent entries,
     # but fail on conflicting records rather than silently publishing the wrong one.
     unique = {}
@@ -254,10 +291,13 @@ def main() -> int:
             if len(e.get('doi', '')) < len(other.get('doi', '')):
                 continue
         unique[e['key']] = e
-    normalized = [normalize(e, overrides) for e in unique.values() if e['entry_type'] in KIND]
+    normalized = [normalize(e, overrides, topic_overrides) for e in unique.values() if e['entry_type'] in KIND]
     if not normalized:
         raise ValueError('No publications were parsed from BibTeX')
     normalized.sort(key=lambda p: (-p['year'], {'journal': 0, 'preprint': 1, 'conference': 2, 'thesis': 3}[p['type']], p['title'].lower()))
+    not_found = set(topic_overrides) - set(unique)
+    if not_found:
+        print('WARNING: topic metadata has unused keys: ' + ', '.join(sorted(not_found)), file=sys.stderr)
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps({'items': normalized}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     from collections import Counter

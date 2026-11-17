@@ -35,7 +35,7 @@ jobs:
       - name: Assemble static site
         run: |
           mkdir -p dist
-          cp index.html publications.html .nojekyll vergani_scholar.bib dist/
+          cp index.html cv.html publications.html .nojekyll vergani_scholar.bib dist/
           cp -R assets data dist/
 
       - name: Configure GitHub Pages

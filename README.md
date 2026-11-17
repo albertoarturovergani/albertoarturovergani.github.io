@@ -1,42 +1,49 @@
-# Alberto Arturo Vergani — academic website
+# Alberto Arturo Vergani — personal academic website
 
-Source of the personal academic website `https://albertoarturovergani.github.io`.
+Public site: **https://albertoarturovergani.github.io**
 
-Responsive, static, no personal portrait photograph, built from the CV (17 November 2026). No paid domain or web hosting is required when using GitHub Pages with a public repository. Artwork images are optimised versions of files supplied by the author.
+This is a lightweight static site hosted by GitHub Pages. It includes the complete CV structure transcribed from `cv_noImage26.tex` in the supplied Overleaf archive (17 November 2026), a search-ready bibliography from `vergani_scholar.bib`, and scientific Brain Art projects. No portrait or personal signature is included.
 
-## Publish
+## Pages
 
-- The repository must be **Public** for GitHub Pages on the free plan. Switch it to Public in **Settings > General > Danger Zone > Change repository visibility**.
-- In **Settings > Pages > Build and deployment**, select **GitHub Actions** as the source. This repository includes `.github/workflows/pages.yml` to build and deploy the site. You can alternatively publish from **Deploy from a branch > main > /(root)**, because prebuilt static files are committed at the root.
-- After each update, confirm a successful run in the **Actions** tab and check the live URL.
+- `index.html` — homepage with research areas, recent publications, academic path, **all four education qualifications**, recognition, science/art and contact links.
+- `cv.html` — **full academic CV**, respecting the original Overleaf order: Introduction; Prizes, Proposals and Fellowships; Academic Information (Positions, Collaborations, Visiting periods, Teaching, Tutoring, Commissions, Memberships, Chairing, Event Organization, Journals Engagement, References, Education); Presentations (Talks, Posters, Seminars); Continuous learning (Workshops, Schools, Courses); Extra Information (Programming skills, Third mission, other academic and non-academic activities); Neuroscience Art; Scientific Outcomes.
+- `publications.html` — complete BibTeX-based bibliography, filterable by **topic, publication type and year**, with text search. Topics can overlap.
 
-## Update publications
+The CV page includes original content, thesis details and activities from the LaTeX source, rather than only the abbreviated homepage timeline. Its `Scientific Outcomes` metrics are a **dated historical snapshot**, not a live feed. Bibliography counts are generated separately to avoid presenting historical counts as current. Contact information for third-party academic referees is intentionally omitted from the public page.
 
-The canonical bibliography is **`vergani_scholar.bib`** at the repository root. Add a valid BibTeX entry (with a unique citation key) and commit it. The GitHub Actions workflow runs `scripts/build_data.py` to regenerate the searchable bibliography. `content/status.json` holds overrides for article/preprint/submitted/accepted statuses. Please verify the publication metadata and acceptance status before publishing. Do not mark conference submissions as accepted without evidence.
+## Add or update a publication
 
-The project comes with a generated `data/publications.json` so the site also works with the branch-based GitHub Pages option. If you use *branch* deployment rather than *GitHub Actions* deployment, regenerate the JSON with `python3 scripts/build_data.py` and commit both the BibTeX and JSON files. If we maintain the repository together through ChatGPT, I can do these updates for you.
+1. Open `vergani_scholar.bib` in this repository, choose **Edit** and add the BibTeX record with a unique citation key, or modify an existing record.
+2. If the publication status needs an explicit correction (accepted, in preparation, submitted, etc.), update `content/status.json` using the corresponding BibTeX citation key.
+3. To manually assign subject tags, update `content/topics.json`, e.g. `"my2027paper": ["neuroscience", "computer-science"]`. You can use several tags for one paper. Existing records have been manually classified using their scientific topics; new records receive an automatic **suggestion** based on keywords until reviewed. Never treat the keyword fallback as an authoritative discipline classification.
+4. Commit the changes. **GitHub Actions regenerates `data/publications.json` and deploys the pages**. The bibliography can be found via search or the subject links on the homepage.
 
-## Website files
+Subjects currently offered (internal codes): `neuroscience`, `computer-science`, `history`, `brain-modelling`, `neuroengineering`, `education`, and `other` (shown only if needed). Subject counts overlap and should not be added together. Type filters (journal / conference / preprint / thesis) and year filters are independent of the subject filter.
 
-- `index.html` — homepage with research, career, awards and brain art
-- `publications.html` — searchable and filterable bibliography
-- `assets/style.css`, `assets/main.js` — theme and interactivity
-- `assets/*.webp` — user's scientific artwork, *not* a portrait
-- `vergani_scholar.bib` — the full editable bibliographic source
-- `scripts/build_data.py` and `content/status.json` — bibliography generator and status corrections
-- `.github/workflows/pages.yml` — automated deployment
+New works are **not automatically harvested** from journals, Google Scholar or ORCID: add a BibTeX entry to trigger the automated publication refresh. Verify DOI, category and acceptance status. Some references in the supplied CV are labelled as submitted or planned for 2027; they are not represented as peer-reviewed publications.
 
-## Local preview
+## Update the CV or homepage
+
+- `cv.html` is a publication-safe rendering of the Overleaf LaTeX supplied on 17 November 2026. When the CV changes, you can update this file, or share a more recent Overleaf source for a new conversion. The full original ZIP, personal photograph, signature and private drafting files **are not committed**.
+- `index.html` contains the featured education cards, current position and career summary. Keep this homepage in sync with the detailed CV.
+- `assets/style.css` and `assets/main.js` contain styling, menu and filtering. The three `assets/*.webp` files are the author's neuroscience artwork, **not** personal photographs.
+
+## Deployment
+
+This repository is public and contains `.github/workflows/pages.yml`. In **Settings → Pages → Build and deployment → Source**, select **GitHub Actions**. The workflow runs on every `main` commit and manually through **Actions → Publish academic website → Run workflow**. The workflow needs `pages: write` and `id-token: write`, both already declared.
+
+GitHub Pages also supports a branch-based publish option, but for **automatic BibTeX updates** use the provided GitHub Actions workflow (otherwise you need to run `python3 scripts/build_data.py` and commit the JSON output yourself).
+
+To preview locally without extra Python dependencies:
 
 ```bash
 python3 scripts/build_data.py
 python3 -m http.server 8000
 ```
 
-Then open `http://localhost:8000` in a browser.
+Open `http://localhost:8000`.
 
-## Bibliography provenance and caution
+## Source / accuracy notes
 
-The source BibTeX includes 84 distinct records after removing one duplicate key: 26 journal entries, 50 conference entries, 5 preprints/working papers and 3 theses (the CV's manually maintained summary may differ). Several 2027 entries are planned/submitted; they are labeled as such on the site. Bibliographic status is inferred from the source BibTeX and explicit overrides and is not independently verified.
-
-The uploaded CV archive included historic material and a portrait/facsimile signature. Those private/historic files **are not included** in this repository. The website includes only publication metadata, professional information, and scientific artwork. Please review current appointment dates, publication statuses and professional contact links before publicising the site.
+The original BibTeX was cleaned to **84 unique entries**: 26 journal items, 50 conference entries, 5 preprints/working papers, 3 theses. The manually maintained *Scientific Outcomes* totals in the original CV do not exactly match this sum. Status and subject data come from the source record and conservative manual curation, not from live publisher verification. The source also includes time-limited appointments and future records; review dates and affiliations before using the website as an official CV.
