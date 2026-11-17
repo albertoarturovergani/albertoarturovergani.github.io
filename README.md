@@ -48,18 +48,24 @@ Open `http://localhost:8000`.
 
 The original BibTeX was cleaned to **84 unique entries**: 26 journal items, 50 conference entries, 5 preprints/working papers, 3 theses. The manually maintained *Scientific Outcomes* totals in the original CV do not exactly match this sum. Status and subject data come from the source record and conservative manual curation, not from live publisher verification. The source also includes time-limited appointments and future records; review dates and affiliations before using the website as an official CV.
 
-## Site update date and bibliometrics
+## Research metrics
 
-The narrow bar at the top of each page shows **Last updated**, generated from the most recent Git commit on `main` during the GitHub Pages build. The date changes when you commit edits to the repository; it is not recalculated on every visit.
-
-Google Scholar and Scopus metrics in `cv.html` are **manual, dated snapshots**. To update citations, H-index or other figures, edit `cv.html` and the date alongside them, then commit. No Google Scholar or Scopus scraping, keys, API requests or daily metrics jobs are involved. The date at the top indicates the site's last update, not the day bibliometric data was measured.
+Google Scholar and Scopus metrics are entered manually in `cv.html`, and their measurement date appears in the Scientific Outcomes section only. The website does not display a global last-updated date.
 
 ## Downloadable PDF version of the CV
 
 A visitor-facing **Download full CV (PDF)** link is available on `cv.html` and near Education on `index.html`. The linked file is `assets/Alberto_Arturo_Vergani_CV.pdf`, currently a 23-page A4 rendering of the complete CV (as of 17 November 2026, without a personal portrait). It keeps the education, appointments, awards, talks, continuing training, research activities and art sections.
 
-**Maintenance:** Updating `cv.html` does not automatically regenerate the PDF. Replace the PDF in `assets/` when the CV changes. You can also ask ChatGPT to regenerate it and update the repository. The site's Last updated date is the website commit date; it is not a guarantee that citation counts or the PDF were refreshed on that date.
+**Maintenance:** Updating `cv.html` does not automatically regenerate the PDF. Replace the PDF in `assets/` when the CV changes. You can also ask ChatGPT to regenerate it and update the repository. The PDF requires a separate update after substantive CV edits.
 
 ## Visual style and domain
 
 The site uses a warm orange/terracotta accent palette, with no portrait photograph. It is currently available at the free `albertoarturovergani.github.io` address. A separately registered personal domain can later be added through Settings → Pages after its DNS records have been configured and ownership verified. Keeping a custom domain still requires renewing its registration; do not change the CNAME or DNS until that decision is made.
+
+## Public GitHub repositories
+
+The Full CV includes all 16 public repositories in `cv.html#github-repositories`, immediately after General programming skills. This inventory is manually curated; re-check public visibility before adding repositories. The optional Algorithms & Computational Models catalogue is deliberately not included.
+
+## Publication topic preset
+
+All subject tags except History of Science are checked when the Publications page opens; its eight history-tagged entries remain accessible when History of Science is selected. There is no visible "All except" or "All including" preset button. Tags are non-exclusive.

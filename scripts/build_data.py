@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import json
 import re
-import subprocess
 import shutil
 import sys
 import unicodedata
@@ -321,11 +320,6 @@ def main() -> int:
         print('WARNING: topic metadata has unused keys: ' + ', '.join(sorted(not_found)), file=sys.stderr)
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps({'items': normalized}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    try:
-        commit_date = subprocess.check_output(['git', 'log', '-1', '--format=%cs'], cwd=ROOT, text=True, stderr=subprocess.DEVNULL).strip()
-    except (OSError, subprocess.CalledProcessError):
-        commit_date = date.today().isoformat()
-    (ROOT / 'data' / 'site-meta.json').write_text(json.dumps({'last_updated': commit_date}, indent=2) + '\n', encoding='utf-8')
     from collections import Counter
     print('Built', OUT.relative_to(ROOT), 'with', len(normalized), 'items:', dict(Counter(p['type'] for p in normalized)))
     missing = [p['id'] for p in normalized if not p['title'] or not p['year']]

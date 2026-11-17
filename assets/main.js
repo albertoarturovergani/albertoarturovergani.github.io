@@ -100,9 +100,14 @@ function renderBibliography(items) {
   let yearFilter = 'all';
   let query = '';
   const params = new URLSearchParams(window.location.search);
-  const requested = params.get('topics') || params.get('topic') || '';
-  const selectedTopics = new Set(requested.split(',').filter(code => Object.hasOwn(TOPIC_NAMES, code)));
-  let browseMode = selectedTopics.size ? 'selected' : (params.get('view') === 'all' ? 'all' : 'default');
+  const requested = params.get('topics') ?? params.get('topic');
+  const validTopics = new Set(items.flatMap(item => item.topics || []));
+  const defaultTopics = new Set(Object.keys(TOPIC_NAMES).filter(code => code !== 'history' && validTopics.has(code)));
+  const legacyAll = params.get('view') === 'all';
+  const selectedTopics = requested === null ?
+    new Set(legacyAll ? validTopics : defaultTopics) :
+    new Set(requested.split(',').filter(code => validTopics.has(code)));
+  const explicitTopicFilter = requested !== null || legacyAll;
   let tagMatch = params.get('match') === 'all' ? 'all' : 'any';
   matchSelect.value = tagMatch;
   let refs = new Set((params.get('refs') || '').split(',').map(s => s.trim()).filter(Boolean));
@@ -132,49 +137,44 @@ function renderBibliography(items) {
       button.setAttribute('aria-pressed', String(active));
     });
   }
+  function isDefaultTopicSelection() {
+    return selectedTopics.size === defaultTopics.size && [...defaultTopics].every(code => selectedTopics.has(code));
+  }
   function styleTopics() {
     topicButtons.forEach(button => {
-      const code = button.dataset.topic;
-      const active = code === 'default' ? browseMode === 'default' :
-        code === 'all' ? browseMode === 'all' : browseMode === 'selected' && selectedTopics.has(code);
+      const active = selectedTopics.has(button.dataset.topic);
       button.classList.toggle('active', active);
       button.setAttribute('aria-pressed', String(active));
     });
-    matchSelect.disabled = browseMode !== 'selected' || selectedTopics.size < 2;
+    matchSelect.disabled = selectedTopics.size < 2;
     const more = document.querySelector('.topic-more');
-    if (more && browseMode === 'selected' && [...selectedTopics].some(code =>
-      [...more.querySelectorAll('[data-topic]')].some(button => button.dataset.topic === code))) {
-      more.open = true;
-    }
+    if (more && explicitTopicFilter && !isDefaultTopicSelection() &&
+      [...selectedTopics].some(code => more.querySelector('[data-topic="' + code + '"]'))) more.open = true;
   }
   function updateUrl() {
     if (!window.history?.replaceState) return;
     const url = new URL(window.location.href);
     for (const key of ['topic','topics','match','view']) url.searchParams.delete(key);
-    if (browseMode === 'all') url.searchParams.set('view','all');
-    if (browseMode === 'selected') {
-      url.searchParams.set('topics',[...selectedTopics].join(','));
-      if (tagMatch === 'all') url.searchParams.set('match','all');
-    }
+    if (!isDefaultTopicSelection()) url.searchParams.set('topics', selectedTopics.size ? [...selectedTopics].join(',') : 'none');
+    if (tagMatch === 'all') url.searchParams.set('match','all');
     window.history.replaceState({}, '', url.pathname + url.search + url.hash);
   }
   function setFilter(value) { filter = value; styleButtons(typeButtons, 'filter', filter); update(); }
   function setTopic(value) {
-    if (value === 'default' || value === 'all') {
-      browseMode = value; selectedTopics.clear();
-    } else {
-      if (browseMode !== 'selected') selectedTopics.clear();
-      browseMode = 'selected';
-      if (selectedTopics.has(value)) selectedTopics.delete(value);
-      else selectedTopics.add(value);
-      if (!selectedTopics.size) browseMode = 'default';
-    }
+    if (value === 'history' && !selectedTopics.has('history') && isDefaultTopicSelection()) {
+      selectedTopics.clear(); selectedTopics.add('history');
+    } else if (selectedTopics.has(value)) selectedTopics.delete(value);
+    else selectedTopics.add(value);
     styleTopics(); updateUrl(); update();
+  }
+  function clearTopics() {
+    selectedTopics.clear(); styleTopics(); updateUrl(); update();
   }
   function reset() {
     query = ''; yearFilter = 'all'; refs = new Set();
     input.value = ''; yearSelect.value = 'all';
-    filter = 'all'; browseMode = 'default'; tagMatch = 'any'; selectedTopics.clear();
+    filter = 'all'; tagMatch = 'any'; selectedTopics.clear();
+    defaultTopics.forEach(code => selectedTopics.add(code));
     matchSelect.value = tagMatch;
     styleButtons(typeButtons, 'filter', filter);
     styleTopics();
@@ -187,8 +187,9 @@ function renderBibliography(items) {
       if (refs.size && !refs.has(item.id)) return false;
       if (filter !== 'all' && item.type !== filter) return false;
       const tags = item.topics || [];
-      if (browseMode === 'default' && !refs.size && tags.includes('history')) return false;
-      if (browseMode === 'selected') {
+      if (!(refs.size && !explicitTopicFilter)) {
+        if (!selectedTopics.size) return false;
+        if (!selectedTopics.has('history') && tags.includes('history')) return false;
         const selection = [...selectedTopics];
         if (tagMatch === 'all' && !selection.every(code => tags.includes(code))) return false;
         if (tagMatch === 'any' && !selection.some(code => tags.includes(code))) return false;
@@ -199,7 +200,7 @@ function renderBibliography(items) {
       return searchable(haystack).includes(query);
     });
     target.replaceChildren();
-    resultCount.textContent = `${matching.length} ${matching.length === 1 ? 'record' : 'records'} shown${browseMode === 'default' && !refs.size ? ' · History of science excluded by default' : ''}`;
+    resultCount.textContent = `${matching.length} ${matching.length === 1 ? 'record' : 'records'} shown`;
     if (context) {
       context.replaceChildren();
       if (refs.size) {
@@ -269,6 +270,7 @@ function renderBibliography(items) {
   }
   typeButtons.forEach(button => button.addEventListener('click', () => setFilter(button.dataset.filter)));
   topicButtons.forEach(button => button.addEventListener('click', () => setTopic(button.dataset.topic)));
+  document.getElementById('topic-clear-selection')?.addEventListener('click', clearTopics);
   matchSelect.addEventListener('change', () => {
     tagMatch = matchSelect.value === 'all' ? 'all' : 'any';
     updateUrl(); update();
@@ -305,23 +307,7 @@ async function initializePublications() {
 }
 
 
-async function initializeSiteUpdateDate() {
-  const targets = document.querySelectorAll('[data-last-updated]');
-  if (!targets.length) return;
-  try {
-    const response = await fetch('data/site-meta.json', { cache: 'no-cache' });
-    if (!response.ok) throw new Error('Missing site update metadata');
-    const data = await response.json();
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(data.last_updated || '')) throw new Error('Invalid date');
-    const date = new Date(data.last_updated + 'T12:00:00Z');
-    const label = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
-    targets.forEach(node => { node.textContent = label; node.setAttribute('datetime', data.last_updated); });
-  } catch (error) {
-    targets.forEach(node => { node.textContent = 'date unavailable'; });
-  }
-}
 
 document.getElementById('current-year')?.replaceChildren(String(new Date().getFullYear()));
 initializeNavigation();
 initializePublications();
-initializeSiteUpdateDate();
