@@ -60,6 +60,11 @@
     .section-title{font-size:11px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);font-weight:800;margin:20px 0 12px}
     .presets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:19px}
     .model-presets button{padding:11px 5px;font-size:12px;line-height:1.2}
+    .wave-presets button{min-height:43px;font-size:11.5px}
+    .wave-controls[hidden]{display:none}
+    .wave-controls{padding:13px 15px 16px;background:#142541;border:1px solid #3d5679;border-radius:9px;margin:-6px 0 19px}
+    .wave-controls .control{margin-top:12px}
+    .wave-controls .hint{color:#b1c6e4}
     .model-description{color:#a9bbd8;font-size:11.5px;line-height:1.55;min-height:36px;margin:-8px 0 20px}
     .stim-panel{margin-top:23px;padding:17px 14px 15px;border:1px solid #405475;border-radius:12px;background:linear-gradient(140deg,#1c2d49,#152238)}
     .stim-panel .section-title{margin:0 0 10px;color:#d0e4ff}
@@ -131,19 +136,18 @@
               </select>
               <label for="analysisStepMs">Nominal Δt</label>
               <select id="analysisStepMs" aria-label="Nominal analysis time per simulation step">
-                <option value="5">5 ms/step</option>
-                <option value="10" selected>10 ms/step</option>
-                <option value="20">20 ms/step</option>
+                <option value="1" selected>1 ms/step · Nyquist 500 Hz</option>
+                <option value="0.5">0.5 ms/step · Nyquist 1000 Hz</option>
               </select>
               <button id="meanPSDExport" type="button" disabled>↓ Save 5 s PSD</button>
               <button id="waveletExport" type="button" disabled>↓ Save wavelet CSV</button>
             </div>
           </div>
           <div class="wavelet-chart">
-            <h3>5 s rolling mean PSD · Welch estimate</h3>
+            <h3>5 s rolling mean PSD · log-log · 1–500 nominal Hz</h3>
             <p id="meanPSDInfo" class="spectral-description">Collecting the first 5-second analysis window…</p>
-            <canvas id="meanPSD" width="760" height="220" role="img" aria-label="Live five-second rolling Welch PSD of excitatory population spike rate"></canvas>
-            <p class="spectral-chart-caption">Hann-windowed, mean-detrended periodograms, 50% overlap. Sliding window: 5 seconds in the chosen nominal analysis timebase, not wall-clock time.</p>
+            <canvas id="meanPSD" width="760" height="260" role="img" aria-label="Log-log Welch mean PSD from 1 to 500 nominal Hz, computed from a five-second sliding window of excitatory population spikes"></canvas>
+            <p class="spectral-chart-caption">Hann-windowed, mean-detrended 1024/2048-point FFT periodograms, 50% overlap, averaged over the last 5 nominal seconds. Both axes use logarithmic scales; zero frequency is omitted. Nominal 1 ms/step gives a 500 Hz Nyquist limit.</p>
           </div>
           <div class="wavelet-chart">
             <h3>Morlet scalogram · time–frequency power</h3>
@@ -160,7 +164,7 @@
             <canvas id="voltageBalance" width="760" height="312" role="img" aria-label="Live mean excitatory and inhibitory membrane potential traces, with voltage difference beneath"></canvas>
             <p class="spectral-chart-caption">Phase plane: horizontal E voltage, vertical I voltage. Voltage balance: mean E and I on the upper axis, E − I on a separate lower axis. Voltages are dimensionless for LIF / adaptive LIF, and model mV for Izhikevich.</p>
           </div>
-          <p class="wavelet-explainer">Nominal Δt changes the spectral analysis clock and the 5-second Welch window, <strong>not the neural simulation equations</strong>. Nominal Hz is not calibrated physiological Hz. Signal: fraction of excitatory neurons spiking at each simulation step, measured in the central patch (radius 10 cells) or across the full lattice. The <strong>5 s mean PSD</strong> uses a moving-window Welch estimate with frequencies in nominal Hz. The <strong>Morlet CWT</strong> is displayed only as a scalogram, updated approximately every 84 simulation steps, with its own axis in cycles/step. Both estimates come from the same actual spike-rate signal. Wavelet edge estimates are approximate; orange lines mark stimulus onsets.</p>
+          <p class="wavelet-explainer">Nominal Δt changes the spectral analysis clock and the 5-second Welch window, <strong>not the neural simulation equations</strong>. Even at 500 Hz Nyquist, nominal Hz is <strong>not calibrated physiological Hz</strong>. Signal: fraction of excitatory neurons spiking at each simulation step, measured in the central patch (radius 10 cells) or across the full lattice. The <strong>5 s mean PSD</strong> uses a moving-window Welch estimate with frequencies in nominal Hz. The <strong>Morlet CWT</strong> is displayed only as a scalogram, updated approximately every 84 simulation steps, with its own axis in cycles/step. Both estimates come from the same actual spike-rate signal. Wavelet edge estimates are approximate; orange lines mark stimulus onsets.</p>
         </section>
       </section>
       <aside class="side" aria-label="Simulation controls">
@@ -174,12 +178,25 @@
         </div>
         <p class="model-description" id="modelDescription">Leaky integrate-and-fire: membrane leakage, threshold, reset and refractory period.</p>
         <div class="section-title">Dynamics preset</div>
-        <div class="presets" role="group" aria-label="Select a dynamics preset">
+        <div class="presets wave-presets" role="group" aria-label="Select a dynamics preset">
           <button class="selected" data-preset="spots" aria-pressed="true">Spots</button>
           <button data-preset="maze" aria-pressed="false">Labyrinth</button>
           <button data-preset="islands" aria-pressed="false">Islands</button>
+          <button data-preset="traveling" aria-pressed="false">Traveling waves</button>
+          <button data-preset="spiral" aria-pressed="false">Spiral waves</button>
         </div>
         <p id="presetDescription" class="preset-desc">Spots: E→I = 13, local E radius = 2, inhibitory radius = 8. Often isolated patches.</p>
+        <div id="waveControls" class="wave-controls" hidden>
+          <p class="hint">Driven-wave modes: a propagating or rotating spatial input drives the genuine E/I spiking network. Wavefronts are therefore stimulated responses, not proven self-sustaining waves.</p>
+          <div class="control">
+            <div class="labelrow"><label for="wavePeriod">Drive period (steps)</label><output id="wavePeriodValue">150</output></div>
+            <input type="range" id="wavePeriod" min="50" max="300" step="10" value="150"/>
+          </div>
+          <div class="control">
+            <div class="labelrow"><label for="waveAmplitude">Wave drive amplitude</label><output id="waveAmplitudeValue">1.40</output></div>
+            <input type="range" id="waveAmplitude" min="0.25" max="2.5" step="0.05" value="1.4"/>
+          </div>
+        </div>
         <div class="control">
           <div class="labelrow"><label for="exc">Local excitation (E → E)</label><output id="excValue">13.0</output></div>
           <input type="range" id="exc" min="9" max="18" value="13" step="0.5" />
@@ -290,16 +307,37 @@
     const image = tinyCtx.createImageData(N, N);
     const $ = id => document.getElementById(id);
     const presets = {
-      spots:   {exc:13, inh:10, iinh:.7, radius:8, iexc:13, driveE:1.03,driveI:.90,local:2},
-      maze:    {exc:13, inh:10, iinh:.7, radius:8, iexc:5,  driveE:1.03,driveI:.90,local:2},
-      islands: {exc:13, inh:10, iinh:.7, radius:12,iexc:13, driveE:1.03,driveI:.90,local:3}
+      spots:    {exc:13, inh:10, iinh:.7, radius:8, iexc:13, driveE:1.03,driveI:.90,local:2},
+      maze:     {exc:13, inh:10, iinh:.7, radius:8, iexc:5,  driveE:1.03,driveI:.90,local:2},
+      islands:  {exc:13, inh:10, iinh:.7, radius:12,iexc:13, driveE:1.03,driveI:.90,local:3},
+      traveling:{exc:13, inh:10, iinh:.7, radius:8, iexc:13, driveE:0.90,driveI:.90,local:2},
+      spiral:   {exc:13, inh:10, iinh:.7, radius:8, iexc:13, driveE:0.90,driveI:.90,local:2}
     };
     const presetDescriptions=Object.freeze({
       spots:'Spots: E→I = 13, local E radius = 2, inhibitory radius = 8. Often isolated patches.',
       maze:'Labyrinth: E→I = 5, local E radius = 2, inhibitory radius = 8. Often interlinked bands.',
-      islands:'Islands: E→I = 13, local E radius = 3, inhibitory radius = 12. Larger spatial scales.'
+      islands:'Islands: E→I = 13, local E radius = 3, inhibitory radius = 12. Larger spatial scales.',
+      traveling:'Traveling waves: a moving plane-wave drive excites the recurrent spiking lattice. This is an externally driven wave response.',
+      spiral:'Spiral waves: a rotating, radially varying drive excites the recurrent spiking lattice. This is an externally driven spiral response.'
     });
     const cfg = {...presets.spots};
+    const waveCos=new Float32Array(LEN),waveSin=new Float32Array(LEN),waveMask=new Float32Array(LEN);
+    let waveMode='none',wavePeriod=150,waveAmplitude=1.4;
+    function configureWaveMode(next){
+      waveMode=next;
+      $('waveControls').hidden=waveMode==='none';
+      if(waveMode==='none')return;
+      const mid=(N-1)/2;
+      for(let y=0;y<N;y++)for(let x=0;x<N;x++){
+        const dx=x-mid,dy=y-mid,r=Math.hypot(dx,dy),j=y*N+x;
+        const phase=waveMode==='traveling'
+          ?(2*Math.PI)*(dx/26+dy/132)
+          :Math.atan2(dy,dx)+(2*Math.PI)*r/24;
+        waveCos[j]=Math.cos(phase);
+        waveSin[j]=Math.sin(phase);
+        waveMask[j]=waveMode==='spiral'?r*r/(r*r+9):1;
+      }
+    }
     const vE = new Float32Array(LEN), vI = new Float32Array(LEN);
     const eTrace = new Float32Array(LEN), iTrace = new Float32Array(LEN);
     const refE = new Uint8Array(LEN), refI = new Uint8Array(LEN);
@@ -437,13 +475,20 @@
       blurWrap(historyField(iDelayRing,effectiveDelay(cfg.radius)),blurI,cfg.radius);
       blurWrap(historyField(iDelayRing,effectiveDelay(cfg.local)),blurILocal,cfg.local);
       const stimulate = stimRemaining > 0;
+      const drivingWave = waveMode!=='none';
+      const waveTheta=drivingWave?2*Math.PI*stepCount/wavePeriod:0;
+      const waveCt=drivingWave?Math.cos(waveTheta):0;
+      const waveSt=drivingWave?Math.sin(waveTheta):0;
       let spikesE = 0,centerSpikes = 0,sumVE=0,sumVI=0;
       for (let j=0; j<LEN; ++j) {
         // Three uniforms centered at zero approximate Gaussian background drive.
         const jitterE = (rand()+rand()+rand()-1.5)*0.24;
         const jitterI = (rand()+rand()+rand()-1.5)*0.24;
         const pulse = stimulate ? stimAmplitude*stimMask[j] : 0;
-        const netE = cfg.driveE+cfg.exc*blurE[j]-cfg.inh*blurI[j]+jitterE+pulse;
+        const wavePhase=drivingWave?waveCos[j]*waveCt+waveSin[j]*waveSt:0;
+        const waveCrest=drivingWave?Math.max(0,wavePhase):0;
+        const waveCurrent=drivingWave?waveAmplitude*waveMask[j]*(waveCrest*waveCrest*waveCrest*waveCrest-.17):0;
+        const netE = cfg.driveE+cfg.exc*blurE[j]-cfg.inh*blurI[j]+jitterE+pulse+waveCurrent;
         const netI = cfg.driveI+cfg.iexc*blurE[j]-cfg.iinh*blurILocal[j]+jitterI;
         let spikeE=0, spikeI=0;
         if(model==='izh') {
@@ -919,7 +964,9 @@
       start();
     }
     function markCustom() {
-      $('presetDescription').textContent='Custom coupling values: altered from the named spatial presets.';
+      $('presetDescription').textContent=waveMode==='none'
+        ?'Custom E/I coupling values: altered from the named spatial presets.'
+        :'Custom E/I coupling with externally driven '+(waveMode==='traveling'?'traveling':'spiral')+' waves still active.';
       document.querySelectorAll('[data-preset]').forEach(button=>{
         button.classList.remove('selected');button.setAttribute('aria-pressed','false');
       });
@@ -933,6 +980,8 @@
       $('radiusValue').textContent=String(cfg.radius);
       $('synDelayValue').textContent=String(synDelay);
       $('conductionSpeedValue').textContent=conductionSpeed.toFixed(1);
+      $('wavePeriodValue').textContent=String(wavePeriod);
+      $('waveAmplitudeValue').textContent=waveAmplitude.toFixed(2);
       $('effectiveDelays').textContent='Effective field delay: E = '+effectiveDelay(cfg.local)+
         ' steps, I = '+effectiveDelay(cfg.radius)+' steps; local I→I = '+effectiveDelay(cfg.local)+' steps.';
     }
@@ -955,6 +1004,7 @@
     for (const button of document.querySelectorAll('[data-preset]')) {
       button.addEventListener('click',()=>{
         Object.assign(cfg,presets[button.dataset.preset]);
+        configureWaveMode(['traveling','spiral'].includes(button.dataset.preset)?button.dataset.preset:'none');
         $('exc').value=cfg.exc;$('iexc').value=cfg.iexc;$('inh').value=cfg.inh;$('iinh').value=cfg.iinh;$('radius').value=cfg.radius;$('local').value=cfg.local;
         updateSliderLabels();
         markCustom();button.classList.add('selected');button.setAttribute('aria-pressed','true');
@@ -966,6 +1016,14 @@
       $(name).addEventListener('input',()=>{
         cfg[name]=Number($(name).value);updateSliderLabels();markCustom();
         parameterHistory.push({atStep:stepCount,field:name,value:cfg[name]});
+      });
+    }
+    for (const name of ['wavePeriod','waveAmplitude']){
+      $(name).addEventListener('input',()=>{
+        if(name==='wavePeriod')wavePeriod=Number($('wavePeriod').value);
+        else waveAmplitude=Number($('waveAmplitude').value);
+        updateSliderLabels();
+        parameterHistory.push({atStep:stepCount,field:name,value:name==='wavePeriod'?wavePeriod:waveAmplitude});
       });
     }
     for (const name of ['synDelay','conductionSpeed']){
@@ -1040,6 +1098,9 @@
         seed:Number($('seed').value),step:stepCount,grid:[N,N],neurons:LEN*2,
         model:model,model_label:modelLabels[model],
         coupling:{...cfg},initial_coupling:initialCoupling,
+        wave_drive:{mode:waveMode,period_steps:wavePeriod,amplitude:waveAmplitude,
+          implementation:waveMode==='none'?'none':'external rotating/propagating phase-dependent input added to E neuron drive; active spiking response, not demonstrated self-sustaining wave',
+          geometry:waveMode==='traveling'?'plane wave, x pitch 26 cells (slightly tilted)':waveMode==='spiral'?'one-arm theta + radial phase winding (radial pitch 24 cells)':'none'},
         propagation:{initial:initialPropagation,baseline_synaptic_delay_steps:synDelay,conduction_speed_cells_per_step:conductionSpeed,
           field_delays_steps:{excitatory:effectiveDelay(cfg.local),inhibitory:effectiveDelay(cfg.radius),local_inhibitory_to_inhibitory:effectiveDelay(cfg.local)},
           approximation:'Characteristic path distance=2*field_radius/3; circular signal-history ring; not an axonal path-resolved simulator.'},
