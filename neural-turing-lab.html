@@ -722,6 +722,123 @@
       $('waveletInfo').textContent=(waveCache.scope==='center'?'Central E':'Whole-network E')
         +' spike rate · '+waveCache.available+' steps · updated at step '+stepCount;
     }
+
+    function recentVoltages(){
+      const n=voltageCount,e=new Float64Array(n),i=new Float64Array(n),t=new Float64Array(n);
+      const from=(voltageIndex-n+V_HISTORY)%V_HISTORY;
+      for(let k=0;k<n;k++){
+        const j=(from+k)%V_HISTORY;
+        e[k]=meanVHistoryE[j];i[k]=meanVHistoryI[j];t[k]=voltageSteps[j];
+      }
+      return {n,e,i,t};
+    }
+    function paddedRange(lo,hi){
+      if(!Number.isFinite(lo)||!Number.isFinite(hi))return [-1,1];
+      const padding=Math.max(0.005,(hi-lo)*.12);
+      return [lo-padding,hi+padding];
+    }
+    function drawVoltageAxis(g,x,y,w,h,range){
+      g.strokeStyle='#4a5d7c';g.lineWidth=1;g.strokeRect(x,y,w,h);
+      g.fillStyle='#a5bada';g.font='13px system-ui';g.textAlign='right';
+      for(let j=0;j<=4;j++){
+        const v=range[1]-(range[1]-range[0])*j/4,yy=y+h*j/4;
+        g.strokeStyle='#283c58';g.beginPath();g.moveTo(x,yy);g.lineTo(x+w,yy);g.stroke();
+        g.fillText(v.toFixed(Math.abs(v)>100?0:2),x-7,yy+4);
+      }
+      g.textAlign='left';
+    }
+    function drawPhasePlane(tr){
+      const g=phaseCtx,c=g.canvas,x=74,y=17,w=c.width-104,h=c.height-76;
+      waveletGrid(g,x,y,w,h);
+      if(tr.n<2)return;
+      let emin=Infinity,emax=-Infinity,imin=Infinity,imax=-Infinity;
+      for(let j=0;j<tr.n;j++){
+        emin=Math.min(emin,tr.e[j]);emax=Math.max(emax,tr.e[j]);
+        imin=Math.min(imin,tr.i[j]);imax=Math.max(imax,tr.i[j]);
+      }
+      const er=paddedRange(emin,emax),ir=paddedRange(imin,imax);
+      const px=v=>x+w*(v-er[0])/(er[1]-er[0]);
+      const py=v=>y+h*(1-(v-ir[0])/(ir[1]-ir[0]));
+      g.strokeStyle='#344962';g.lineWidth=1;
+      g.fillStyle='#a7bcda';g.font='13px system-ui';
+      for(let j=0;j<=4;j++){
+        const xx=x+w*j/4,yy=y+h*j/4;
+        g.beginPath();g.moveTo(xx,y);g.lineTo(xx,y+h);g.stroke();
+        g.beginPath();g.moveTo(x,yy);g.lineTo(x+w,yy);g.stroke();
+        g.textAlign='center';g.fillText((er[0]+(er[1]-er[0])*j/4).toFixed(2),xx,y+h+18);
+        g.textAlign='right';g.fillText((ir[1]-(ir[1]-ir[0])*j/4).toFixed(2),x-6,yy+4);
+      }
+      g.save();g.beginPath();g.rect(x,y,w,h);g.clip();
+      // A monotone-color trajectory shows the recent direction of evolution.
+      for(let j=1;j<tr.n;j++){
+        const v=j/Math.max(1,tr.n-1);
+        g.strokeStyle='rgba(104,225,233,'+(.16+.8*v).toFixed(3)+')';
+        g.lineWidth=1.4+v;
+        g.beginPath();g.moveTo(px(tr.e[j-1]),py(tr.i[j-1]));
+        g.lineTo(px(tr.e[j]),py(tr.i[j]));g.stroke();
+      }
+      g.fillStyle='#ffd18e';g.beginPath();
+      g.arc(px(tr.e[tr.n-1]),py(tr.i[tr.n-1]),5,0,2*Math.PI);g.fill();
+      g.restore();
+      const units=model==='izh'?'model mV':'normalized';
+      g.fillStyle='#c7d8ef';g.font='13px system-ui';g.textAlign='center';
+      g.fillText('Mean E membrane voltage ('+units+')',x+w/2,c.height-6);
+      g.save();g.translate(16,y+h/2);g.rotate(-Math.PI/2);
+      g.fillText('Mean I voltage ('+units+')',0,0);g.restore();
+      g.textAlign='left';g.fillStyle='#b7c9e2';g.fillText('Latest point',x+w-90,y+18);
+    }
+    function drawVoltageBalance(tr){
+      const g=voltageCtx,c=g.canvas;
+      g.fillStyle='#081123';g.fillRect(0,0,c.width,c.height);
+      const x=76,w=c.width-100,upperY=18,upperH=132,lowerY=193,lowerH=76;
+      if(tr.n<2)return;
+      let lo=Infinity,hi=-Infinity,dLo=Infinity,dHi=-Infinity;
+      for(let j=0;j<tr.n;j++){
+        lo=Math.min(lo,tr.e[j],tr.i[j]);hi=Math.max(hi,tr.e[j],tr.i[j]);
+        const delta=tr.e[j]-tr.i[j];dLo=Math.min(dLo,delta);dHi=Math.max(dHi,delta);
+      }
+      const range=paddedRange(lo,hi),differenceRange=paddedRange(dLo,dHi);
+      drawVoltageAxis(g,x,upperY,w,upperH,range);
+      drawVoltageAxis(g,x,lowerY,w,lowerH,differenceRange);
+      const pointX=j=>x+w*j/Math.max(1,tr.n-1);
+      const plot=(getter,range,y,h,color)=>{
+        g.save();g.beginPath();g.rect(x,y,w,h);g.clip();
+        g.beginPath();
+        for(let j=0;j<tr.n;j++){
+          const val=getter(j),yy=y+h*(1-(val-range[0])/(range[1]-range[0]));
+          if(j===0)g.moveTo(pointX(j),yy);else g.lineTo(pointX(j),yy);
+        }
+        g.strokeStyle=color;g.lineWidth=2.1;g.lineJoin='round';g.stroke();g.restore();
+      };
+      plot(j=>tr.e[j],range,upperY,upperH,'#85d7e9');
+      plot(j=>tr.i[j],range,upperY,upperH,'#ff9cab');
+      plot(j=>tr.e[j]-tr.i[j],differenceRange,lowerY,lowerH,'#ffe1a0');
+      g.font='13px system-ui';
+      g.textAlign='left';g.fillStyle='#85d7e9';g.fillText('E',x+8,upperY+15);
+      g.fillStyle='#ff9cab';g.fillText('I',x+31,upperY+15);
+      g.fillStyle='#ffe1a0';g.fillText('ΔV = E − I',x+8,lowerY+15);
+      g.textAlign='center';g.fillStyle='#b0c6e3';
+      for(let j=0;j<=4;j++){
+        const xx=x+w*j/4;
+        const when=Math.round(tr.t[0]+(tr.t[tr.n-1]-tr.t[0])*j/4);
+        g.fillText(String(when),xx,lowerY+lowerH+20);
+      }
+      g.fillText('Simulation step',x+w/2,c.height-6);
+      g.textAlign='left';
+    }
+    function renderVoltageMeasurements(){
+      const tr=recentVoltages();
+      if(tr.n<2){
+        waveletGrid(phaseCtx,74,17,phaseCtx.canvas.width-104,phaseCtx.canvas.height-76);
+        waveletGrid(voltageCtx,76,18,voltageCtx.canvas.width-100,132);
+        $('voltageInfo').textContent='Collecting membrane-potential samples…';
+        return;
+      }
+      drawPhasePlane(tr);drawVoltageBalance(tr);
+      const units=model==='izh'?'model mV':'dimensionless';
+      $('voltageInfo').textContent='Mean E '+meanLastVE.toFixed(3)+' · mean I '+meanLastVI.toFixed(3)+
+        ' · ΔV '+(meanLastVE-meanLastVI).toFixed(3)+' ('+units+') · '+tr.n+' steps';
+    }
     function render() {
       blurWrap(eTrace, imageSmooth, 1); // Display smoothing only.
       let mean=0;
@@ -753,6 +870,7 @@
       $('toggle').textContent=running?'Ⅱ  Pause':'▶  Resume';
       renderWavelet(false);
       renderMeanPSD(false);
+      renderVoltageMeasurements();
     }
     function loop() {
       frameId=null;
