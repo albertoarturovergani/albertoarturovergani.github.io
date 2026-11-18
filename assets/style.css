@@ -196,3 +196,9 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{line-height:1.16}h1,h2{letter-spacing:-.04em}h2
 @media(max-width:580px){
  .strip-inner>.research-line-link{font-size:10px;white-space:normal;min-height:30px;text-align:center}
 }
+
+/* Per-publication BibTeX copy action */
+.bib-item-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:14px}
+.bib-copy-button{appearance:none;display:inline-flex;align-items:center;justify-content:center;min-height:31px;padding:6px 11px;border:1px solid #bdd4cd;border-radius:5px;background:#fff;color:#216e68;font:inherit;font-size:11px;font-weight:750;line-height:1.3;cursor:pointer;transition:background .15s,border-color .15s}
+.bib-copy-button:hover,.bib-copy-button:focus-visible{background:#edf6f4;border-color:#65a79a;color:#174c48}
+.bib-copy-button.is-copied{background:#edf6f0;border-color:#a0cbbb;color:#256044}

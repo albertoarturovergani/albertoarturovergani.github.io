@@ -110,6 +110,7 @@ def parse_bib(content: str) -> list[dict[str, str]]:
     while m := pattern.search(content, cursor):
         entry_type = m.group(1).lower()
         body, cursor = consume_braces(content, m.end() - 1)
+        raw_bibtex = content[m.start():cursor].strip()
         if entry_type in ('comment', 'preamble', 'string'):
             continue
         comma = body.find(',')
@@ -131,7 +132,7 @@ def parse_bib(content: str) -> list[dict[str, str]]:
             i += fm.end()
             val, i = consume_value(body, i)
             fields[field] = val
-        records.append({'key': key, 'entry_type': entry_type, **fields})
+        records.append({'key': key, 'entry_type': entry_type, **fields, '__bibtex': raw_bibtex})
     return records
 
 
@@ -292,6 +293,7 @@ def normalize(entry: dict[str, str], overrides: dict, topic_overrides: dict) -> 
         'doi': doi if doi_link else '',
         'url': safe_link(ov.get('url', '')) or url,
         'note': note,
+        'bibtex': entry['__bibtex'],
         'topics': assigned_topics(entry, topic_overrides),
     }
     return item

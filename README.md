@@ -77,3 +77,9 @@ The homepage replaces the three research-area cards with a free-floating, random
 **To curate the vocabulary:** edit `content/wordcloud.json`. Each concept has `id`, `label`, a list of subject `topics` and an optional regular-expression `pattern`. Be conservative about scientific associations. Committing that file or adding new BibTeX records triggers the GitHub Actions build, which regenerates `data/wordcloud.json` (counts) and keyword matches within `data/publications.json`. **Do not edit these generated data files manually.**
 
 Clicking a word opens `publications.html?keyword=<slug>`, which displays the matching records even when they belong to History of Science (ordinarily excluded by the default topic preset). Visitors can then clear the research focus and return to the normal publication list. On narrow devices the same keywords are presented as accessible clickable chips instead of shrinking the SVG text.
+
+## Copy BibTeX per publication
+
+Each record in the Publications page has a **Copy BibTeX** button. The action copies that record's complete original BibTeX entry from the maintained `vergani_scholar.bib` file, including its citation key and full available metadata. No manual selection or external site is needed. A short “Copied” confirmation appears after a successful copy. The existing download link still provides the complete bibliography.
+
+The parser in `scripts/build_data.py` retains the exact BibTeX block for each included entry in the generated `data/publications.json`. When editing `vergani_scholar.bib`, the next GitHub Pages build refreshes both the on-screen record and its copyable BibTeX text. The generated JSON file should not be edited manually.

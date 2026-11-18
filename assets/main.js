@@ -84,6 +84,39 @@ const TOPIC_NAMES = Object.freeze({
   "other": "Other / interdisciplinary"
 });
 
+
+async function copyBibtex(source, button) {
+  if (!source) return;
+  try {
+    if (!navigator.clipboard?.writeText) throw new Error('Clipboard API unavailable');
+    await navigator.clipboard.writeText(source);
+  } catch (error) {
+    try {
+      const field = document.createElement('textarea');
+      field.value = source;
+      field.setAttribute('readonly', '');
+      field.style.position = 'fixed';
+      field.style.left = '-9999px';
+      document.body.append(field);
+      field.select();
+      const copied = document.execCommand('copy');
+      field.remove();
+      if (!copied) throw new Error('Clipboard access denied');
+    } catch (fallbackError) {
+      button.textContent = 'Copy unavailable';
+      button.title = 'Clipboard permissions may be blocked in this browser';
+      setTimeout(() => { button.textContent = 'Copy BibTeX'; }, 2500);
+      return;
+    }
+  }
+  button.textContent = 'Copied ✓';
+  button.classList.add('is-copied');
+  setTimeout(() => {
+    button.textContent = 'Copy BibTeX';
+    button.classList.remove('is-copied');
+  }, 2500);
+}
+
 function renderBibliography(items) {
   const target = document.getElementById('publication-list');
   if (!target) return;
@@ -263,6 +296,16 @@ function renderBibliography(items) {
           topicLine.append(tag);
         });
         if (topicLine.childNodes.length) content.append(topicLine);
+        if (p.bibtex) {
+          const actions = makeEl('div', 'bib-item-actions');
+          const copyButton = makeEl('button', 'bib-copy-button', 'Copy BibTeX');
+          copyButton.type = 'button';
+          copyButton.setAttribute('aria-label', `Copy BibTeX for ${p.title}`);
+          copyButton.setAttribute('aria-live', 'polite');
+          copyButton.addEventListener('click', () => copyBibtex(p.bibtex, copyButton));
+          actions.append(copyButton);
+          content.append(actions);
+        }
         article.append(content);
         if (p.url) {
           const external = makeLink(p.url, '↗', 'bib-external');
