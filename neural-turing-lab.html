@@ -35,6 +35,16 @@
     label{display:block;color:#e5ecfb;font-size:13px;font-weight:600;margin-bottom:9px}
     .section-title{font-size:11px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);font-weight:800;margin:20px 0 12px}
     .presets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:19px}
+    .model-presets button{padding:11px 5px;font-size:12px;line-height:1.2}
+    .model-description{color:#a9bbd8;font-size:11.5px;line-height:1.55;min-height:36px;margin:-8px 0 20px}
+    .stim-panel{margin-top:23px;padding:17px 14px 15px;border:1px solid #405475;border-radius:12px;background:linear-gradient(140deg,#1c2d49,#152238)}
+    .stim-panel .section-title{margin:0 0 10px;color:#d0e4ff}
+    .stim-panel .control{margin-top:13px}
+    .stim-panel .hint{color:#b0bdd3}
+    .stim-action{width:100%;margin:16px 0 7px}
+    .stim-note{font-size:11px;color:#b0c0d8;line-height:1.5;margin:0}
+    .stim-readout{font-size:12px;color:#bedcfb;min-height:20px;margin-top:10px;font-variant-numeric:tabular-nums}
+    .stim-readout.active{color:#ffd1c6}
     button{cursor:pointer;border:1px solid #465471;color:#dbe7ff;background:#19253d;border-radius:9px;padding:11px 10px;transition:background .16s,border-color .16s,transform .16s;font-size:13px}
     button:hover{background:#293853;border-color:#8eaad0}
     button:active{transform:translateY(1px)}
@@ -86,7 +96,14 @@
       </section>
       <aside class="side" aria-label="Simulation controls">
         <h2 class="side-title">Pattern generator</h2>
-        <p class="side-desc">Generate an independent neural world, then watch its activity self-organize. Each result is reproducible from its seed and parameters.</p>
+        <p class="side-desc">Generate an independent neural world, then watch its activity self-organize. Results can be reproduced using the same model, seed, network settings and intervention history.</p>
+        <div class="section-title">Neuron model</div>
+        <div class="presets model-presets" role="group" aria-label="Select spiking neuron model">
+          <button class="selected" data-model="lif" aria-pressed="true">LIF</button>
+          <button data-model="alif" aria-pressed="false">Adaptive LIF</button>
+          <button data-model="izh" aria-pressed="false">Izhikevich</button>
+        </div>
+        <p class="model-description" id="modelDescription">Leaky integrate-and-fire: membrane leakage, threshold, reset and refractory period.</p>
         <div class="section-title">Dynamics preset</div>
         <div class="presets" role="group" aria-label="Select a dynamics preset">
           <button class="selected" data-preset="spots" aria-pressed="true">Spots</button>
@@ -112,6 +129,25 @@
           <div class="labelrow"><label for="seed">Random seed</label></div>
           <input type="number" id="seed" min="1" max="2147483647" step="1" value="2026" inputmode="numeric" />
         </div>
+        <section class="stim-panel" aria-label="Focal central stimulation">
+          <h3 class="section-title">Central perturbation</h3>
+          <p class="stim-note">Gaussian excitatory input centered in the network, applied without restarting the simulation.</p>
+          <div class="control">
+            <div class="labelrow"><label for="stimIntensity">Intensity (relative drive)</label><output id="stimIntensityValue">1.00</output></div>
+            <input type="range" id="stimIntensity" min="0.25" max="2.5" step="0.25" value="1" />
+          </div>
+          <div class="control">
+            <div class="labelrow"><label for="stimRadius">Spatial spread σ (cells)</label><output id="stimRadiusValue">5</output></div>
+            <input type="range" id="stimRadius" min="2" max="12" step="1" value="5" />
+          </div>
+          <div class="control">
+            <div class="labelrow"><label for="stimDuration">Duration (simulation steps)</label><output id="stimDurationValue">350</output></div>
+            <input type="range" id="stimDuration" min="50" max="1000" step="50" value="350" />
+          </div>
+          <button class="primary stim-action" id="stimulate">◎ &nbsp;Stimulate center</button>
+          <p class="stim-note">A new pulse interrupts any ongoing pulse. Step counts are model-dependent, not calibrated milliseconds.</p>
+          <div class="stim-readout" id="stimStatus" role="status" aria-live="polite">Ready to stimulate.</div>
+        </section>
         <div class="btnrow">
           <button class="primary" id="generate">↻ &nbsp;New pattern</button>
           <button id="toggle">Ⅱ &nbsp;Pause</button>
@@ -124,18 +160,18 @@
           <div class="stat"><div class="stat-title">Neurons (E + I)</div><div class="stat-value" id="neurons">10,368</div></div>
           <div class="stat"><div class="stat-title">Simulation step</div><div class="stat-value" id="step">0</div></div>
           <div class="stat"><div class="stat-title">Mean E activity</div><div class="stat-value" id="activity">0.000</div></div>
-          <div class="stat"><div class="stat-title">Boundary</div><div class="stat-value">Periodic</div></div>
+          <div class="stat"><div class="stat-title">Neuron model</div><div class="stat-value" id="modelStat">LIF</div></div>
         </div>
       </aside>
     </div>
     <section class="about" aria-label="Scientific model and limitations">
       <div>
         <h2>What is simulated?</h2>
-        <p>Two spatially organized populations of leaky integrate-and-fire neurons, one excitatory (E) and one inhibitory (I), with distinct recurrent coupling. Neurons emit discrete spikes when their membrane potential crosses threshold, then reset and enter a brief refractory period. Local excitation competes with longer-range inhibition, allowing structured firing-rate maps to arise.</p>
+        <p>A recurrent two-population E/I lattice is simulated with your choice of LIF, adaptive LIF (with spike-triggered recovery), or Izhikevich neurons (regular-spiking E and fast-spiking I). All three produce discrete spikes and feed the same spatial excitatory/inhibitory synaptic coupling. The central perturbation is an added Gaussian external input to excitatory neurons, with adjustable intensity, spread and pulse duration.</p>
       </div>
       <div>
         <h2>How is the artwork made?</h2>
-        <p>The displayed colors represent an exponentially smoothed trace of excitatory spikes, with a small spatial smoothing used only for display. No pre-rendered pattern is inserted. This is a simplified exploratory SNN with a periodic 2D topology; pattern appearance is parameter- and seed-dependent and should not be interpreted as a validated biological or mathematical Turing instability.</p>
+        <p>The colors encode exponentially smoothed excitatory spike traces (blue = low, red = high), with mild display-only smoothing. The pulse marker is an overlay, while stimulation directly enters neuronal dynamics. Results depend on the model, coupling, stimulus history and random seed. This is an exploratory periodic-lattice SNN, not a validated biological model or proof of a mathematical Turing instability.</p>
       </div>
     </section>
     <footer>
@@ -145,7 +181,7 @@
   </main>
   <script>
     'use strict';
-    // Experimental E/I lattice of discrete-time leaky integrate-and-fire neurons.
+    // Experimental E/I spatial SNN with interchangeable LIF, adaptive LIF and Izhikevich neuron equations.
     // 72 × 72 excitatory cells + 72 × 72 inhibitory cells; toroidal lattice.
     // Synaptic fields are normalized periodic square-kernel convolutions of the
     // exponential spike traces. This is a model-generating algorithm, not a GIF
@@ -168,7 +204,19 @@
     const refE = new Uint8Array(LEN), refI = new Uint8Array(LEN);
     const blurE = new Float32Array(LEN), blurI = new Float32Array(LEN);
     const blurScratch = new Float32Array(LEN), imageSmooth = new Float32Array(LEN);
+    const adaptE = new Float32Array(LEN), adaptI = new Float32Array(LEN);
+    const uE = new Float32Array(LEN), uI = new Float32Array(LEN);
+    const stimMask = new Float32Array(LEN);
+    const modelDescriptions = Object.freeze({
+      lif:'Leaky integrate-and-fire: membrane leakage, threshold, reset and a two-step refractory period.',
+      alif:'Adaptive LIF: LIF plus a decaying, spike-triggered hyperpolarizing current, favoring adaptation.',
+      izh:'Izhikevich quadratic dynamics: regular-spiking excitatory cells and fast-spiking inhibitory cells.'
+    });
+    const modelLabels = {lif:'LIF',alif:'Adaptive LIF',izh:'Izhikevich'};
+    let model = 'lif';
     let randomState = 1, stepCount = 0, lastSpikesE = 0, running = true;
+    let stimRemaining = 0, stimAmplitude = 0, stimRadiusActive = 5, lastPulseEnd = -1;
+    let stimHistory = [], parameterHistory = [], initialCoupling = {...cfg};
     let frameId = null;
     function reseed(seed) { randomState = (seed >>> 0) || 1; }
     function rand() {
@@ -200,30 +248,77 @@
         }
       }
     }
+    function setStimulusProfile(sigma) {
+      const mid=(N-1)/2, inv2s2=1/(2*sigma*sigma);
+      for(let y=0; y<N; ++y) for(let x=0; x<N; ++x) {
+        const dx=x-mid, dy=y-mid, r2=dx*dx+dy*dy;
+        stimMask[y*N+x]=r2<=9*sigma*sigma ? Math.exp(-r2*inv2s2) : 0;
+      }
+    }
+    function triggerStimulus() {
+      const intensity=Number($('stimIntensity').value);
+      const radius=Number($('stimRadius').value);
+      const duration=Number($('stimDuration').value);
+      if(stimRemaining>0 && stimHistory.length) {
+        stimHistory[stimHistory.length-1].appliedSteps=stepCount-stimHistory[stimHistory.length-1].onsetStep;
+      }
+      stimAmplitude=intensity; stimRadiusActive=radius; stimRemaining=duration;
+      setStimulusProfile(radius);
+      stimHistory.push({onsetStep:stepCount,plannedSteps:duration,appliedSteps:duration,intensity,spreadSigmaCells:radius,target:'excitatory population',center:[(N-1)/2,(N-1)/2]});
+      if(!running) start(); else render();
+    }
     function runOneStep() {
       blurWrap(eTrace, blurE, cfg.local);
       blurWrap(iTrace, blurI, cfg.radius);
+      const stimulate = stimRemaining > 0;
       let spikesE = 0;
       for (let j=0; j<LEN; ++j) {
-        // 3 uniforms centered at zero approximate Gaussian background drive.
+        // Three uniforms centered at zero approximate Gaussian background drive.
         const jitterE = (rand()+rand()+rand()-1.5)*0.24;
         const jitterI = (rand()+rand()+rand()-1.5)*0.24;
+        const pulse = stimulate ? stimAmplitude*stimMask[j] : 0;
+        const netE = cfg.driveE+cfg.exc*blurE[j]-cfg.inh*blurI[j]+jitterE+pulse;
+        const netI = cfg.driveI+cfg.iexc*blurE[j]-0.7*iTrace[j]+jitterI;
         let spikeE=0, spikeI=0;
-        if (refE[j] !== 0) { refE[j]--; vE[j]=0; }
-        else {
-          const target=cfg.driveE+cfg.exc*blurE[j]-cfg.inh*blurI[j]+jitterE;
-          vE[j] += DT_ALPHA*(target-vE[j]);
-          if (vE[j]>=1.0) {spikeE=1;vE[j]=0;refE[j]=2;spikesE++;}
-        }
-        if (refI[j] !== 0) { refI[j]--; vI[j]=0; }
-        else {
-          const target=cfg.driveI+cfg.iexc*blurE[j]-0.7*iTrace[j]+jitterI;
-          vI[j] += DT_ALPHA*(target-vI[j]);
-          if (vI[j]>=1.0) {spikeI=1;vI[j]=0;refI[j]=2;}
+        if(model==='izh') {
+          // Izhikevich (2003) quadratic integrate-and-fire with recovery variable.
+          // E: regular-spiking (a=.02,b=.2,c=-65,d=8).
+          // I: fast-spiking (a=.1,b=.2,c=-65,d=2).
+          // Dimensionless lattice drive maps to model-specific injected current.
+          const ie=14+12*(netE-1);
+          const ii=8+12*(netI-0.9);
+          let ve=vE[j],vi=vI[j],ue=uE[j],ui=uI[j];
+          ve+=0.5*(.04*ve*ve+5*ve+140-ue+ie);
+          ve+=0.5*(.04*ve*ve+5*ve+140-ue+ie);
+          ue+=.02*(.2*ve-ue);
+          if(ve>=30) {ve=-65;ue+=8;spikeE=1;spikesE++;}
+          vi+=0.5*(.04*vi*vi+5*vi+140-ui+ii);
+          vi+=0.5*(.04*vi*vi+5*vi+140-ui+ii);
+          ui+=.1*(.2*vi-ui);
+          if(vi>=30) {vi=-65;ui+=2;spikeI=1;}
+          vE[j]=ve;vI[j]=vi;uE[j]=ue;uI[j]=ui;
+        } else {
+          if(model==='alif') {
+            adaptE[j]*=.985;
+            adaptI[j]*=.975;
+          }
+          if (refE[j] !== 0) { refE[j]--; vE[j]=0; }
+          else {
+            const target=netE-(model==='alif'?adaptE[j]:0);
+            vE[j] += DT_ALPHA*(target-vE[j]);
+            if (vE[j]>=1.0) {spikeE=1;vE[j]=0;refE[j]=2;spikesE++;if(model==='alif')adaptE[j]+=.05;}
+          }
+          if (refI[j] !== 0) { refI[j]--; vI[j]=0; }
+          else {
+            const target=netI-(model==='alif'?adaptI[j]:0);
+            vI[j] += DT_ALPHA*(target-vI[j]);
+            if (vI[j]>=1.0) {spikeI=1;vI[j]=0;refI[j]=2;if(model==='alif')adaptI[j]+=.025;}
+          }
         }
         eTrace[j]=TRACE_DECAY*eTrace[j]+(1-TRACE_DECAY)*spikeE;
         iTrace[j]=TRACE_DECAY*iTrace[j]+(1-TRACE_DECAY)*spikeI;
       }
+      if(stimulate) {stimRemaining--;if(stimRemaining===0)lastPulseEnd=stepCount+1;}
       stepCount++;
       lastSpikesE=spikesE;
     }
@@ -258,6 +353,16 @@
       ctx.imageSmoothingEnabled=true;
       ctx.clearRect(0,0,canvas.width,canvas.height);
       ctx.drawImage(tiny,0,0,canvas.width,canvas.height);
+      if(stimRemaining>0) {
+        // Visible targeting guide; the neural pattern itself is in image.data.
+        const scale=canvas.width/N;
+        ctx.save();ctx.strokeStyle='rgba(255,226,149,.88)';ctx.lineWidth=2;
+        ctx.setLineDash([7,5]);ctx.beginPath();ctx.arc(canvas.width/2,canvas.height/2,stimRadiusActive*scale,0,2*Math.PI);ctx.stroke();
+        ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(canvas.width/2-9,canvas.height/2);ctx.lineTo(canvas.width/2+9,canvas.height/2);ctx.moveTo(canvas.width/2,canvas.height/2-9);ctx.lineTo(canvas.width/2,canvas.height/2+9);ctx.stroke();ctx.restore();
+      }
+      $('modelStat').textContent=modelLabels[model];
+      $('stimStatus').textContent=stimRemaining>0?`Central stimulus active · ${stimRemaining} steps remaining`:lastPulseEnd>=0?`Last pulse ended at step ${lastPulseEnd}`:'Ready to stimulate.';
+      $('stimStatus').classList.toggle('active',stimRemaining>0);
       $('step').textContent=stepCount.toLocaleString('en-US');
       $('activity').textContent=(mean/LEN).toFixed(3);
       $('status').textContent=running?'Simulating (live)':'Paused';
@@ -283,8 +388,15 @@
         seed=2026;$('seed').value=String(seed);
       }
       reseed(seed);stepCount=0;lastSpikesE=0;
+      stimRemaining=0;stimHistory=[];parameterHistory=[];initialCoupling={...cfg};lastPulseEnd=-1;
       eTrace.fill(0);iTrace.fill(0);refE.fill(0);refI.fill(0);
-      for(let i=0;i<LEN;i++) {vE[i]=rand()*.95;vI[i]=rand()*.95;}
+      adaptE.fill(0);adaptI.fill(0);uE.fill(0);uI.fill(0);
+      for(let i=0;i<LEN;i++) {
+        if(model==='izh') {
+          vE[i]=-65+rand()*4;vI[i]=-65+rand()*4;
+          uE[i]=.2*vE[i];uI[i]=.2*vI[i];
+        } else {vE[i]=rand()*.95;vI[i]=rand()*.95;}
+      }
       start();
     }
     function markCustom() {
@@ -296,6 +408,22 @@
       $('excValue').textContent=Number(cfg.exc).toFixed(1);
       $('inhValue').textContent=Number(cfg.inh).toFixed(1);
       $('radiusValue').textContent=String(cfg.radius);
+    }
+    function updateStimulusLabels() {
+      $('stimIntensityValue').textContent=Number($('stimIntensity').value).toFixed(2);
+      $('stimRadiusValue').textContent=$('stimRadius').value;
+      $('stimDurationValue').textContent=$('stimDuration').value;
+    }
+    for(const button of document.querySelectorAll('[data-model]')) {
+      button.addEventListener('click',()=>{
+        if(model===button.dataset.model)return;
+        model=button.dataset.model;
+        document.querySelectorAll('[data-model]').forEach(b=>{
+          const selected=b===button;b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected));
+        });
+        $('modelDescription').textContent=modelDescriptions[model];
+        reset();
+      });
     }
     for (const button of document.querySelectorAll('[data-preset]')) {
       button.addEventListener('click',()=>{
@@ -309,8 +437,11 @@
     for (const name of ['exc','inh','radius']) {
       $(name).addEventListener('input',()=>{
         cfg[name]=Number($(name).value);updateSliderLabels();markCustom();
+        parameterHistory.push({atStep:stepCount,field:name,value:cfg[name]});
       });
     }
+    for(const name of ['stimIntensity','stimRadius','stimDuration']) $(name).addEventListener('input',updateStimulusLabels);
+    $('stimulate').addEventListener('click',triggerStimulus);
     $('generate').addEventListener('click',()=>{
       // A new independent world at every click, with the new seed visible.
       // Changing the value back reproduces the same initial world and parameters.
@@ -336,13 +467,17 @@
       const saved={
         title:'Neural Turing Patterns — Interactive Lab',
         seed:Number($('seed').value),step:stepCount,grid:[N,N],neurons:LEN*2,
-        model:'two-population discrete-time LIF spatial SNN',
-        coupling:{...cfg},
-        dynamics:{alpha:DT_ALPHA,trace_decay:TRACE_DECAY,threshold:1,refractory_steps:2,jitter_factor:.24},
-        note:'This records the parameters and step for reproducibility with this exact HTML implementation.'
+        model:model,model_label:modelLabels[model],
+        coupling:{...cfg},initial_coupling:initialCoupling,
+        neuron_dynamics:model==='izh'?{excitatory:{a:.02,b:.2,c:-65,d:8},inhibitory:{a:.1,b:.2,c:-65,d:2},current_e:'14+12*(netE-1)',current_i:'8+12*(netI-0.9)'}:model==='alif'?{alpha:DT_ALPHA,threshold:1,refractory_steps:2,adaptation_e:{decay:.985,spike_increment:.05},adaptation_i:{decay:.975,spike_increment:.025}}:{alpha:DT_ALPHA,threshold:1,refractory_steps:2},
+        synaptic_trace_decay:TRACE_DECAY,noise_jitter_factor:.24,
+        central_stimulation:{target:'excitatory population',spatial_profile:'Gaussian, cut at 3 sigma',settings:{intensity:Number($('stimIntensity').value),spreadSigmaCells:Number($('stimRadius').value),durationSteps:Number($('stimDuration').value)},pulse_events:stimHistory.map((pulse,index)=>({...pulse,appliedSteps:(index===stimHistory.length-1&&stimRemaining>0)?stepCount-pulse.onsetStep:pulse.appliedSteps}))},
+        parameter_change_events:parameterHistory,
+        note:'To reproduce a run, use this HTML implementation, seed, model, coupling values, parameter change events and scheduled stimulus pulse events. Step counts are discrete and not calibrated as milliseconds.'
       };
       downloadBlob(new Blob([JSON.stringify(saved,null,2)],{type:'application/json'}),`neural-turing-seed-${$('seed').value}.json`);
     });
+    updateStimulusLabels();
     reset();
   </script>
 </body>
