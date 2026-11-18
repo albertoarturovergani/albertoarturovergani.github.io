@@ -156,7 +156,7 @@
             <h3>5 s rolling mean PSD · log-log · 1–500 nominal Hz</h3>
             <p id="meanPSDInfo" class="spectral-description">Collecting the first 5-second analysis window…</p>
             <canvas id="meanPSD" width="760" height="260" role="img" aria-label="Log-log Welch mean PSD from 1 to 500 nominal Hz, computed from a five-second sliding window of excitatory population spikes"></canvas>
-            <p class="spectral-chart-caption">Hann-windowed, mean-detrended 1024/2048-point FFT periodograms, 50% overlap, averaged over the last 5 nominal seconds. Both axes use logarithmic scales; zero frequency is omitted. Nominal 1 ms/step gives a 500 Hz Nyquist limit.</p>
+            <p class="spectral-chart-caption">Hann-windowed, mean-detrended 1024/2048-point FFT periodograms, 50% overlap, averaged over the last 5 nominal seconds once available (clearly labeled partial preview during warm-up). Both axes use logarithmic scales; zero frequency is omitted. Nominal 1 ms/step gives a 500 Hz Nyquist limit.</p>
           </div>
           <div class="wavelet-chart">
             <h3>Morlet scalogram · time–frequency power</h3>
@@ -322,7 +322,7 @@
       islands:  {exc:13,inh:10,iinh:.7,radius:27,iexc:13,driveE:1.03,driveI:.90,local:7,poissonRate:0,poissonKick:0},
       traveling:{exc:13,inh:10,iinh:.7,radius:18,iexc:13,driveE:.90, driveI:.90,local:5,poissonRate:0,poissonKick:0},
       spiral:   {exc:13,inh:10,iinh:.7,radius:18,iexc:13,driveE:.90, driveI:.90,local:5,poissonRate:0,poissonKick:0},
-      brunel:   {exc:14,inh:17,iinh:.50,radius:18,iexc:13,driveE:1.05,driveI:.99,local:5,poissonRate:.055,poissonKick:.75}
+      brunel:   {exc:14,inh:17,iinh:.50,radius:18,iexc:13,driveE:1.65,driveI:.99,local:5,poissonRate:.10,poissonKick:1.25}
     };
     const presetDescriptions=Object.freeze({
       spots:'Spots: E→I = 13, local E radius = 5, inhibitory radius = 18. Often isolated patches.',
@@ -715,15 +715,19 @@
       }
     }
     function computeMeanPSD(){
-      const count=requiredPsdSamples();
-      if(pFilled<count)return null;
+      const requested=requiredPsdSamples();
+      const count=Math.min(pFilled,requested);
+      // Show an explicitly labeled preview before the full 5 s window fills.
+      if(count<256)return null;
       const sample=$('waveletRegion').value==='center'?pCenter:pWhole;
       const sequence=new Float64Array(count);
       const start=(pIndex-count+P_RING)%P_RING;
       for(let i=0;i<count;i++)sequence[i]=sample[(start+i)%P_RING];
       // 1 ms: 1 kHz sampling with 500 Hz Nyquist, 1024-point FFT.
       // 0.5 ms: 2 kHz sampling, 2048-point FFT; plot is capped at 500 Hz.
-      const dtMs=analysisDt(),nfft=dtMs<=.5?2048:1024;
+      const dtMs=analysisDt();
+      const fullFFT=dtMs<=.5?2048:1024;
+      const nfft=count>=fullFFT?fullFFT:(count>=1024?1024:count>=512?512:256);
       const hop=nfft/2,fs=1000/dtMs;
       const kernel=welchKernel(nfft),bins=kernel.half,psd=new Float64Array(bins+1);
       const re=new Float64Array(nfft),im=new Float64Array(nfft);
@@ -742,7 +746,8 @@
       }
       if(!segments)return null;
       for(let k=1;k<=bins;k++)psd[k]/=segments;
-      return {psd,nfft,segments,dtMs,scope:$('waveletRegion').value,windowSamples:count,step:stepCount};
+      return {psd,nfft,segments,dtMs,scope:$('waveletRegion').value,windowSamples:count,
+        requestedSamples:requested,complete:count>=requested,step:stepCount};
     }
     function drawMeanPSD(d){
       const g=meanPSDCtx,c=g.canvas,x=79,y=20,w=c.width-105,h=c.height-78;
@@ -793,12 +798,12 @@
     }
     function renderMeanPSD(force){
       const needed=requiredPsdSamples();
-      if(pFilled<needed){
+      if(pFilled<256){
         const g=meanPSDCtx,c=g.canvas;waveletGrid(g,78,17,c.width-99,c.height-63);
         g.fillStyle='#adc4e4';g.font='14px system-ui';
         g.fillText('Collecting '+pFilled+' / '+needed+' nominal samples…',108,c.height/2);
         $('meanPSDExport').disabled=true;
-        $('meanPSDInfo').textContent='Waiting for the first 5 s ('+needed+' steps at '+analysisDt()+' ms/step).';
+        $('meanPSDInfo').textContent='Collecting data for the first spectral preview ('+pFilled+'/'+needed+' steps).';
         return;
       }
       if(!force&&stepCount-pLastStep<P_INTERVAL)return;
@@ -806,9 +811,11 @@
       if(!pCache)return;
       pLastStep=stepCount;
       drawMeanPSD(pCache);
-      $('meanPSDExport').disabled=false;
+      $('meanPSDExport').disabled=!pCache.complete;
+      const elapsed=(pCache.windowSamples*pCache.dtMs/1000).toFixed(2);
       $('meanPSDInfo').textContent=(pCache.scope==='center'?'Central E':'Whole E')+
-        ' · 5.0 nominal seconds · '+pCache.segments+' Welch segments · last updated at step '+stepCount;
+        (pCache.complete?' · 5.0 s rolling mean PSD':' · PREVIEW '+elapsed+'/5.00 nominal seconds')+
+        ' · '+pCache.segments+' Welch segments · last updated at step '+stepCount;
     }
     function renderWavelet(force){
       if(waveCount<112){
@@ -1092,7 +1099,7 @@
     });
     $('analysisStepMs').addEventListener('change',()=>renderMeanPSD(true));
     $('meanPSDExport').addEventListener('click',()=>{
-      const data=computeMeanPSD();if(!data)return;
+      const data=computeMeanPSD();if(!data||!data.complete)return;
       const fs=1000/data.dtMs,rows=[
         '# Five-second rolling mean Welch PSD, spiking E population rate',
         '# model='+model+', seed='+$('seed').value+', scope='+data.scope+', step='+stepCount,
