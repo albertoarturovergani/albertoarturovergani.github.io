@@ -281,12 +281,30 @@ function renderBibliography(items) {
           meta.append(makeEl('span', 'bib-status', p.status));
         }
         content.append(meta);
+        const doi = String(p.doi || '').trim();
+        const doiUrl = doi.startsWith('10.') && doi.includes('/') ? 'https://doi.org/' + encodeURI(doi) : '';
+        const scholarUrl = 'https://scholar.google.com/citations?user=BqEQTtQAAAAJ';
+        const mainLink = doiUrl || scholarUrl;
         const heading = makeEl('h3');
-        if (p.url) heading.append(makeLink(p.url, p.title));
-        else heading.textContent = p.title;
+        heading.append(makeLink(mainLink, p.title));
         content.append(heading);
         if (p.authors) content.append(makeEl('p', 'bib-authors', p.authors));
         if (p.venue) content.append(makeEl('p', 'bib-venue', p.venue));
+        const identifiers = makeEl('div', 'bib-identifiers');
+        if (doiUrl) {
+          const doiLink = makeLink(doiUrl, 'DOI: ' + doi, 'bib-identifier-link');
+          doiLink.setAttribute('aria-label', 'Open DOI ' + doi);
+          identifiers.append(doiLink);
+        } else {
+          const scholar = makeLink(scholarUrl, 'Google Scholar profile', 'bib-identifier-link');
+          scholar.setAttribute('aria-label', 'Open Alberto Arturo Vergani Google Scholar profile');
+          identifiers.append(scholar);
+        }
+        if (p.url && (p.url.startsWith('https://') || p.url.startsWith('http://')) &&
+            p.url !== doiUrl && p.url !== scholarUrl) {
+          identifiers.append(makeLink(p.url, 'Original source', 'bib-identifier-link bib-source-link'));
+        }
+        content.append(identifiers);
         const topicLine = makeEl('div', 'bib-topic-tags');
         (p.topics || []).forEach(code => {
           const tag = makeEl('button', 'bib-topic-tag', TOPIC_NAMES[code] || code);
@@ -307,11 +325,9 @@ function renderBibliography(items) {
           content.append(actions);
         }
         article.append(content);
-        if (p.url) {
-          const external = makeLink(p.url, '↗', 'bib-external');
-          external.setAttribute('aria-label', `Open source for ${p.title}`);
-          article.append(external);
-        }
+        const external = makeLink(mainLink, '↗', 'bib-external');
+        external.setAttribute('aria-label', doiUrl ? `Open DOI for ${p.title}` : `Open Google Scholar profile for ${p.title}`);
+        article.append(external);
         list.append(article);
       });
       group.append(list); target.append(group);
