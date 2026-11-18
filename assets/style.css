@@ -235,3 +235,22 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{line-height:1.16}h1,h2{letter-spacing:-.04em}h2
 .contact-grid{align-items:start;gap:clamp(28px,5vw,78px)}
 .contact-links strong{font-size:12px}
 @media(max-width:580px){.contact-grid{gap:30px}.recognition-entry h4{font-size:16px}}
+
+/* Clean site identity: textual brand, without AV monograms. */
+.brand{gap:0}
+.brand-type strong{font-size:15px}
+.footer-inner>p{margin-right:auto}
+.footer-inner>div{margin-left:0}
+/* Keep the entire name on one line in the homepage hero. */
+.hero .hero-copy{max-width:100%}
+.hero h1.hero-name-line{
+  white-space:nowrap;
+  max-width:100%;
+  font-size:clamp(23px,5.3vw,76px);
+  letter-spacing:-.055em;
+  line-height:1.12;
+}
+@media(max-width:580px){
+  .hero h1.hero-name-line{font-size:clamp(23px,5.3vw,31px);letter-spacing:-.06em}
+  .brand-type strong{font-size:13px}
+}
