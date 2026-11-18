@@ -47,91 +47,11 @@
     return box;
   }
 
-
-  // Motion is driven by curated semantic families and related-word lists.
-  // Words stay linked to their corresponding publication subsets.
-  function attachSemanticMotion(nodes) {
-    const byId = new Map(nodes.map(node => [node.id, node]));
-    const svg = wordsGroup.ownerSVGElement;
-    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-    let active = null;
-    let frameId = null;
-
-    function focus(id) {
-      if (id === active) return;
-      active = id;
-      if (frameId !== null) cancelAnimationFrame(frameId);
-      const pivot = byId.get(id);
-      const chosen = new Map();
-      const boxes = [];
-      function reserve(node, x, y) {
-        const b = {l:x-node.width/2-8,r:x+node.width/2+8,
-                   t:y-node.height/2-7,b:y+node.height/2+7};
-        if (b.l < 14 || b.r > 1086 || b.t < 14 || b.b > 656) return false;
-        if (boxes.some(a => a.l < b.r && b.l < a.r && a.t < b.b && b.t < a.b))
-          return false;
-        boxes.push(b);
-        return true;
-      }
-      if (pivot) {
-        // Keep the hovered word stationary so it remains easy to click.
-        reserve(pivot, pivot.x, pivot.y);
-        chosen.set(pivot.id, {x:pivot.x,y:pivot.y});
-        const related = [...new Set([
-          ...(pivot.related || []),
-          ...nodes.filter(n => n.family === pivot.family && n.id !== pivot.id).map(n => n.id)
-        ])].filter(key => key !== pivot.id && byId.has(key)).slice(0, 9);
-        related.forEach((key, i) => {
-          const node = byId.get(key);
-          for (let t = 0; t < 540; t++) {
-            const angle = i * 2.399963 + t * .31;
-            const radius = 155 + 9*Math.sqrt(t) + 20*(i % 3);
-            const x = pivot.x + Math.cos(angle)*radius;
-            const y = pivot.y + Math.sin(angle)*Math.min(radius, 265);
-            if (reserve(node, x, y)) {chosen.set(key,{x,y});break;}
-          }
-        });
-      }
-      const states = nodes.map(node => ({
-        node, sx:node.dx||0, sy:node.dy||0, so:node.opacity??1,
-        x:(chosen.get(node.id)?.x ?? node.x)-node.x,
-        y:(chosen.get(node.id)?.y ?? node.y)-node.y,
-        opacity:pivot ? (chosen.has(node.id)?1:.10) : 1
-      }));
-      const start = performance.now(), duration = reduced ? 0 : 620;
-      function animate(time) {
-        const t=duration?Math.min(1,(time-start)/duration):1;
-        const e=1-(1-t)**3;
-        for(const st of states) {
-          const n=st.node;
-          n.dx=reduced?0:st.sx+(st.x-st.sx)*e;
-          n.dy=reduced?0:st.sy+(st.y-st.sy)*e;
-          n.opacity=st.so+(st.opacity-st.so)*e;
-          n.anchor.setAttribute('transform','translate('+n.dx.toFixed(2)+' '+n.dy.toFixed(2)+')');
-          n.anchor.style.opacity=String(n.opacity);
-          n.anchor.classList.toggle('is-semantic-neighbor',!!pivot&&chosen.has(n.id));
-        }
-        frameId=t<1?requestAnimationFrame(animate):null;
-      }
-      if(reduced)animate(start);
-      else frameId=requestAnimationFrame(animate);
-    }
-    nodes.forEach(n=>{
-      n.anchor.addEventListener('pointerenter',()=>focus(n.id));
-      n.anchor.addEventListener('focus',()=>focus(n.id));
-    });
-    svg?.addEventListener('pointerleave',()=>focus(null));
-    svg?.addEventListener('focusout',event=>{
-      if(!svg.contains(event.relatedTarget))focus(null);
-    });
-  }
-
   function render(items) {
     wordsGroup.replaceChildren();
     smallScreen.replaceChildren();
     if (extras) extras.replaceChildren();
     const occupied = [];
-    const motionNodes = [];
     const max = Math.max(1, ...items.map(item => Number(item.count) || 0));
     const sorted = [...items].filter(item => item.count > 0)
       .sort((a,b) => b.count - a.count || a.label.localeCompare(b.label));
@@ -193,9 +113,6 @@
           text.replaceWith(anchor);
           anchor.append(text);
           occupied.push(position.box);
-          motionNodes.push({id:item.id, family:item.family||'general',
-            related:Array.isArray(item.related)?item.related:[],
-            x:position.x,y:position.y,width,height,anchor,dx:0,dy:0,opacity:1});
           placed = true;
           break;
         }
@@ -210,7 +127,6 @@
         extras.append(link);
       }
     }
-    attachSemanticMotion(motionNodes);
     if (loading) loading.hidden = true;
   }
 
