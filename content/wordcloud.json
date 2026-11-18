@@ -1,5 +1,5 @@
 {
-  "description": "Curated concepts; counts are recomputed from associated publication records during every GitHub Pages build.",
+  "description": "Curated concepts, verified record counts and semantic neighborhoods. Counts and links are regenerated from the bibliography on each deployment.",
   "concepts": [
     {
       "id": "computational-models",
@@ -7,7 +7,8 @@
       "topics": [
         "brain-modelling"
       ],
-      "pattern": "computational model|mechanistic|virtual brain|brain model|network model|in silico|simulat"
+      "pattern": "computational model|mechanistic|virtual brain|brain model|network model|in silico|simulat",
+      "family": "modelling"
     },
     {
       "id": "cognitive-decline",
@@ -15,7 +16,16 @@
       "topics": [
         "cognitive-decline"
       ],
-      "pattern": "cognitive decline|\\bSCD\\b|\\bMCI\\b|dementia|alzheimer|prodromal"
+      "pattern": "cognitive decline|\\bSCD\\b|\\bMCI\\b|dementia|alzheimer|prodromal",
+      "family": "pathology",
+      "related": [
+        "alzheimer-disease",
+        "parkinson-disease",
+        "autism",
+        "epilepsy",
+        "schizophrenia",
+        "brain-resilience"
+      ]
     },
     {
       "id": "eeg",
@@ -23,7 +33,17 @@
       "topics": [
         "eeg"
       ],
-      "pattern": "\\bEEG\\b|electroencephalog|electrophysiolog|event.related potential|microstate"
+      "pattern": "\\bEEG\\b|electroencephalog|electrophysiolog|event.related potential|microstate",
+      "family": "methods",
+      "related": [
+        "fmri",
+        "mri",
+        "neuroimaging",
+        "erp",
+        "tms-eeg",
+        "brain-stimulation",
+        "functional-connectivity"
+      ]
     },
     {
       "id": "cerebellum",
@@ -31,7 +51,8 @@
       "topics": [
         "cerebellum"
       ],
-      "pattern": "cerebell|purkinje|deep nuclei|saccadic dysmetria"
+      "pattern": "cerebell|purkinje|deep nuclei|saccadic dysmetria",
+      "family": "concepts"
     },
     {
       "id": "schizophrenia",
@@ -39,13 +60,15 @@
       "topics": [
         "schizophrenia"
       ],
-      "pattern": "schizophren|psychos|psychotic"
+      "pattern": "schizophren|psychos|psychotic",
+      "family": "pathology"
     },
     {
       "id": "visual-attention",
       "label": "Visual Attention",
       "topics": [],
-      "pattern": "visuo|visual|attention|anticipat"
+      "pattern": "visuo|visual|attention|anticipat",
+      "family": "concepts"
     },
     {
       "id": "machine-learning",
@@ -53,7 +76,8 @@
       "topics": [
         "machine-learning"
       ],
-      "pattern": "machine learning|deep learning|competitive learning|learning algorithms"
+      "pattern": "machine learning|deep learning|competitive learning|learning algorithms",
+      "family": "modelling"
     },
     {
       "id": "neuroimaging",
@@ -61,25 +85,29 @@
       "topics": [
         "neuroimaging"
       ],
-      "pattern": "neuroimag|functional neurorad|brain atlas"
+      "pattern": "neuroimag|functional neurorad|brain atlas",
+      "family": "methods"
     },
     {
       "id": "clustering",
       "label": "Clustering",
       "topics": [],
-      "pattern": "cluster|fuzzy|Davies.Bouldin|competitive learning"
+      "pattern": "cluster|fuzzy|Davies.Bouldin|competitive learning",
+      "family": "modelling"
     },
     {
       "id": "neural-dynamics",
       "label": "Neural Dynamics",
       "topics": [],
-      "pattern": "dynamics|dynamical|network activity|neural responses|functional connectivity"
+      "pattern": "dynamics|dynamical|network activity|neural responses|functional connectivity",
+      "family": "modelling"
     },
     {
       "id": "erp",
       "label": "ERP",
       "topics": [],
-      "pattern": "\\bERPs?\\b|event.related potential|\\bP300\\b"
+      "pattern": "\\bERPs?\\b|event.related potential|\\bP300\\b",
+      "family": "methods"
     },
     {
       "id": "neuroengineering",
@@ -87,7 +115,8 @@
       "topics": [
         "neuroengineering"
       ],
-      "pattern": "neuroengineering"
+      "pattern": "neuroengineering",
+      "family": "concepts"
     },
     {
       "id": "history-of-neuroscience",
@@ -95,13 +124,15 @@
       "topics": [
         "history"
       ],
-      "pattern": "\\bBerger\\b|Matteucci|Galvani|Lombroso|Lapicque|Stein|Locatelli"
+      "pattern": "\\bBerger\\b|Matteucci|Galvani|Lombroso|Lapicque|Stein|Locatelli",
+      "family": "concepts"
     },
     {
       "id": "fmri",
       "label": "fMRI",
       "topics": [],
-      "pattern": "\\bfMRI\\b|functional MRI|functional neuroimag"
+      "pattern": "\\bfMRI\\b|functional MRI|functional neuroimag",
+      "family": "methods"
     },
     {
       "id": "brain-stimulation",
@@ -109,13 +140,15 @@
       "topics": [
         "brain-stimulation"
       ],
-      "pattern": "\\bTMS\\b|rTMS|brain stimulation|transcranial magnetic"
+      "pattern": "\\bTMS\\b|rTMS|brain stimulation|transcranial magnetic",
+      "family": "methods"
     },
     {
       "id": "soft-clustering",
       "label": "Soft Clustering",
       "topics": [],
-      "pattern": "\\bsoft\\b|fuzzy|cluster|competitive learning"
+      "pattern": "\\bsoft\\b|fuzzy|cluster|competitive learning",
+      "family": "modelling"
     },
     {
       "id": "dopamine",
@@ -123,31 +156,45 @@
       "topics": [
         "dopamine"
       ],
-      "pattern": "dopamin|basal ganglia|antipsychotic"
+      "pattern": "dopamin|basal ganglia|antipsychotic",
+      "family": "concepts"
     },
     {
       "id": "alzheimer-disease",
       "label": "Alzheimer’s Disease",
       "topics": [],
-      "pattern": "alzheimer"
+      "pattern": "alzheimer",
+      "family": "pathology",
+      "related": [
+        "autism",
+        "parkinson-disease",
+        "epilepsy",
+        "schizophrenia",
+        "cognitive-decline",
+        "neurodevelopment",
+        "atrophy"
+      ]
     },
     {
       "id": "atrophy",
       "label": "Atrophy",
       "topics": [],
-      "pattern": "atrophy|degeneration|neurodegeneration|structural alterations"
+      "pattern": "atrophy|degeneration|neurodegeneration|structural alterations",
+      "family": "pathology"
     },
     {
       "id": "predictive-modelling",
       "label": "Predictive Modelling",
       "topics": [],
-      "pattern": "predict|forecast|anticipat"
+      "pattern": "predict|forecast|anticipat",
+      "family": "modelling"
     },
     {
       "id": "digital-twins",
       "label": "Digital Twins",
       "topics": [],
-      "pattern": "digital twins?|personalized brain models?|virtual brain"
+      "pattern": "digital twins?|personalized brain models?|virtual brain",
+      "family": "modelling"
     },
     {
       "id": "neurodevelopment",
@@ -155,19 +202,22 @@
       "topics": [
         "neurodevelopment"
       ],
-      "pattern": "neurodevelop|autism|\\bGRIN\\b|\\bSCN1A\\b"
+      "pattern": "neurodevelop|autism|\\bGRIN\\b|\\bSCN1A\\b",
+      "family": "pathology"
     },
     {
       "id": "brain-resilience",
       "label": "Brain Resilience",
       "topics": [],
-      "pattern": "resilien|compensat"
+      "pattern": "resilien|compensat",
+      "family": "pathology"
     },
     {
       "id": "epilepsy",
       "label": "Epilepsy",
       "topics": [],
-      "pattern": "epilep|\\bSCN1A\\b|\\bGRIN\\b"
+      "pattern": "epilep|\\bSCN1A\\b|\\bGRIN\\b",
+      "family": "pathology"
     },
     {
       "id": "spiking-networks",
@@ -175,37 +225,59 @@
       "topics": [
         "spiking-networks"
       ],
-      "pattern": "spiking|bump attractor|cell assemblies"
+      "pattern": "spiking|bump attractor|cell assemblies",
+      "family": "modelling"
     },
     {
       "id": "tms-eeg",
       "label": "TMS–EEG",
       "topics": [],
-      "pattern": "TMS[–\\-\\s]*EEG|TEPs?\\b"
+      "pattern": "TMS[–\\-\\s]*EEG|TEPs?\\b",
+      "family": "methods"
     },
     {
       "id": "functional-connectivity",
       "label": "Functional Connectivity",
       "topics": [],
-      "pattern": "functional connectivity|effective connectivity"
+      "pattern": "functional connectivity|effective connectivity",
+      "family": "methods"
     },
     {
       "id": "neural-networks",
       "label": "Neural Networks",
       "topics": [],
-      "pattern": "neural network|cell assemblies|network of spiking"
+      "pattern": "neural network|cell assemblies|network of spiking",
+      "family": "modelling"
     },
     {
       "id": "dosimetry",
       "label": "Dosimetry",
       "topics": [],
-      "pattern": "dosimetry|electric.field"
+      "pattern": "dosimetry|electric.field",
+      "family": "modelling"
     },
     {
       "id": "autism",
       "label": "Autism",
       "topics": [],
-      "pattern": "autism|autistic|\\bASD\\b"
+      "pattern": "autism|autistic|\\bASD\\b",
+      "family": "pathology"
+    },
+    {
+      "id": "parkinson-disease",
+      "label": "Parkinson's Disease",
+      "topics": [
+        "parkinson"
+      ],
+      "pattern": "parkinson|dopamine depletion",
+      "family": "pathology"
+    },
+    {
+      "id": "mri",
+      "label": "MRI",
+      "topics": [],
+      "pattern": "\\bfMRI\\b|\\bMRI\\b|magnetic resonance",
+      "family": "methods"
     }
   ]
 }

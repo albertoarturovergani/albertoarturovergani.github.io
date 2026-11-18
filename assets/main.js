@@ -81,6 +81,8 @@ const TOPIC_NAMES = Object.freeze({
   "spiking-networks": "Spiking & neuromorphic networks",
   "dopamine": "Dopamine & basal ganglia",
   "neurodevelopment": "Neurodevelopment & epilepsy",
+  "parkinson": "Parkinson\u2019s disease",
+  "autism": "Autism",
   "other": "Other / interdisciplinary"
 });
 
@@ -124,6 +126,7 @@ function renderBibliography(items) {
   const topicButtons = [...document.querySelectorAll('[data-topic]')];
   const matchSelect = document.getElementById('topic-match-mode');
   const input = document.getElementById('publication-search');
+  const titleSuggestions = document.getElementById('publication-title-suggestions');
   const yearSelect = document.getElementById('publication-year');
   const resultCount = document.getElementById('publication-result-count');
   const context = document.getElementById('bib-context');
@@ -145,6 +148,27 @@ function renderBibliography(items) {
   let tagMatch = params.get('match') === 'all' ? 'all' : 'any';
   matchSelect.value = tagMatch;
   let refs = new Set((params.get('refs') || '').split(',').map(s => s.trim()).filter(Boolean));
+
+
+  // Suggestions are derived only from actual publication titles.
+  const stopWords = new Set(['with','that','from','through','using','into','the','and','for','are','was','our','their','theory','analysis','study','towards','model','models']);
+  const titleWords = [...new Set(items.flatMap(item =>
+    String(item.title || '').match(/[A-Za-zÀ-ÿ0-9][A-Za-zÀ-ÿ0-9'’\-]*/g) || []))]
+    .filter(word => word.length >= 3 && !stopWords.has(searchable(word)));
+  function updateTitleSuggestions(inputText) {
+    if (!titleSuggestions) return;
+    const term = searchable(inputText.trim());
+    titleSuggestions.replaceChildren();
+    if (term.length < 2 || term.includes(' ')) return;
+    const matches = titleWords.filter(w => searchable(w).includes(term))
+      .sort((a,b) => searchable(a).indexOf(term) - searchable(b).indexOf(term) ||
+        a.length - b.length || a.localeCompare(b)).slice(0, 14);
+    for (const word of matches) {
+      const option = document.createElement('option');
+      option.value = word;
+      titleSuggestions.append(option);
+    }
+  }
 
   const counts = { all: items.length, journal: 0, conference: 0, preprint: 0, thesis: 0 };
   const topicCounts = { all: items.length, default: items.filter(item => !(item.topics || []).includes('history')).length };
@@ -209,7 +233,7 @@ function renderBibliography(items) {
   function reset() {
     query = ''; keyword = ''; explicitTopicFilter = false;
     yearFilter = 'all'; refs = new Set();
-    input.value = ''; yearSelect.value = 'all';
+    input.value = ''; yearSelect.value = 'all'; updateTitleSuggestions('');
     filter = 'all'; tagMatch = 'any'; selectedTopics.clear();
     defaultTopics.forEach(code => selectedTopics.add(code));
     matchSelect.value = tagMatch;
@@ -233,9 +257,7 @@ function renderBibliography(items) {
         if (tagMatch === 'any' && !selection.some(code => tags.includes(code))) return false;
       }
       if (yearFilter !== 'all' && String(item.year) !== yearFilter) return false;
-      const haystack = [item.id, item.title, item.authors, item.venue,
-        item.year, item.status, ...(item.topics || []).map(t => TOPIC_NAMES[t] || t)].join(' ');
-      return searchable(haystack).includes(query);
+      return searchable(item.title).includes(query);
     });
     target.replaceChildren();
     resultCount.textContent = `${matching.length} ${matching.length === 1 ? 'record' : 'records'} shown`;
@@ -340,7 +362,7 @@ function renderBibliography(items) {
     tagMatch = matchSelect.value === 'all' ? 'all' : 'any';
     updateUrl(); update();
   });
-  input.addEventListener('input', () => { query = searchable(input.value.trim()); update(); });
+  input.addEventListener('input', () => { query = searchable(input.value.trim()); updateTitleSuggestions(input.value); update(); });
   yearSelect.addEventListener('change', () => { yearFilter = yearSelect.value; update(); });
   styleButtons(typeButtons, 'filter', filter);
   styleTopics();
@@ -373,6 +395,24 @@ async function initializePublications() {
 
 
 
+function initializeContactForm() {
+  const form = document.getElementById('contact-form');
+  if (!form) return;
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+    const name = form.querySelector('#contact-name').value.trim();
+    const email = form.querySelector('#contact-email').value.trim();
+    const subject = form.querySelector('#contact-subject').value.trim();
+    const message = form.querySelector('#contact-message').value.trim();
+    const body = 'From: ' + name + ' (' + email + ')' + String.fromCharCode(10,10) + message;
+    const mailto = 'mailto:albertoarturo.vergani@unipv.it?subject=' +
+      encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    window.location.href = mailto;
+  });
+}
+
 document.getElementById('current-year')?.replaceChildren(String(new Date().getFullYear()));
 initializeNavigation();
 initializePublications();
+initializeContactForm();

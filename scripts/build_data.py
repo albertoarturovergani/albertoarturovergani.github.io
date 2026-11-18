@@ -25,7 +25,7 @@ TOPICS_FILE = ROOT / 'content' / 'topics.json'
 WORDCLOUD_FILE = ROOT / 'content' / 'wordcloud.json'
 WORDCLOUD_OUTPUT = ROOT / 'data' / 'wordcloud.json'
 
-TOPICS = {'neuroscience', 'computer-science', 'history', 'neuroengineering', 'education', 'brain-modelling', 'machine-learning', 'eeg', 'neuroimaging', 'cerebellum', 'cognitive-decline', 'schizophrenia', 'brain-stimulation', 'spiking-networks', 'dopamine', 'neurodevelopment', 'other'}
+TOPICS = {'neuroscience', 'computer-science', 'history', 'neuroengineering', 'education', 'brain-modelling', 'machine-learning', 'eeg', 'neuroimaging', 'cerebellum', 'cognitive-decline', 'schizophrenia', 'brain-stimulation', 'spiking-networks', 'dopamine', 'neurodevelopment', 'parkinson', 'autism', 'other'}
 
 KIND = {
     'article': 'journal',
@@ -226,15 +226,22 @@ def infer_topics(entry: dict[str, str]) -> list[str]:
         found.append('dopamine')
     if re.search(r'neurodevelop|autism|epilep|\bscn1a\b|\bgrin\b',t):
         found.append('neurodevelopment')
+    if re.search(r'parkinson|dopamine depletion', t):
+        found.append('parkinson')
+    if re.search(r'autism|autistic|\\basd\\b', t):
+        found.append('autism')
     return list(dict.fromkeys(found)) or ['other']
 
 
 def assigned_topics(entry: dict[str, str], topic_overrides: dict) -> list[str]:
     tags = topic_overrides.get(entry['key'])
     if tags is None:
-        return infer_topics(entry)
+        tags = infer_topics(entry)
     if not isinstance(tags, list) or not tags or any(t not in TOPICS for t in tags):
         raise ValueError('Invalid topic list for BibTeX key: ' + entry['key'])
+    tags = list(tags)
+    if 'mazzoni' in entry.get('author', '').lower():
+        tags.append('neuroengineering')
     return list(dict.fromkeys(tags))
 
 
@@ -333,7 +340,9 @@ def build_wordcloud(items: list[dict]) -> None:
                 item['keywords'].append(key)
                 match_count += 1
         if match_count:
-            output.append({'id': key, 'label': label, 'count': match_count})
+            output.append({'id': key, 'label': label, 'count': match_count,
+                           'family': concept.get('family', 'general'),
+                           'related': concept.get('related', [])})
     output.sort(key=lambda c: (-c['count'], c['label'].casefold()))
     WORDCLOUD_OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     WORDCLOUD_OUTPUT.write_text(json.dumps({'items': output}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')

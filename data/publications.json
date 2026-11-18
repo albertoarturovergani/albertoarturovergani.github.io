@@ -92,11 +92,14 @@
       "topics": [
         "neuroscience",
         "computer-science",
-        "brain-modelling"
+        "brain-modelling",
+        "neuroengineering",
+        "autism"
       ],
       "keywords": [
         "computational-models",
         "neural-dynamics",
+        "neuroengineering",
         "digital-twins"
       ],
       "bibtex": "@article{fabbrizzi2026digitaltwin,\n    title={A Digital Twin Approach for Simultaneous Reconstruction of Brain Anatomy and Dynamics from Neural Data},\n    author={Fabbrizzi, Michelangelo and Amato, Lorenzo Gaetano and Martinelli, Leonardo and Carpaneto, Jacopo and Bartolini, Emanuele and Calderoni, Sara and Retico, Alessandra and \\textbf{Vergani, Alberto Arturo} and Mazzoni, Alberto},\n    journal={PLOS Digital Health},\n    volume={5},\n    number={6},\n    pages={e0001445},\n    year={2026},\n    month={jun},\n    doi={10.1371/journal.pdig.0001445},\n    url={https://doi.org/10.1371/journal.pdig.0001445}\n}"
@@ -155,12 +158,14 @@
       "topics": [
         "neuroscience",
         "eeg",
-        "cognitive-decline"
+        "cognitive-decline",
+        "neuroengineering"
       ],
       "keywords": [
         "cognitive-decline",
         "eeg",
         "visual-attention",
+        "neuroengineering",
         "alzheimer-disease"
       ],
       "bibtex": "@article{amato2026gender,\n  title={EEG recordings during visuo-attentive task reduce sex bias in Alzheimer's disease diagnosis},\n  author={Amato, Lorenzo Gaetano and Lassi, Michael and Grippo, Antonello and Moschini, Valentina and Giacomucci, Giulia and Padiglioni, Sonia and Morinelli, Carmen and Nacmias, Benedetta and Mazzoni, Alberto and Bessi, Valentina and \\textbf{Vergani, Alberto Arturo}},\n  journal={Alzheimer's \\& Dementia: Translational Research \\& Clinical Interventions},\n  volume={12},\n  number={2},\n  pages={e70245},\n  year={2026},\n  month={4},\n  publisher={Wiley Online Library},\n  doi={10.1002/trc2.70245}\n}"
@@ -316,10 +321,13 @@
         "neuroscience",
         "computer-science",
         "eeg",
-        "neurodevelopment"
+        "neurodevelopment",
+        "neuroengineering",
+        "autism"
       ],
       "keywords": [
         "eeg",
+        "neuroengineering",
         "neurodevelopment",
         "functional-connectivity",
         "autism"
@@ -424,10 +432,12 @@
       "note": "",
       "topics": [
         "neuroscience",
-        "cognitive-decline"
+        "cognitive-decline",
+        "neuroengineering"
       ],
       "keywords": [
-        "cognitive-decline"
+        "cognitive-decline",
+        "neuroengineering"
       ],
       "bibtex": "@inproceedings{Mazzeo2025,\n  title = {Towards the development of a management protocol for Subjective Cognitive Decline: insights\nfrom a cross-sectional and longitudinal analysis of multimodal data from a memory clinic},\n  year      = {2026},\n  month     = sep,\n  address   = {Chicago, USA},\n  booktitle      = {Annual Meeting American Academic of Neurology, 18-22 April 2026},\n  author = {Mazzeo,  Salvatore and Lassi,  Michael and Padiglioni,  Sonia and \\textbf{Vergani,  Alberto Arturo} and Moschini,  Valentina and Scarpino,  Maenia and Giacomucci,  Giulia and Burali,  Rachele and Morinelli,  Carmen and Fabbiani,  Carlo and Galdo,  Giulia and Amato,  Lorenzo Gaetano and Bagnoli,  Silvia and Emiliani,  Filippo and Ingannato,  Assunta and Nacmias,  Benedetta and Sorbi,  Sandro and Grippo,  Antonello and Mazzoni,  Alberto and Bessi,  Valentina},\n  year = {2026},\n}"
     },
@@ -490,14 +500,16 @@
         "neuroscience",
         "eeg",
         "neuroimaging",
-        "cognitive-decline"
+        "cognitive-decline",
+        "neuroengineering"
       ],
       "keywords": [
         "cognitive-decline",
         "eeg",
         "visual-attention",
         "neuroimaging",
-        "erp"
+        "erp",
+        "neuroengineering"
       ],
       "bibtex": "@article{vergani2025erp,\nauthor = {\\textbf{A. A. Vergani} and S. Mazzeo and V. Moschini and R. Burali and M. Lassi and L. G. Amato and J. Carpaneto and G. Salvestrini and C. Fabbiani and G. Giacomucci and C. Morinelli and F. Emiliani and M. Scarpino and S. Bagnoli and A. Ingannato and B. Nacmias and S. Padiglioni and S. Sorbi and V. Bessi and A. Grippo and A. Mazzoni},\ndate = {2025-02-17},\ntitle = {Event-Related Potential Markers of Subject Cognitive Decline and Mild Cognitive Impairment during a sustained visuo-attentive task},\njournal={NeuroImage: Clinical},\ndoi={10.1101/2024.01.30.577910},\nyear={2025},\npublisher={Elsevier}\n}"
     },
@@ -780,11 +792,13 @@
         "neuroscience",
         "computer-science",
         "brain-modelling",
-        "cognitive-decline"
+        "cognitive-decline",
+        "neuroengineering"
       ],
       "keywords": [
         "computational-models",
         "cognitive-decline",
+        "neuroengineering",
         "alzheimer-disease",
         "atrophy",
         "digital-twins"
@@ -1008,10 +1022,12 @@
       "note": "",
       "topics": [
         "neuroscience",
-        "dopamine"
+        "dopamine",
+        "parkinson"
       ],
       "keywords": [
-        "dopamine"
+        "dopamine",
+        "parkinson-disease"
       ],
       "bibtex": "@article{taddeini2024dopaminergic,\n  title={Dopaminergic therapy disrupts decision-making in impulsive-compulsive Parkinsonian patients},\n  author={Taddeini, Fabio and Ordali, Erica and Govoni, Alessandra and Piattellini, Francesca and Valente, Simone and Caremani, Luca and \\textbf{Vergani, Alberto A} and Kaymak, Ahmet and Rustichini, Aldo and Russo, Eleonora and others},\n  journal={Annals of Clinical and Translational Neurology},\n  year={2024},\n  publisher={Wiley Online Library}\n}"
     },
@@ -1100,13 +1116,15 @@
       "topics": [
         "neuroscience",
         "eeg",
-        "cognitive-decline"
+        "cognitive-decline",
+        "neuroengineering"
       ],
       "keywords": [
         "cognitive-decline",
         "eeg",
         "visual-attention",
-        "erp"
+        "erp",
+        "neuroengineering"
       ],
       "bibtex": "@inproceedings{Vergani2024FENS,\n    author = {\\textbf{A. A. Vergani} and S. Mazzeo and V. Moschini and R. Burali and M. Lassi and L. G. Amato and J. Carpaneto and G. Salvestrini and C. Fabbiani and G. Giacomucci and C. Morinelli and F. Emiliani and M. Scarpino and S. Bagnoli and A. Ingannato and B. Nacmias and S. Padiglioni and S. Sorbi and V. Bessi and A. Grippo and A. Mazzoni},\n booktitle = {FENS Forum 2024},\n date = {2024-06-27},\n location = {Vienna (Austria)},\n title = {Gender differences in event-related potentials of subjective cognitive decline and mild cognitive impairment during a sustained visuo-attentive task},\n year = {2024}\n}"
     },
@@ -1125,11 +1143,13 @@
         "neuroscience",
         "computer-science",
         "eeg",
-        "cognitive-decline"
+        "cognitive-decline",
+        "neuroengineering"
       ],
       "keywords": [
         "cognitive-decline",
         "eeg",
+        "neuroengineering",
         "alzheimer-disease",
         "predictive-modelling"
       ],
@@ -1148,10 +1168,12 @@
       "note": "",
       "topics": [
         "neuroscience",
-        "cognitive-decline"
+        "cognitive-decline",
+        "neuroengineering"
       ],
       "keywords": [
-        "cognitive-decline"
+        "cognitive-decline",
+        "neuroengineering"
       ],
       "bibtex": "@inproceedings{vergani2024eventSINDEM,\n  title={Sex neurophysiological signatures in subjective cognitive decline and mild cognitive impairment associated with low and high demanding memory tasks},\n author = {\\textbf{A. A. Vergani} and S. Mazzeo and V. Moschini and R. Burali and M. Lassi and L. G. Amato and J. Carpaneto and G. Salvestrini and C. Fabbiani and G. Giacomucci and C. Morinelli and F. Emiliani and M. Scarpino and S. Bagnoli and A. Ingannato and B. Nacmias and S. Padiglioni and S. Sorbi and V. Bessi and A. Grippo and A. Mazzoni},\n  booktitle={SINdem Conference 2024, Societ{\\`a} Italiana di Neurologia, sezione Demenze, Padova, Italy},\n date = {2024-09-28},\n  year={2024}\n}"
     },
@@ -1169,13 +1191,15 @@
       "topics": [
         "neuroscience",
         "eeg",
-        "cognitive-decline"
+        "cognitive-decline",
+        "neuroengineering"
       ],
       "keywords": [
         "cognitive-decline",
         "eeg",
         "visual-attention",
-        "erp"
+        "erp",
+        "neuroengineering"
       ],
       "bibtex": "@inproceedings{vergani2024eventSIPF,\n  title={Sex-Specific Event-Related Potentials in Visual Encoding Along the Cognitive Decline Continuum},\n author = {\\textbf{A. A. Vergani} and S. Mazzeo and V. Moschini and R. Burali and M. Lassi and L. G. Amato and J. Carpaneto and G. Salvestrini and C. Fabbiani and G. Giacomucci and C. Morinelli and F. Emiliani and M. Scarpino and S. Bagnoli and A. Ingannato and B. Nacmias and S. Padiglioni and S. Sorbi and V. Bessi and A. Grippo and A. Mazzoni},\n  booktitle={XXXII SIPF Conference 2024, Societ{\\`a} Italiana di Psicofisologia e Neuroscienze Cognitive, Cesena, Italy},\n  date = {2024-09-05},\n  year={2024}\n}"
     },
@@ -1271,11 +1295,15 @@
         "neuroscience",
         "computer-science",
         "brain-modelling",
-        "dopamine"
+        "dopamine",
+        "neuroengineering",
+        "parkinson"
       ],
       "keywords": [
         "computational-models",
-        "dopamine"
+        "neuroengineering",
+        "dopamine",
+        "parkinson-disease"
       ],
       "bibtex": "@article{ortone2023dopamine,\n  title={Dopamine depletion leads to pathological synchronization of distinct basal ganglia loops in the beta band},\n  author={Ortone, Andrea and \\textbf{Vergani, Alberto Arturo} and Ahmadipour, Mahboubeh and Mannella, Riccardo and Mazzoni, Alberto},\n  journal={PLOS Computational Biology},\n  volume={19},\n  number={4},\n  doi={10.1371/journal.pcbi.1010645},\n  pages={e1010645},\n  year={2023},\n  publisher={Public Library of Science San Francisco, CA USA}\n}"
     },
@@ -1294,11 +1322,13 @@
         "neuroscience",
         "computer-science",
         "machine-learning",
-        "cognitive-decline"
+        "cognitive-decline",
+        "neuroengineering"
       ],
       "keywords": [
         "cognitive-decline",
         "machine-learning",
+        "neuroengineering",
         "alzheimer-disease",
         "predictive-modelling"
       ],
@@ -1509,12 +1539,14 @@
         "computer-science",
         "brain-modelling",
         "eeg",
-        "cognitive-decline"
+        "cognitive-decline",
+        "neuroengineering"
       ],
       "keywords": [
         "computational-models",
         "cognitive-decline",
         "eeg",
+        "neuroengineering",
         "alzheimer-disease",
         "digital-twins"
       ],
@@ -1534,12 +1566,14 @@
       "topics": [
         "neuroscience",
         "eeg",
-        "cognitive-decline"
+        "cognitive-decline",
+        "neuroengineering"
       ],
       "keywords": [
         "cognitive-decline",
         "eeg",
-        "erp"
+        "erp",
+        "neuroengineering"
       ],
       "bibtex": "@inproceedings{vergani2022temporal,\n  title={Temporal and Spectral ERPs Biomarkers in Early Stages of Dementia},\n  author={\\textbf{Vergani, Alberto} and Lassi, Micheal and Mazzoni, Alberto},\n  booktitle={FENS Forum 2022  (Federation of European Neuroscience Societies), Paris, France},\n  year={2022}\n}"
     },
@@ -1636,7 +1670,8 @@
         "visual-attention",
         "machine-learning",
         "neuroimaging",
-        "fmri"
+        "fmri",
+        "mri"
       ],
       "bibtex": "@article{vergani2020resting,\n  title={Resting state fMRI analysis using unsupervised learning algorithms},\n  author={\\textbf{Vergani, Alberto Arturo} and Martinelli, Samuele and Binaghi, Elisabetta},\n  journal={Computer Methods in Biomechanics and Biomedical Engineering: Imaging \\& Visualization},\n  volume={8},\n  number={3},\n  pages={252--265},\n  year={2020},\n  doi={10.1080/21681163.2019.1636413},\n  publisher={Taylor \\& Francis}\n}"
     },
@@ -1705,7 +1740,8 @@
       ],
       "keywords": [
         "neuroimaging",
-        "fmri"
+        "fmri",
+        "mri"
       ],
       "bibtex": "@inproceedings{temporal_classes_RS-fMRI,\n  author={\\textbf{Vergani, Alberto Arturo} and Huyck, Christian Robert},\n  title        = {Counting Temporal Classes in a RS-fMRI Data Exploring Volumes Organization},\n  year         = {2020},\n  month        = {January},\n  doi          = {10.13140/RG.2.2.31612.67208},\n  booktitle    = {Proceedings of the 4th Human Brain Project Student Conference},\n  address      = {Pisa, Italy},\n  organization = {The Human Brain Project},\n}"
     },
@@ -1753,7 +1789,8 @@
         "neuroimaging",
         "clustering",
         "fmri",
-        "soft-clustering"
+        "soft-clustering",
+        "mri"
       ],
       "bibtex": "@inproceedings{martinelli2019comparison,\n  title={Comparison of Validity Indexes for Fuzzy Clusters of fMRI Data},\n  author={Martinelli, Samuele and \\textbf{Vergani, Alberto Arturo} and Binaghi, Elisabetta},\n  booktitle={Lecture Notes in Computational Vision and Biomechanics},\n  volume={34},\n  pages={169--178},\n  year={2019},\n  doi={10.1007/978-3-030-32040-9_18},\n  publisher={Springer, Cham}\n}"
     },
@@ -1776,7 +1813,8 @@
       "keywords": [
         "visual-attention",
         "neuroimaging",
-        "fmri"
+        "fmri",
+        "mri"
       ],
       "bibtex": "@article{binaghi2018computation,\n  title={Computation and management of weighted activation vectors in support to fMRI analysis of clinical subjects},\n  author={Binaghi, Elisabetta and \\textbf{Vergani, Alberto A} and Montalbetti, Andrea and Minotto, Renzo and Pedoia, Valentina and Strocchi, Sabina and Balbi, Sergio},\n  journal={Computer Methods in Biomechanics and Biomedical Engineering: Imaging \\& Visualization},\n  volume={7},\n  number={5-6},\n  pages={563--582},\n  doi={10.1080/21681163.2018.1501767},\n  year={2018},\n  publisher={Taylor \\& Francis}\n}"
     },
@@ -1824,7 +1862,8 @@
         "neuroimaging",
         "clustering",
         "fmri",
-        "soft-clustering"
+        "soft-clustering",
+        "mri"
       ],
       "bibtex": "@inproceedings{vergani2018clustering,\n  title={Clustering functional MRI Patterns with Fuzzy and Competitive Algorithms},\n  author={\\textbf{Vergani, Alberto Arturo} and Martinelli, Samuele and Binaghi, Elisabetta},\n  booktitle={Lecture Notes in Computer Science},\n  volume={10986},\n  pages={129--144},\n  doi={10.1007/978-3-030-20805-9_12},\n  year={2018},\n  publisher={Springer, Cham}\n}"
     },
@@ -1853,7 +1892,8 @@
         "neural-dynamics",
         "fmri",
         "soft-clustering",
-        "functional-connectivity"
+        "functional-connectivity",
+        "mri"
       ],
       "bibtex": "@inproceedings{vergani2018resting,\n  title={Resting State fMRI Functional Connectivity Analysis Using Soft Competitive Learning Algorithms},\n  author={\\textbf{Vergani, Alberto A} and Binaghi, Elisabetta and Martinelli, Samuele and Strocchi, Sabina},\n  booktitle={15th International Symposium on Computer Methods in Biomechanics and Biomedical Engineering  and  3rd Conference on Imaging and Visualization},\n  pages={1--12},\n  year={2018},\n  organization={Springer}\n}"
     },

@@ -210,3 +210,37 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{line-height:1.16}h1,h2{letter-spacing:-.04em}h2
 .bib-identifier-link{font-size:11px;font-weight:720;color:#246f82;text-decoration:underline;text-decoration-color:#bdd3d8;text-underline-offset:3px;overflow-wrap:anywhere}
 .bib-identifier-link:hover,.bib-identifier-link:focus-visible{color:#0d4559;text-decoration-color:#0d4559}
 .bib-source-link{font-weight:600;color:#6c7d82}
+
+/* Full recognition history and winning proposals */
+.recognition-columns{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:42px}
+.recognition-group h3{font-family:Georgia,serif;font-size:25px;font-weight:500;color:var(--deep);margin:0 0 18px;border-bottom:1px solid #d9e6df;padding-bottom:13px}
+.recognition-entry-list{display:flex;flex-direction:column;gap:12px}
+.recognition-entry{background:#f8faf8;border:1px solid #e5ece7;border-radius:9px;padding:18px 20px}
+.recognition-entry h4{font-family:Georgia,serif;font-size:17px;font-weight:600;line-height:1.3;color:var(--deep);margin:7px 0 8px}
+.recognition-entry p{font-size:12px;line-height:1.75;color:var(--muted);margin:0}
+.recognition-entry a{color:var(--teal);font-weight:750;text-decoration:underline;text-underline-offset:3px}
+.recognition-more{font-size:12px;line-height:1.65;margin:27px 0 0}
+.education-thesis-link{margin-top:7px!important}
+.education-thesis-link a{font-size:11px;color:#277f76;text-decoration:underline;text-underline-offset:3px;font-weight:800}
+.education-thesis-link a:hover{color:var(--deep)}
+/* Search publication titles directly beneath the thematic filters */
+.publication-title-search{margin-top:0}
+.publication-title-search .topic-filter-label{margin:0 0 11px}
+.publication-title-search .search-tools{display:flex;align-items:stretch;gap:12px}
+.publication-title-search input:focus{border-color:#3a9485}
+.bib-identifier-link{font-size:11px}
+.brain-cloud-word.is-semantic-neighbor text{fill:#0b5473!important}
+@media(max-width:900px){.recognition-columns{grid-template-columns:1fr;gap:32px}.recognition-entry{padding:16px}}
+/* Contact form is client-side only; submission opens the visitor's email app. */
+.contact-grid{align-items:start;gap:clamp(28px,5vw,78px)}
+.contact-form{margin-top:27px;display:grid;gap:14px}
+.contact-field-pair{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.contact-form label{display:flex;flex-direction:column;gap:7px;color:#d2e3e2;font-size:11px;font-weight:750;letter-spacing:.02em}
+.contact-form input,.contact-form textarea{display:block;width:100%;box-sizing:border-box;border:1px solid #71949a;border-radius:6px;background:#f8fbfb;color:#173b46;font:inherit;font-size:13px;line-height:1.5;padding:12px 13px}
+.contact-form input::placeholder,.contact-form textarea::placeholder{color:#7e9298}
+.contact-form input:focus-visible,.contact-form textarea:focus-visible{outline:2px solid #81d6c6;outline-offset:2px}
+.contact-form textarea{resize:vertical;min-height:106px}
+.contact-form .contact-submit{justify-self:start;cursor:pointer}
+.contact-section .contact-form .contact-form-note{margin:2px 0 0;font-size:11px;line-height:1.65;color:#afc9c8}
+.contact-links strong{font-size:12px}
+@media(max-width:580px){.contact-field-pair{grid-template-columns:1fr}.contact-form{margin-top:19px}.contact-grid{gap:30px}.recognition-entry h4{font-size:16px}}

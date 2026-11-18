@@ -3,152 +3,249 @@
     {
       "id": "computational-models",
       "label": "Computational Models",
-      "count": 26
+      "count": 26,
+      "family": "modelling",
+      "related": []
     },
     {
       "id": "cognitive-decline",
       "label": "Cognitive Decline",
-      "count": 25
+      "count": 25,
+      "family": "pathology",
+      "related": [
+        "alzheimer-disease",
+        "parkinson-disease",
+        "autism",
+        "epilepsy",
+        "schizophrenia",
+        "brain-resilience"
+      ]
     },
     {
       "id": "eeg",
       "label": "EEG",
-      "count": 23
-    },
-    {
-      "id": "cerebellum",
-      "label": "Cerebellum",
-      "count": 19
-    },
-    {
-      "id": "schizophrenia",
-      "label": "Schizophrenia",
-      "count": 16
-    },
-    {
-      "id": "visual-attention",
-      "label": "Visual Attention",
-      "count": 16
-    },
-    {
-      "id": "machine-learning",
-      "label": "Machine Learning",
-      "count": 12
-    },
-    {
-      "id": "neuroimaging",
-      "label": "Neuroimaging",
-      "count": 12
-    },
-    {
-      "id": "alzheimer-disease",
-      "label": "Alzheimer’s Disease",
-      "count": 11
-    },
-    {
-      "id": "neural-dynamics",
-      "label": "Neural Dynamics",
-      "count": 10
-    },
-    {
-      "id": "erp",
-      "label": "ERP",
-      "count": 9
-    },
-    {
-      "id": "history-of-neuroscience",
-      "label": "History of Neuroscience",
-      "count": 9
+      "count": 23,
+      "family": "methods",
+      "related": [
+        "fmri",
+        "mri",
+        "neuroimaging",
+        "erp",
+        "tms-eeg",
+        "brain-stimulation",
+        "functional-connectivity"
+      ]
     },
     {
       "id": "neuroengineering",
       "label": "Neuroengineering",
-      "count": 9
+      "count": 23,
+      "family": "concepts",
+      "related": []
+    },
+    {
+      "id": "cerebellum",
+      "label": "Cerebellum",
+      "count": 19,
+      "family": "concepts",
+      "related": []
+    },
+    {
+      "id": "schizophrenia",
+      "label": "Schizophrenia",
+      "count": 16,
+      "family": "pathology",
+      "related": []
+    },
+    {
+      "id": "visual-attention",
+      "label": "Visual Attention",
+      "count": 16,
+      "family": "concepts",
+      "related": []
+    },
+    {
+      "id": "machine-learning",
+      "label": "Machine Learning",
+      "count": 12,
+      "family": "modelling",
+      "related": []
+    },
+    {
+      "id": "neuroimaging",
+      "label": "Neuroimaging",
+      "count": 12,
+      "family": "methods",
+      "related": []
+    },
+    {
+      "id": "alzheimer-disease",
+      "label": "Alzheimer’s Disease",
+      "count": 11,
+      "family": "pathology",
+      "related": [
+        "autism",
+        "parkinson-disease",
+        "epilepsy",
+        "schizophrenia",
+        "cognitive-decline",
+        "neurodevelopment",
+        "atrophy"
+      ]
+    },
+    {
+      "id": "neural-dynamics",
+      "label": "Neural Dynamics",
+      "count": 10,
+      "family": "modelling",
+      "related": []
+    },
+    {
+      "id": "erp",
+      "label": "ERP",
+      "count": 9,
+      "family": "methods",
+      "related": []
+    },
+    {
+      "id": "history-of-neuroscience",
+      "label": "History of Neuroscience",
+      "count": 9,
+      "family": "concepts",
+      "related": []
     },
     {
       "id": "brain-stimulation",
       "label": "Brain Stimulation",
-      "count": 8
+      "count": 8,
+      "family": "methods",
+      "related": []
     },
     {
       "id": "clustering",
       "label": "Clustering",
-      "count": 8
+      "count": 8,
+      "family": "modelling",
+      "related": []
     },
     {
       "id": "fmri",
       "label": "fMRI",
-      "count": 8
+      "count": 8,
+      "family": "methods",
+      "related": []
     },
     {
       "id": "soft-clustering",
       "label": "Soft Clustering",
-      "count": 8
+      "count": 8,
+      "family": "modelling",
+      "related": []
     },
     {
       "id": "dopamine",
       "label": "Dopamine",
-      "count": 7
+      "count": 7,
+      "family": "concepts",
+      "related": []
     },
     {
       "id": "atrophy",
       "label": "Atrophy",
-      "count": 6
+      "count": 6,
+      "family": "pathology",
+      "related": []
+    },
+    {
+      "id": "mri",
+      "label": "MRI",
+      "count": 6,
+      "family": "methods",
+      "related": []
     },
     {
       "id": "predictive-modelling",
       "label": "Predictive Modelling",
-      "count": 6
+      "count": 6,
+      "family": "modelling",
+      "related": []
     },
     {
       "id": "brain-resilience",
       "label": "Brain Resilience",
-      "count": 5
+      "count": 5,
+      "family": "pathology",
+      "related": []
     },
     {
       "id": "digital-twins",
       "label": "Digital Twins",
-      "count": 5
+      "count": 5,
+      "family": "modelling",
+      "related": []
     },
     {
       "id": "neurodevelopment",
       "label": "Neurodevelopment",
-      "count": 5
+      "count": 5,
+      "family": "pathology",
+      "related": []
     },
     {
       "id": "epilepsy",
       "label": "Epilepsy",
-      "count": 4
+      "count": 4,
+      "family": "pathology",
+      "related": []
     },
     {
       "id": "spiking-networks",
       "label": "Spiking Networks",
-      "count": 4
+      "count": 4,
+      "family": "modelling",
+      "related": []
     },
     {
       "id": "functional-connectivity",
       "label": "Functional Connectivity",
-      "count": 3
+      "count": 3,
+      "family": "methods",
+      "related": []
     },
     {
       "id": "tms-eeg",
       "label": "TMS–EEG",
-      "count": 3
+      "count": 3,
+      "family": "methods",
+      "related": []
     },
     {
       "id": "neural-networks",
       "label": "Neural Networks",
-      "count": 2
+      "count": 2,
+      "family": "modelling",
+      "related": []
+    },
+    {
+      "id": "parkinson-disease",
+      "label": "Parkinson's Disease",
+      "count": 2,
+      "family": "pathology",
+      "related": []
     },
     {
       "id": "autism",
       "label": "Autism",
-      "count": 1
+      "count": 1,
+      "family": "pathology",
+      "related": []
     },
     {
       "id": "dosimetry",
       "label": "Dosimetry",
-      "count": 1
+      "count": 1,
+      "family": "modelling",
+      "related": []
     }
   ]
 }

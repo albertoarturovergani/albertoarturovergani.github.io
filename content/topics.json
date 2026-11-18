@@ -22,7 +22,9 @@
   "fabbrizzi2026digitaltwin": [
     "neuroscience",
     "computer-science",
-    "brain-modelling"
+    "brain-modelling",
+    "neuroengineering",
+    "autism"
   ],
   "Vergani_2026_Matteucci": [
     "neuroscience",
@@ -35,7 +37,8 @@
   "amato2026gender": [
     "neuroscience",
     "eeg",
-    "cognitive-decline"
+    "cognitive-decline",
+    "neuroengineering"
   ],
   "vergani2026effective": [
     "neuroscience",
@@ -72,7 +75,9 @@
     "neuroscience",
     "computer-science",
     "eeg",
-    "neurodevelopment"
+    "neurodevelopment",
+    "neuroengineering",
+    "autism"
   ],
   "Lomi2026GRIN": [
     "neuroscience",
@@ -99,7 +104,8 @@
   ],
   "Mazzeo2025": [
     "neuroscience",
-    "cognitive-decline"
+    "cognitive-decline",
+    "neuroengineering"
   ],
   "vergani2025hill": [
     "history"
@@ -114,7 +120,8 @@
     "neuroscience",
     "eeg",
     "neuroimaging",
-    "cognitive-decline"
+    "cognitive-decline",
+    "neuroengineering"
   ],
   "taddeini2025extended": [
     "neuroscience",
@@ -184,7 +191,8 @@
     "neuroscience",
     "computer-science",
     "brain-modelling",
-    "cognitive-decline"
+    "cognitive-decline",
+    "neuroengineering"
   ],
   "Faris2025_SIF": [
     "neuroscience",
@@ -241,7 +249,8 @@
   ],
   "taddeini2024dopaminergic": [
     "neuroscience",
-    "dopamine"
+    "dopamine",
+    "parkinson"
   ],
   "vergani2024hans": [
     "neuroscience",
@@ -263,22 +272,26 @@
   "Vergani2024FENS": [
     "neuroscience",
     "eeg",
-    "cognitive-decline"
+    "cognitive-decline",
+    "neuroengineering"
   ],
   "amato2024predicting": [
     "neuroscience",
     "computer-science",
     "eeg",
-    "cognitive-decline"
+    "cognitive-decline",
+    "neuroengineering"
   ],
   "vergani2024eventSINDEM": [
     "neuroscience",
-    "cognitive-decline"
+    "cognitive-decline",
+    "neuroengineering"
   ],
   "vergani2024eventSIPF": [
     "neuroscience",
     "eeg",
-    "cognitive-decline"
+    "cognitive-decline",
+    "neuroengineering"
   ],
   "vergani2024erice": [
     "neuroscience",
@@ -304,13 +317,16 @@
     "neuroscience",
     "computer-science",
     "brain-modelling",
-    "dopamine"
+    "dopamine",
+    "neuroengineering",
+    "parkinson"
   ],
   "Mazzeo2023": [
     "neuroscience",
     "computer-science",
     "machine-learning",
-    "cognitive-decline"
+    "cognitive-decline",
+    "neuroengineering"
   ],
   "vergani2023electrophysiology": [
     "neuroscience",
@@ -356,12 +372,14 @@
     "computer-science",
     "brain-modelling",
     "eeg",
-    "cognitive-decline"
+    "cognitive-decline",
+    "neuroengineering"
   ],
   "vergani2022temporal": [
     "neuroscience",
     "eeg",
-    "cognitive-decline"
+    "cognitive-decline",
+    "neuroengineering"
   ],
   "vergani2021modulation": [
     "neuroscience",

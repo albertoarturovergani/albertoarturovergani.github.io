@@ -72,7 +72,7 @@ All subject tags except History of Science are checked when the Publications pag
 
 ## Interactive research keyword cloud
 
-The homepage replaces the three research-area cards with a free-floating, randomly arranged SVG word cloud, without a brain outline or a prominent section heading. It uses **30 clickable topics**, including **Epilepsy**, compiled from bibliography topics and the titles/venues of the research outputs. The text size is determined by the number of **distinct matching bibliographic records**, not raw occurrences of a word in a single article or a subjective importance score. A paper may count toward several words.
+The homepage replaces the three research-area cards with a free-floating, randomly arranged SVG word cloud, without a brain outline or a prominent section heading. It uses **32 clickable topics**, including **Epilepsy**, compiled from bibliography topics and the titles/venues of the research outputs. The text size is determined by the number of **distinct matching bibliographic records**, not raw occurrences of a word in a single article or a subjective importance score. A paper may count toward several words.
 
 **To curate the vocabulary:** edit `content/wordcloud.json`. Each concept has `id`, `label`, a list of subject `topics` and an optional regular-expression `pattern`. Be conservative about scientific associations. Committing that file or adding new BibTeX records triggers the GitHub Actions build, which regenerates `data/wordcloud.json` (counts) and keyword matches within `data/publications.json`. **Do not edit these generated data files manually.**
 
@@ -83,3 +83,14 @@ Clicking a word opens `publications.html?keyword=<slug>`, which displays the mat
 Each record in the Publications page has a **Copy BibTeX** button. The action copies that record's complete original BibTeX entry from the maintained `vergani_scholar.bib` file, including its citation key and full available metadata. No manual selection or external site is needed. A short “Copied” confirmation appears after a successful copy. The existing download link still provides the complete bibliography.
 
 The parser in `scripts/build_data.py` retains the exact BibTeX block for each included entry in the generated `data/publications.json`. When editing `vergani_scholar.bib`, the next GitHub Pages build refreshes both the on-screen record and its copyable BibTeX text. The generated JSON file should not be edited manually.
+
+## November 2026 refinements: discoverability and communication
+
+- The homepage `Positions` section no longer duplicates the Education overview immediately below it.
+- The Training cards link thesis **titles** directly to the available DOI landing pages. The diploma project has no invented thesis link.
+- `Recognition` now lists all seven prizes and five winning proposals from the Full CV, with available links. Fellowships remain in the detailed CV.
+- Publications are searchable by **partial or full title**, with word suggestions derived from real publication titles. The title search sits under the topic filters.
+- `content/topics.json` assigns all BibTeX records coauthored with Alberto Mazzoni to Neuroengineering; the build also enforces this for new references. It includes Parkinson's disease and Autism subject tags, including the Ortone and Fabbrizzi publications.
+- There is intentionally **no fabricated or automatically extracted abstract** and **no abstract-expansion control**: the supplied BibTeX contains no abstract fields. Bibliographic DOI, source links and Copy BibTeX remain available.
+- The research word cloud now includes explicitly curated semantic families and related-term neighborhoods in `content/wordcloud.json`. Hovering or keyboard-focusing an SVG word smoothly brings related concepts near it, while clicking the word continues to filter the bibliography. Reduced-motion preferences are honored, and mobile visitors keep clickable keywords.
+- The Contact details section links the author's personal Google Scholar, Scopus, ResearchGate, IRIS (University of Pavia), DBLP, ORCID and GitHub profiles. The contact form uses a `mailto:` link to prepare an email locally; it **does not transmit or store submissions on GitHub Pages** and requires a configured email application.
