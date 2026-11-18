@@ -280,10 +280,15 @@
     const image = tinyCtx.createImageData(N, N);
     const $ = id => document.getElementById(id);
     const presets = {
-      spots:   {exc:13, inh:10, radius:8, iexc:13, driveE:1.03,driveI:.90,local:2},
-      maze:    {exc:13, inh:10, radius:8, iexc:5,  driveE:1.03,driveI:.90,local:2},
-      islands: {exc:13, inh:10, radius:12,iexc:13, driveE:1.03,driveI:.90,local:3}
+      spots:   {exc:13, inh:10, iinh:.7, radius:8, iexc:13, driveE:1.03,driveI:.90,local:2},
+      maze:    {exc:13, inh:10, iinh:.7, radius:8, iexc:5,  driveE:1.03,driveI:.90,local:2},
+      islands: {exc:13, inh:10, iinh:.7, radius:12,iexc:13, driveE:1.03,driveI:.90,local:3}
     };
+    const presetDescriptions=Object.freeze({
+      spots:'Spots: E→I = 13, local E radius = 2, inhibitory radius = 8. Often isolated patches.',
+      maze:'Labyrinth: E→I = 5, local E radius = 2, inhibitory radius = 8. Often interlinked bands.',
+      islands:'Islands: E→I = 13, local E radius = 3, inhibitory radius = 12. Larger spatial scales.'
+    });
     const cfg = {...presets.spots};
     const vE = new Float32Array(LEN), vI = new Float32Array(LEN);
     const eTrace = new Float32Array(LEN), iTrace = new Float32Array(LEN);
@@ -293,6 +298,30 @@
     const adaptE = new Float32Array(LEN), adaptI = new Float32Array(LEN);
     const uE = new Float32Array(LEN), uI = new Float32Array(LEN);
     const stimMask = new Float32Array(LEN);
+    // Delayed recurrent synaptic traces use an independent history per population.
+    // Effective delay combines a baseline and a characteristic-distance term.
+    const D_RING=64,D_MASK=D_RING-1;
+    const eDelayRing=new Float32Array(LEN*D_RING);
+    const iDelayRing=new Float32Array(LEN*D_RING);
+    const zeroTrace=new Float32Array(LEN);
+    let synDelay=0,conductionSpeed=16;
+    function effectiveDelay(radius){
+      return Math.min(D_RING-1,synDelay+Math.round(2*radius/(3*conductionSpeed)));
+    }
+    function historyField(ring,lag){
+      if(stepCount<lag)return zeroTrace;
+      const offset=((stepCount-lag)&D_MASK)*LEN;
+      return ring.subarray(offset,offset+LEN);
+    }
+    // Population voltage measurements recorded after threshold/reset processing.
+    const V_HISTORY=360;
+    const meanVHistoryE=new Float32Array(V_HISTORY);
+    const meanVHistoryI=new Float32Array(V_HISTORY);
+    const voltageSteps=new Float64Array(V_HISTORY);
+    let voltageIndex=0,voltageCount=0,meanLastVE=0,meanLastVI=0;
+    const phaseCtx=$('phasePlane').getContext('2d');
+    const voltageCtx=$('voltageBalance').getContext('2d');
+
     // A fixed circular central ROI, without changing neuronal dynamics.
     const centerMask = new Uint8Array(LEN);
     let centerCellCount=0;
@@ -379,17 +408,21 @@
       if(!running) start(); else render();
     }
     function runOneStep() {
-      blurWrap(eTrace, blurE, cfg.local);
-      blurWrap(iTrace, blurI, cfg.radius);
+      const traceOffset=(stepCount&D_MASK)*LEN;
+      eDelayRing.set(eTrace,traceOffset);
+      iDelayRing.set(iTrace,traceOffset);
+      blurWrap(historyField(eDelayRing,effectiveDelay(cfg.local)),blurE,cfg.local);
+      blurWrap(historyField(iDelayRing,effectiveDelay(cfg.radius)),blurI,cfg.radius);
+      const recurrentILocal=historyField(iDelayRing,synDelay);
       const stimulate = stimRemaining > 0;
-      let spikesE = 0,centerSpikes = 0;
+      let spikesE = 0,centerSpikes = 0,sumVE=0,sumVI=0;
       for (let j=0; j<LEN; ++j) {
         // Three uniforms centered at zero approximate Gaussian background drive.
         const jitterE = (rand()+rand()+rand()-1.5)*0.24;
         const jitterI = (rand()+rand()+rand()-1.5)*0.24;
         const pulse = stimulate ? stimAmplitude*stimMask[j] : 0;
         const netE = cfg.driveE+cfg.exc*blurE[j]-cfg.inh*blurI[j]+jitterE+pulse;
-        const netI = cfg.driveI+cfg.iexc*blurE[j]-0.7*iTrace[j]+jitterI;
+        const netI = cfg.driveI+cfg.iexc*blurE[j]-cfg.iinh*recurrentILocal[j]+jitterI;
         let spikeE=0, spikeI=0;
         if(model==='izh') {
           // Izhikevich (2003) quadratic integrate-and-fire with recovery variable.
@@ -426,6 +459,7 @@
             if (vI[j]>=1.0) {spikeI=1;vI[j]=0;refI[j]=2;if(model==='alif')adaptI[j]+=.025;}
           }
         }
+        sumVE+=vE[j];sumVI+=vI[j];
         if(spikeE && centerMask[j])centerSpikes++;
         eTrace[j]=TRACE_DECAY*eTrace[j]+(1-TRACE_DECAY)*spikeE;
         iTrace[j]=TRACE_DECAY*iTrace[j]+(1-TRACE_DECAY)*spikeI;
@@ -437,6 +471,12 @@
       waveWhole[wi]=spikesE/LEN;
       waveCenter[wi]=centerSpikes/centerCellCount;
       waveCount++;
+      meanLastVE=sumVE/LEN;meanLastVI=sumVI/LEN;
+      meanVHistoryE[voltageIndex]=meanLastVE;
+      meanVHistoryI[voltageIndex]=meanLastVI;
+      voltageSteps[voltageIndex]=stepCount;
+      voltageIndex=(voltageIndex+1)%V_HISTORY;
+      voltageCount=Math.min(V_HISTORY,voltageCount+1);
     }
     function interpolateColor(x) {
       // Original artwork's conceptual low / mid / high = blue / white / red.
@@ -658,6 +698,9 @@
       stimRemaining=0;stimHistory=[];parameterHistory=[];initialCoupling={...cfg};lastPulseEnd=-1;
       waveCount=0;waveLastStep=-1e9;waveCache=null;waveWhole.fill(0);waveCenter.fill(0);
       eTrace.fill(0);iTrace.fill(0);refE.fill(0);refI.fill(0);
+      eDelayRing.fill(0);iDelayRing.fill(0);
+      meanVHistoryE.fill(0);meanVHistoryI.fill(0);voltageSteps.fill(0);
+      voltageIndex=0;voltageCount=0;meanLastVE=0;meanLastVI=0;
       adaptE.fill(0);adaptI.fill(0);uE.fill(0);uI.fill(0);
       for(let i=0;i<LEN;i++) {
         if(model==='izh') {
@@ -668,6 +711,7 @@
       start();
     }
     function markCustom() {
+      $('presetDescription').textContent='Custom coupling values: altered from the named spatial presets.';
       document.querySelectorAll('[data-preset]').forEach(button=>{
         button.classList.remove('selected');button.setAttribute('aria-pressed','false');
       });
@@ -675,7 +719,12 @@
     function updateSliderLabels() {
       $('excValue').textContent=Number(cfg.exc).toFixed(1);
       $('inhValue').textContent=Number(cfg.inh).toFixed(1);
+      $('iinhValue').textContent=Number(cfg.iinh).toFixed(2);
       $('radiusValue').textContent=String(cfg.radius);
+      $('synDelayValue').textContent=String(synDelay);
+      $('conductionSpeedValue').textContent=conductionSpeed.toFixed(1);
+      $('effectiveDelays').textContent='Effective field delay: E = '+effectiveDelay(cfg.local)+
+        ' steps, I = '+effectiveDelay(cfg.radius)+' steps; local I→I = '+synDelay+' steps.';
     }
     function updateStimulusLabels() {
       $('stimIntensityValue').textContent=Number($('stimIntensity').value).toFixed(2);
@@ -696,16 +745,25 @@
     for (const button of document.querySelectorAll('[data-preset]')) {
       button.addEventListener('click',()=>{
         Object.assign(cfg,presets[button.dataset.preset]);
-        $('exc').value=cfg.exc;$('inh').value=cfg.inh;$('radius').value=cfg.radius;
+        $('exc').value=cfg.exc;$('inh').value=cfg.inh;$('iinh').value=cfg.iinh;$('radius').value=cfg.radius;
         updateSliderLabels();
         markCustom();button.classList.add('selected');button.setAttribute('aria-pressed','true');
+        $('presetDescription').textContent=presetDescriptions[button.dataset.preset];
         reset();
       });
     }
-    for (const name of ['exc','inh','radius']) {
+    for (const name of ['exc','inh','iinh','radius']) {
       $(name).addEventListener('input',()=>{
         cfg[name]=Number($(name).value);updateSliderLabels();markCustom();
         parameterHistory.push({atStep:stepCount,field:name,value:cfg[name]});
+      });
+    }
+    for (const name of ['synDelay','conductionSpeed']){
+      $(name).addEventListener('input',()=>{
+        if(name==='synDelay')synDelay=Number($('synDelay').value);
+        else conductionSpeed=Number($('conductionSpeed').value);
+        updateSliderLabels();
+        parameterHistory.push({atStep:stepCount,field:name,value:name==='synDelay'?synDelay:conductionSpeed});
       });
     }
     for(const name of ['stimIntensity','stimRadius','stimDuration']) $(name).addEventListener('input',updateStimulusLabels);
@@ -756,6 +814,11 @@
         seed:Number($('seed').value),step:stepCount,grid:[N,N],neurons:LEN*2,
         model:model,model_label:modelLabels[model],
         coupling:{...cfg},initial_coupling:initialCoupling,
+        propagation:{baseline_synaptic_delay_steps:synDelay,conduction_speed_cells_per_step:conductionSpeed,
+          field_delays_steps:{excitatory:effectiveDelay(cfg.local),inhibitory:effectiveDelay(cfg.radius),local_inhibitory_to_inhibitory:synDelay},
+          approximation:'Characteristic path distance=2*field_radius/3; circular signal-history ring; not an axonal path-resolved simulator.'},
+        voltage_analysis:{signals:['spatial mean E membrane voltage','spatial mean I membrane voltage','E-I difference'],
+          phase_plane:'population mean E versus population mean I',units:model==='izh'?'model mV':'dimensionless LIF voltage',history_steps:V_HISTORY},
         neuron_dynamics:model==='izh'?{excitatory:{a:.02,b:.2,c:-65,d:8},inhibitory:{a:.1,b:.2,c:-65,d:2},current_e:'14+12*(netE-1)',current_i:'8+12*(netI-0.9)'}:model==='alif'?{alpha:DT_ALPHA,threshold:1,refractory_steps:2,adaptation_e:{decay:.985,spike_increment:.05},adaptation_i:{decay:.975,spike_increment:.025}}:{alpha:DT_ALPHA,threshold:1,refractory_steps:2},
         synaptic_trace_decay:TRACE_DECAY,noise_jitter_factor:.24,
         central_stimulation:{target:'excitatory population',spatial_profile:'Gaussian, cut at 3 sigma',settings:{intensity:Number($('stimIntensity').value),spreadSigmaCells:Number($('stimRadius').value),durationSteps:Number($('stimDuration').value)},pulse_events:stimHistory.map((pulse,index)=>({...pulse,appliedSteps:(index===stimHistory.length-1&&stimRemaining>0)?stepCount-pulse.onsetStep:pulse.appliedSteps}))},
@@ -766,6 +829,7 @@
       downloadBlob(new Blob([JSON.stringify(saved,null,2)],{type:'application/json'}),`neural-turing-seed-${$('seed').value}.json`);
     });
     updateStimulusLabels();
+    updateSliderLabels();
     reset();
   </script>
 </body>
