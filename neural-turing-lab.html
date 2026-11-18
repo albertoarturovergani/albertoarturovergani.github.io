@@ -186,6 +186,11 @@
           <div class="hint">Strength of local positive coupling between excitatory neurons</div>
         </div>
         <div class="control">
+          <div class="labelrow"><label for="iexc">E → I recruitment</label><output id="iexcValue">13.0</output></div>
+          <input type="range" id="iexc" min="2" max="18" value="13" step="0.5" />
+          <div class="hint">Excitatory drive onto inhibitory neurons; reduced in Labyrinth.</div>
+        </div>
+        <div class="control">
           <div class="labelrow"><label for="inh">Surround inhibition (I → E)</label><output id="inhValue">10.0</output></div>
           <input type="range" id="inh" min="5" max="18" value="10" step="0.5" />
           <div class="hint">Strength of inhibition delivered by the inhibitory population</div>
@@ -199,6 +204,11 @@
           <div class="labelrow"><label for="radius">Inhibitory radius (cells)</label><output id="radiusValue">8</output></div>
           <input type="range" id="radius" min="4" max="13" value="8" step="1" />
           <div class="hint">Larger radii produce more spatially extended interactions</div>
+        </div>
+        <div class="control">
+          <div class="labelrow"><label for="local">Local E and I→I radius (cells)</label><output id="localValue">2</output></div>
+          <input type="range" id="local" min="1" max="5" value="2" step="1" />
+          <div class="hint">Used for E→E, E→I and local I→I coupling; increased in Islands.</div>
         </div>
         <div class="section-title">Propagation and delay</div>
         <div class="control">
@@ -917,6 +927,8 @@
     function updateSliderLabels() {
       $('excValue').textContent=Number(cfg.exc).toFixed(1);
       $('inhValue').textContent=Number(cfg.inh).toFixed(1);
+      $('iexcValue').textContent=Number(cfg.iexc).toFixed(1);
+      $('localValue').textContent=String(cfg.local);
       $('iinhValue').textContent=Number(cfg.iinh).toFixed(2);
       $('radiusValue').textContent=String(cfg.radius);
       $('synDelayValue').textContent=String(synDelay);
@@ -943,14 +955,14 @@
     for (const button of document.querySelectorAll('[data-preset]')) {
       button.addEventListener('click',()=>{
         Object.assign(cfg,presets[button.dataset.preset]);
-        $('exc').value=cfg.exc;$('inh').value=cfg.inh;$('iinh').value=cfg.iinh;$('radius').value=cfg.radius;
+        $('exc').value=cfg.exc;$('iexc').value=cfg.iexc;$('inh').value=cfg.inh;$('iinh').value=cfg.iinh;$('radius').value=cfg.radius;$('local').value=cfg.local;
         updateSliderLabels();
         markCustom();button.classList.add('selected');button.setAttribute('aria-pressed','true');
         $('presetDescription').textContent=presetDescriptions[button.dataset.preset];
         reset();
       });
     }
-    for (const name of ['exc','inh','iinh','radius']) {
+    for (const name of ['exc','iexc','inh','iinh','radius','local']) {
       $(name).addEventListener('input',()=>{
         cfg[name]=Number($(name).value);updateSliderLabels();markCustom();
         parameterHistory.push({atStep:stepCount,field:name,value:cfg[name]});
