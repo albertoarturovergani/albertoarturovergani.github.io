@@ -31,6 +31,23 @@
     .render-detail label{margin:0;font-size:11px;color:#bdcee9}
     .render-detail select{background:#101d32;border:1px solid #3b5172;color:#e1efff;border-radius:7px;padding:5px 8px;font-size:11px}
 
+
+    /* View modes render the same underlying 2D SNN activity; 3D is illustrative. */
+    [hidden]{display:none!important}
+    .view-bar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:10px}
+    .view-bar button{font-size:12px;padding:10px 6px;min-height:42px;font-weight:650}
+    .view-options{display:flex;flex-wrap:wrap;gap:13px;padding:12px;margin-bottom:10px;border:1px solid #354c70;background:#12213b;border-radius:9px}
+    .view-control{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:13px;row-gap:6px;width:100%;align-items:center}
+    .view-control label{margin:0;font-size:11px}
+    .view-control output{font-size:11px}
+    .view-control input{grid-column:1 / -1}
+    #art3d{touch-action:none;cursor:grab}
+    #art3d:active{cursor:grabbing}
+    .view-note{color:#a7b9d7;font-size:11px;line-height:1.55;margin:9px 2px 8px}
+    .appearance-control select{width:100%;background:#111e34;border:1px solid #455b7a;border-radius:8px;padding:10px 12px;color:#e5eefc;min-height:42px}
+    .stim-panel{margin:10px 0 19px;padding:16px 14px}
+    @media(max-width:460px){.view-bar button{font-size:11px;padding:10px 4px}}
+
     /* Real-time CWT analysis, kept beneath the generated image. */
     .wavelet-panel{margin-top:21px;padding:18px 2px 2px;border-top:1px solid var(--line)}
     .wavelet-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:13px;flex-wrap:wrap;margin-bottom:14px}
@@ -117,13 +134,26 @@
     </header>
     <div class="layout">
       <section class="canvas-card" aria-label="Live neural activity visualization">
+        <div class="view-bar" role="group" aria-label="Neural activity visualization">
+          <button type="button" class="selected" data-view="2d" aria-pressed="true">2D map</button>
+          <button type="button" data-view="surface" aria-pressed="false">3D surface</button>
+          <button type="button" data-view="rolled" aria-pressed="false">Rolled sheet</button>
+        </div>
+        <div class="view-options" id="surfaceControls" hidden>
+          <div class="view-control"><label for="viewDepth">Relief exaggeration</label><output id="viewDepthValue">1.20×</output><input id="viewDepth" type="range" min="0" max="3" step="0.1" value="1.2"></div>
+        </div>
+        <div class="view-options" id="rolledControls" hidden>
+          <div class="view-control"><label for="rollAmount">Roll amount</label><output id="rollAmountValue">65%</output><input id="rollAmount" type="range" min="0" max="100" step="1" value="65"></div>
+        </div>
         <div class="art-wrap">
           <canvas id="art" width="768" height="768" role="img" aria-label="Activity map of an evolving two-population spiking neural network. Blue areas have lower excitatory firing, red areas higher firing."></canvas>
-          <div class="corner-label">Neural activity / E population</div>
+          <canvas id="art3d" width="768" height="768" hidden tabindex="0" role="img" aria-label="Rotatable 3D visual rendering of the simulated two-dimensional excitatory neural activity map. Drag or use arrow keys to rotate."></canvas>
+          <div class="corner-label" id="viewCorner">Neural activity / E population</div>
         </div>
+        <p class="view-note" id="viewNote">2D map of the excitatory spike trace. Change viewing mode to explore graphical 3D projections.</p>
         <div class="art-caption">
           <span><span id="led" class="live-dot"></span><span id="status" role="status" aria-live="polite">Simulating</span></span>
-          <span>Blue = low activity · White = intermediate · Red = high activity</span>
+          <span id="paletteCaption">Classic: blue → white → red (low → high E activity)</span>
           <span class="render-detail"><label for="renderDetail">Image detail</label>
             <select id="renderDetail" aria-label="Choose sharp or smooth display">
               <option value="sharp" selected>Sharp · no blur</option>
@@ -179,13 +209,6 @@
       <aside class="side" aria-label="Simulation controls">
         <h2 class="side-title">Pattern generator</h2>
         <p class="side-desc">Generate an independent neural world, then watch its activity self-organize. Results can be reproduced using the same model, seed, network settings and intervention history.</p>
-        <div class="section-title">Neuron model</div>
-        <div class="presets model-presets" role="group" aria-label="Select spiking neuron model">
-          <button class="selected" data-model="lif" aria-pressed="true">LIF</button>
-          <button data-model="alif" aria-pressed="false">Adaptive LIF</button>
-          <button data-model="izh" aria-pressed="false">Izhikevich</button>
-        </div>
-        <p class="model-description" id="modelDescription">Leaky integrate-and-fire: membrane leakage, threshold, reset and refractory period.</p>
         <div class="section-title">Dynamics preset</div>
         <div class="presets wave-presets" role="group" aria-label="Select a dynamics preset">
           <button class="selected" data-preset="spots" aria-pressed="true">Spots</button>
@@ -207,6 +230,33 @@
             <input type="range" id="waveAmplitude" min="0.25" max="2.5" step="0.05" value="1.4"/>
           </div>
         </div>
+        <section class="stim-panel" aria-label="Focal central stimulation">
+          <h3 class="section-title">Central perturbation</h3>
+          <p class="stim-note">Gaussian excitatory input centered in the network, applied without restarting the simulation.</p>
+          <div class="control">
+            <div class="labelrow"><label for="stimIntensity">Intensity (relative drive)</label><output id="stimIntensityValue">1.00</output></div>
+            <input type="range" id="stimIntensity" min="0.25" max="2.5" step="0.25" value="1" />
+          </div>
+          <div class="control">
+            <div class="labelrow"><label for="stimRadius">Spatial spread σ (cells)</label><output id="stimRadiusValue">11</output></div>
+            <input type="range" id="stimRadius" min="4" max="27" step="1" value="11" />
+          </div>
+          <div class="control">
+            <div class="labelrow"><label for="stimDuration">Duration (simulation steps)</label><output id="stimDurationValue">350</output></div>
+            <input type="range" id="stimDuration" min="50" max="1000" step="50" value="350" />
+          </div>
+          <button class="primary stim-action" id="stimulate">◎ &nbsp;Stimulate center</button>
+          <p class="stim-note">A new pulse interrupts any ongoing pulse. Step counts are model-dependent, not calibrated milliseconds.</p>
+          <div class="stim-readout" id="stimStatus" role="status" aria-live="polite">Ready to stimulate.</div>
+        </section>
+        <div class="section-title">Neuron model</div>
+        <div class="presets model-presets" role="group" aria-label="Select spiking neuron model">
+          <button class="selected" data-model="lif" aria-pressed="true">LIF</button>
+          <button data-model="alif" aria-pressed="false">Adaptive LIF</button>
+          <button data-model="izh" aria-pressed="false">Izhikevich</button>
+        </div>
+        <p class="model-description" id="modelDescription">Leaky integrate-and-fire: membrane leakage, threshold, reset and refractory period.</p>
+        <div class="section-title">Neural coupling</div>
         <div class="control">
           <div class="labelrow"><label for="exc">Local excitation (E → E)</label><output id="excValue">13.0</output></div>
           <input type="range" id="exc" min="9" max="18" value="13" step="0.5" />
@@ -252,25 +302,27 @@
           <div class="labelrow"><label for="seed">Random seed</label></div>
           <input type="number" id="seed" min="1" max="2147483647" step="1" value="2026" inputmode="numeric" />
         </div>
-        <section class="stim-panel" aria-label="Focal central stimulation">
-          <h3 class="section-title">Central perturbation</h3>
-          <p class="stim-note">Gaussian excitatory input centered in the network, applied without restarting the simulation.</p>
-          <div class="control">
-            <div class="labelrow"><label for="stimIntensity">Intensity (relative drive)</label><output id="stimIntensityValue">1.00</output></div>
-            <input type="range" id="stimIntensity" min="0.25" max="2.5" step="0.25" value="1" />
-          </div>
-          <div class="control">
-            <div class="labelrow"><label for="stimRadius">Spatial spread σ (cells)</label><output id="stimRadiusValue">11</output></div>
-            <input type="range" id="stimRadius" min="4" max="27" step="1" value="11" />
-          </div>
-          <div class="control">
-            <div class="labelrow"><label for="stimDuration">Duration (simulation steps)</label><output id="stimDurationValue">350</output></div>
-            <input type="range" id="stimDuration" min="50" max="1000" step="50" value="350" />
-          </div>
-          <button class="primary stim-action" id="stimulate">◎ &nbsp;Stimulate center</button>
-          <p class="stim-note">A new pulse interrupts any ongoing pulse. Step counts are model-dependent, not calibrated milliseconds.</p>
-          <div class="stim-readout" id="stimStatus" role="status" aria-live="polite">Ready to stimulate.</div>
-        </section>
+        <div class="section-title">Appearance</div>
+        <div class="control appearance-control">
+          <div class="labelrow"><label for="palette">Color palette</label></div>
+          <select id="palette" aria-label="Select color palette">
+            <option value="classic" selected>Classic · Blue / white / red</option>
+            <option value="fire">Fire</option>
+            <option value="ocean">Ocean</option>
+            <option value="viridis">Viridis-inspired</option>
+            <option value="plasma">Plasma-inspired</option>
+            <option value="grayscale">Grayscale</option>
+          </select>
+        </div>
+        <div class="control">
+          <div class="labelrow"><label for="hue">Hue shift</label><output id="hueValue">0°</output></div>
+          <input id="hue" type="range" min="-180" max="180" step="5" value="0"/>
+        </div>
+        <div class="control">
+          <div class="labelrow"><label for="contrast">Contrast</label><output id="contrastValue">1.00×</output></div>
+          <input id="contrast" type="range" min="0.5" max="2" step="0.05" value="1"/>
+          <p class="hint">Display-only adjustments: no change to the neural simulation.</p>
+        </div>
         <div class="btnrow">
           <button class="primary" id="generate">↻ &nbsp;New pattern</button>
           <button id="toggle">Ⅱ &nbsp;Pause</button>
@@ -294,7 +346,7 @@
       </div>
       <div>
         <h2>How is the artwork made?</h2>
-        <p>The colors encode exponentially smoothed excitatory spike traces (blue = low, red = high), with mild display-only smoothing. The pulse marker is an overlay, while stimulation directly enters neuronal dynamics. Results depend on the model, coupling, stimulus history and random seed. This is an exploratory periodic-lattice SNN, not a validated biological model or proof of a mathematical Turing instability.</p>
+        <p>Colors encode exponentially smoothed excitatory spike traces. Palette, hue, contrast and 3D projection alter the rendering only. The 3D surface and rolled sheet visualize the same 2D numerical field without representing neuronal geometry. The pulse marker is an overlay, while stimulation directly enters neuronal dynamics. Results depend on the model, coupling, stimulus history and random seed. This is an exploratory periodic-lattice SNN, not a validated biological model or proof of a mathematical Turing instability.</p>
       </div>
     </section>
     <footer>
@@ -579,7 +631,146 @@
       }
       return [131,13,54];
     }
-    const LUT=Array.from({length:256},(_,i)=>interpolateColor(i/255));
+
+    const COLOR_STOPS=Object.freeze({
+      classic:[[0,7,32,82],[.22,8,80,154],[.42,130,191,222],[.56,247,249,249],[.75,239,96,117],[1,131,13,54]],
+      fire:[[0,8,8,23],[.28,91,12,41],[.5,212,48,34],[.74,255,156,56],[1,255,247,190]],
+      ocean:[[0,4,19,53],[.26,5,71,120],[.50,12,143,178],[.75,109,223,211],[1,234,253,239]],
+      viridis:[[0,68,1,84],[.25,59,82,139],[.5,33,145,140],[.75,94,201,97],[1,253,231,37]],
+      plasma:[[0,13,8,135],[.25,126,3,168],[.5,204,71,120],[.75,248,149,64],[1,240,249,33]],
+      grayscale:[[0,10,14,26],[.5,132,140,154],[1,250,253,255]]
+    });
+    function sampleColorStops(x,stops){
+      for(let i=0;i<stops.length-1;i++){
+        const a=stops[i],b=stops[i+1];
+        if(x<=b[0]){
+          const t=Math.max(0,Math.min(1,(x-a[0])/(b[0]-a[0])));
+          return [Math.round(a[1]+(b[1]-a[1])*t),
+                  Math.round(a[2]+(b[2]-a[2])*t),
+                  Math.round(a[3]+(b[3]-a[3])*t)];
+        }
+      }
+      return stops[stops.length-1].slice(1);
+    }
+    function hueRotate(rgb,degrees){
+      if(!degrees)return rgb;
+      const r=rgb[0]/255,g=rgb[1]/255,b=rgb[2]/255;
+      const max=Math.max(r,g,b),min=Math.min(r,g,b),delta=max-min;
+      let hue=0;
+      if(delta){
+        if(max===r)hue=((g-b)/delta)%6;
+        else if(max===g)hue=(b-r)/delta+2;
+        else hue=(r-g)/delta+4;
+        hue=(hue/6+degrees/360+2)%1;
+      }
+      const sat=max===0?0:delta/max, val=max;
+      const h=hue*6, c=val*sat, x=c*(1-Math.abs(h%2-1)),m=val-c;
+      let out;
+      if(h<1)out=[c,x,0];else if(h<2)out=[x,c,0];
+      else if(h<3)out=[0,c,x];else if(h<4)out=[0,x,c];
+      else if(h<5)out=[x,0,c];else out=[c,0,x];
+      return out.map(v=>Math.round((v+m)*255));
+    }
+    let paletteName='classic',hueShift=0,contrastGain=1;
+    const LUT=new Array(256);
+    function rebuildLUT(){
+      paletteName=$('palette').value;
+      hueShift=Number($('hue').value);
+      contrastGain=Number($('contrast').value);
+      const stops=COLOR_STOPS[paletteName]||COLOR_STOPS.classic;
+      for(let i=0;i<256;i++){
+        const t=Math.max(0,Math.min(1,(i/255-.5)*contrastGain+.5));
+        LUT[i]=hueRotate(sampleColorStops(t,stops),hueShift);
+      }
+      $('hueValue').textContent=(hueShift>0?'+':'')+hueShift+'°';
+      $('contrastValue').textContent=contrastGain.toFixed(2)+'×';
+      $('paletteCaption').textContent=paletteName==='classic'&&hueShift===0
+        ?'Classic: blue → white → red (low → high E activity)'
+        :'Low → high E activity · '+$('palette').selectedOptions[0].textContent+' · hue '+hueShift+'°';
+    }
+    const canvas3d=$('art3d'),ctx3d=canvas3d.getContext('2d',{alpha:false});
+    let activeView='2d',viewYaw=-.33,viewPitch=.38,last3DStep=-Infinity;
+    const GRID3D=60;
+    function render3D(field){
+      const w=canvas3d.width,h=canvas3d.height,verts=[],faces=[];
+      const cy=Math.cos(viewYaw),sy=Math.sin(viewYaw),cp=Math.cos(viewPitch),sp=Math.sin(viewPitch);
+      const relief=Number($('viewDepth').value),roll=Number($('rollAmount').value)/100;
+      const sweep=.1+roll*4.5,rad=2/sweep,scale=Math.min(w,h)*.375,cam=3.8;
+      for(let row=0;row<=GRID3D;row++){
+        const v=row/GRID3D,iy=Math.min(N-1,Math.round(v*(N-1)));
+        for(let col=0;col<=GRID3D;col++){
+          const u=col/GRID3D,ix=Math.min(N-1,Math.round(u*(N-1)));
+          const val=Math.max(0,Math.min(1,(field[iy*N+ix]-.008)/.185));
+          let px=(u-.5)*2,py=(.5-v)*2,pz=(val-.47)*relief*.82;
+          if(activeView==='rolled'){
+            const a=(u-.5)*sweep;
+            px=rad*Math.sin(a);
+            pz=rad*(Math.cos(a)-1);
+          }
+          const rx=cy*px+sy*pz,rz=-sy*px+cy*pz;
+          const ry=cp*py-sp*rz,depth=sp*py+cp*rz;
+          const perspective=cam/Math.max(1.7,cam-depth);
+          verts.push({x:rx,y:ry,z:depth,px:w/2+rx*scale*perspective,
+            py:h/2-ry*scale*perspective,val});
+        }
+      }
+      const rowStride=GRID3D+1;
+      for(let y=0;y<GRID3D;y++)for(let x=0;x<GRID3D;x++){
+        const k=y*rowStride+x;
+        const a=verts[k],b=verts[k+1],c=verts[k+rowStride+1],d=verts[k+rowStride];
+        const ux=b.x-a.x,uy=b.y-a.y,uz=b.z-a.z;
+        const vx=d.x-a.x,vy=d.y-a.y,vz=d.z-a.z;
+        const nx=uy*vz-uz*vy,ny=uz*vx-ux*vz,nz=ux*vy-uy*vx;
+        const norm=Math.max(1e-6,Math.hypot(nx,ny,nz));
+        const light=Math.max(.5,Math.min(1.03,.82+.21*(nx*.28-ny*.3+nz*.9)/norm));
+        const t=(a.val+b.val+c.val+d.val)*.25;
+        const base=LUT[Math.max(0,Math.min(255,Math.round(t*255)))];
+        const color='rgb('+Math.round(base[0]*light)+','+Math.round(base[1]*light)+','+Math.round(base[2]*light)+')';
+        faces.push({a,b,c,d,depth:(a.z+b.z+c.z+d.z)*.25,color});
+      }
+      faces.sort((a,b)=>a.depth-b.depth);
+      ctx3d.fillStyle='#0b1428';ctx3d.fillRect(0,0,w,h);
+      ctx3d.save();ctx3d.lineWidth=.7;ctx3d.lineJoin='round';
+      for(const f of faces){
+        ctx3d.fillStyle=f.color;
+        ctx3d.beginPath();ctx3d.moveTo(f.a.px,f.a.py);
+        ctx3d.lineTo(f.b.px,f.b.py);ctx3d.lineTo(f.c.px,f.c.py);
+        ctx3d.lineTo(f.d.px,f.d.py);ctx3d.closePath();
+        ctx3d.fill();ctx3d.strokeStyle=f.color;ctx3d.stroke();
+      }
+      ctx3d.restore();
+    }
+    function setView(next){
+      activeView=['2d','surface','rolled'].includes(next)?next:'2d';
+      canvas.hidden=activeView!=='2d';
+      canvas3d.hidden=activeView==='2d';
+      $('surfaceControls').hidden=activeView!=='surface';
+      $('rolledControls').hidden=activeView!=='rolled';
+      document.querySelectorAll('[data-view]').forEach(b=>{
+        const selected=b.dataset.view===activeView;
+        b.classList.toggle('selected',selected);
+        b.setAttribute('aria-pressed',String(selected));
+      });
+      $('viewCorner').textContent=activeView==='2d'?'Neural activity / E population':
+        activeView==='surface'?'3D activity height map (graphic)':'Rolled 2D activity sheet (graphic)';
+      $('viewNote').textContent=activeView==='2d'
+        ?'2D map of the excitatory spike trace. Change viewing mode to explore graphical 3D projections.'
+        :activeView==='surface'
+          ?'Illustrative 3D height map of the same 2D E activity; relief is a display choice, not neuronal anatomy. Drag or use arrow keys to rotate.'
+          :'Illustrative rolled-sheet projection of the same 2D E activity; curvature is a display choice, not a cortical reconstruction. Drag or use arrow keys to rotate.';
+      last3DStep=-Infinity;
+      render();
+    }
+    function rotateView(dx,dy){
+      viewYaw+=dx;viewPitch=Math.max(-1.25,Math.min(1.25,viewPitch+dy));
+      last3DStep=-Infinity;
+      if(activeView!=='2d'){
+        const display=$('renderDetail').value==='sharp'?eTrace:imageSmooth;
+        render3D(display);
+        last3DStep=stepCount;
+      }
+    }
+
 
     // A complex Morlet continuous wavelet transform, with an edge-aware
     // weighted-mean correction to remove DC without wraparound. Dividing
@@ -953,24 +1144,29 @@
       const sharp=$('renderDetail').value==='sharp';
       if(!sharp)blurWrap(eTrace,imageSmooth,1); // Optional display-only smoothing.
       const displayTrace=sharp?eTrace:imageSmooth;
+      const drawFlat=activeView==='2d';
       let mean=0;
-      for(let i=0;i<LEN;i++) {
+      for(let i=0;i<LEN;i++){
         mean+=eTrace[i];
-        const normalized = Math.max(0,Math.min(1,(displayTrace[i]-.008)/.185));
-        const c = LUT[Math.round(normalized*255)];
-        const k=i*4;
-        image.data[k]=c[0];image.data[k+1]=c[1];image.data[k+2]=c[2];image.data[k+3]=255;
+        if(drawFlat){
+          const normalized=Math.max(0,Math.min(1,(displayTrace[i]-.008)/.185));
+          const c=LUT[Math.round(normalized*255)],k=i*4;
+          image.data[k]=c[0];image.data[k+1]=c[1];image.data[k+2]=c[2];image.data[k+3]=255;
+        }
       }
-      tinyCtx.putImageData(image,0,0);
-      ctx.imageSmoothingEnabled=!sharp;
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      ctx.drawImage(tiny,0,0,canvas.width,canvas.height);
-      if(stimRemaining>0) {
-        // Visible targeting guide; the neural pattern itself is in image.data.
-        const scale=canvas.width/N;
-        ctx.save();ctx.strokeStyle='rgba(255,226,149,.88)';ctx.lineWidth=2;
-        ctx.setLineDash([7,5]);ctx.beginPath();ctx.arc(canvas.width/2,canvas.height/2,stimRadiusActive*scale,0,2*Math.PI);ctx.stroke();
-        ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(canvas.width/2-9,canvas.height/2);ctx.lineTo(canvas.width/2+9,canvas.height/2);ctx.moveTo(canvas.width/2,canvas.height/2-9);ctx.lineTo(canvas.width/2,canvas.height/2+9);ctx.stroke();ctx.restore();
+      if(drawFlat){
+        tinyCtx.putImageData(image,0,0);
+        ctx.imageSmoothingEnabled=!sharp;
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.drawImage(tiny,0,0,canvas.width,canvas.height);
+        if(stimRemaining>0){
+          const scale=canvas.width/N;
+          ctx.save();ctx.strokeStyle='rgba(255,226,149,.88)';ctx.lineWidth=2;
+          ctx.setLineDash([7,5]);ctx.beginPath();ctx.arc(canvas.width/2,canvas.height/2,stimRadiusActive*scale,0,2*Math.PI);ctx.stroke();
+          ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(canvas.width/2-9,canvas.height/2);ctx.lineTo(canvas.width/2+9,canvas.height/2);ctx.moveTo(canvas.width/2,canvas.height/2-9);ctx.lineTo(canvas.width/2,canvas.height/2+9);ctx.stroke();ctx.restore();
+        }
+      }else if(stepCount-last3DStep>=3){
+        render3D(displayTrace);last3DStep=stepCount;
       }
       $('modelStat').textContent=modelLabels[model];
       $('stimStatus').textContent=stimRemaining>0?`Central stimulus active · ${stimRemaining} steps remaining`:lastPulseEnd>=0?`Last pulse ended at step ${lastPulseEnd}`:'Ready to stimulate.';
@@ -1092,7 +1288,43 @@
       });
     }
     for(const name of ['stimIntensity','stimRadius','stimDuration']) $(name).addEventListener('input',updateStimulusLabels);
-    $('renderDetail').addEventListener('change',render);
+    for(const button of document.querySelectorAll('[data-view]')){
+      button.addEventListener('click',()=>setView(button.dataset.view));
+    }
+    for(const control of ['viewDepth','rollAmount']){
+      $(control).addEventListener('input',()=>{
+        $('viewDepthValue').textContent=Number($('viewDepth').value).toFixed(2)+'×';
+        $('rollAmountValue').textContent=$('rollAmount').value+'%';
+        last3DStep=-Infinity;render();
+      });
+    }
+    for(const control of ['palette','hue','contrast']){
+      $(control).addEventListener(control==='palette'?'change':'input',()=>{
+        rebuildLUT();last3DStep=-Infinity;render();
+      });
+    }
+    let dragPointer=null,lastPointerX=0,lastPointerY=0;
+    canvas3d.addEventListener('pointerdown',e=>{
+      dragPointer=e.pointerId;lastPointerX=e.clientX;lastPointerY=e.clientY;
+      canvas3d.setPointerCapture(e.pointerId);
+    });
+    canvas3d.addEventListener('pointermove',e=>{
+      if(dragPointer!==e.pointerId)return;
+      rotateView((e.clientX-lastPointerX)*.008,-(e.clientY-lastPointerY)*.008);
+      lastPointerX=e.clientX;lastPointerY=e.clientY;
+    });
+    function stopDrag(e){
+      if(dragPointer===e.pointerId)dragPointer=null;
+    }
+    canvas3d.addEventListener('pointerup',stopDrag);
+    canvas3d.addEventListener('pointercancel',stopDrag);
+    canvas3d.addEventListener('keydown',e=>{
+      if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;
+      e.preventDefault();
+      rotateView((e.key==='ArrowLeft'?-1:e.key==='ArrowRight'?1:0)*.10,
+        (e.key==='ArrowUp'?1:e.key==='ArrowDown'?-1:0)*.10);
+    });
+    $('renderDetail').addEventListener('change',()=>{last3DStep=-Infinity;render();});
     $('stimulate').addEventListener('click',triggerStimulus);
     $('waveletRegion').addEventListener('change',()=>{
       renderWavelet(true);renderMeanPSD(true);
@@ -1151,14 +1383,19 @@
       setTimeout(()=>URL.revokeObjectURL(url),1200);
     }
     $('png').addEventListener('click',()=>{
-      const filename=`neural-turing-seed-${$('seed').value}-step-${stepCount}.png`;
-      canvas.toBlob(blob=>{if(blob)downloadBlob(blob,filename);},'image/png');
+      const filename=`neural-turing-${activeView}-seed-${$('seed').value}-step-${stepCount}.png`;
+      const displayCanvas=activeView==='2d'?canvas:canvas3d;
+      displayCanvas.toBlob(blob=>{if(blob)downloadBlob(blob,filename);},'image/png');
     });
     $('config').addEventListener('click',()=>{
       const saved={
         title:'Neural Turing Patterns — Interactive Lab',
         seed:Number($('seed').value),step:stepCount,grid:[N,N],neurons:LEN*2,
         model:model,model_label:modelLabels[model],
+        visualization:{view:activeView,palette:paletteName,hue_shift_degrees:hueShift,contrast_gain:contrastGain,
+          relief_exaggeration:Number($('viewDepth').value),roll_percent:Number($('rollAmount').value),
+          rotation_yaw_radians:viewYaw,rotation_pitch_radians:viewPitch,
+          interpretation:'Display-only 3D projection of the simulated 2D activity map; no anatomical reconstruction.'},
         coupling:{...cfg},initial_coupling:initialCoupling,
         spatial_sampling:{excitatory_grid:[N,N],inhibitory_grid:[N,N],total_neurons:LEN*2,
           visual_mode:$('renderDetail').value,display_blur_radius_cells:$('renderDetail').value==='sharp'?0:1},
@@ -1188,6 +1425,7 @@
     });
     updateStimulusLabels();
     updateSliderLabels();
+    rebuildLUT();
     reset();
   </script>
 </body>
