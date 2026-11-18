@@ -45,6 +45,12 @@
     .wavelet-scale-gradient{height:7px;flex:0 1 125px;border-radius:99px;background:linear-gradient(90deg,#071837,#14549c,#84badf,#f5e9c8,#f38b8e,#bf236a)}
     .wavelet-explainer{font-size:11px;line-height:1.6;color:#9aafcc;margin:5px 1px 0}
     .wavelet-info{color:#c6d9f6}
+
+    .preset-desc{margin:-9px 0 17px;color:#abbcda;font-size:11.5px;line-height:1.6}
+    .propagation-note{color:#a8bfda;line-height:1.55;margin:6px 0 2px;font-size:11px}
+    .spectral-description{margin:4px 0 9px;color:#abc0da;font-size:11px;line-height:1.6}
+    .spectral-description strong{color:#ddeafc}
+    .spectral-chart-caption{margin:8px 0 1px;font-size:11px;color:#a9bfdb;line-height:1.5}
     .live-dot{width:7px;height:7px;border-radius:100%;background:#95efc8;display:inline-block;margin-right:8px;box-shadow:0 0 9px #95efc8}
     .live-dot.pause{background:#bac7de;box-shadow:none}
     .side{padding:23px}
@@ -114,7 +120,7 @@
         <section class="wavelet-panel" aria-label="Real-time wavelet spectral analysis">
           <div class="wavelet-heading">
             <div>
-              <h2>Wavelet PSD <span aria-hidden="true">·</span> live</h2>
+              <h2>Live dynamics and spectral analysis</h2>
               <p id="waveletInfo" class="wavelet-info" aria-live="off">Collecting spike activity…</p>
             </div>
             <div class="wavelet-tools">
@@ -123,19 +129,38 @@
                 <option value="center" selected>Central E region</option>
                 <option value="whole">Whole E network</option>
               </select>
-              <button id="waveletExport" type="button" disabled>↓ Save CSV</button>
+              <label for="analysisStepMs">Nominal Δt</label>
+              <select id="analysisStepMs" aria-label="Nominal analysis time per simulation step">
+                <option value="5">5 ms/step</option>
+                <option value="10" selected>10 ms/step</option>
+                <option value="20">20 ms/step</option>
+              </select>
+              <button id="meanPSDExport" type="button" disabled>↓ Save 5 s PSD</button>
+              <button id="waveletExport" type="button" disabled>↓ Save wavelet CSV</button>
             </div>
           </div>
           <div class="wavelet-chart">
-            <h3>Wavelet-derived PSD · time-averaged power</h3>
-            <canvas id="waveletPSD" width="760" height="218" role="img" aria-label="Live wavelet-derived spectral power of the selected excitatory spike-rate signal versus frequency in cycles per simulation step"></canvas>
+            <h3>5 s rolling mean PSD · Welch estimate</h3>
+            <p id="meanPSDInfo" class="spectral-description">Collecting the first 5-second analysis window…</p>
+            <canvas id="meanPSD" width="760" height="220" role="img" aria-label="Live five-second rolling Welch PSD of excitatory population spike rate"></canvas>
+            <p class="spectral-chart-caption">Hann-windowed, mean-detrended periodograms, 50% overlap. Sliding window: 5 seconds in the chosen nominal analysis timebase, not wall-clock time.</p>
           </div>
           <div class="wavelet-chart">
             <h3>Morlet scalogram · time–frequency power</h3>
             <div class="wavelet-scale"><span>Low</span><span class="wavelet-scale-gradient" aria-hidden="true"></span><span>High power (fixed log scale)</span></div>
             <canvas id="waveletMap" width="760" height="280" role="img" aria-label="Live continuous Morlet wavelet time–frequency power map with stimulation onset markers"></canvas>
           </div>
-          <p class="wavelet-explainer">Signal: fraction of excitatory neurons spiking at each simulation step, measured in the central patch (radius 10 cells) or across the full lattice. Morlet CWT, updated approximately every 84 simulation steps; the PSD is a <strong>relative wavelet-power estimate</strong> averaged across the displayed time window. Frequencies are in <strong>cycles/step, not Hz</strong>, because the three exploratory models do not share a calibrated biological timebase. Wavelet edge estimates are approximate; orange lines mark stimulus onsets.</p>
+          <div class="wavelet-chart">
+            <h3>E–I phase plane · mean membrane potential trajectory</h3>
+            <canvas id="phasePlane" width="760" height="275" role="img" aria-label="Real-time population phase-plane trajectory of mean excitatory versus inhibitory neuron membrane potentials"></canvas>
+          </div>
+          <div class="wavelet-chart">
+            <h3>E/I voltage balance · live</h3>
+            <p id="voltageInfo" class="spectral-description">Collecting membrane-potential samples…</p>
+            <canvas id="voltageBalance" width="760" height="312" role="img" aria-label="Live mean excitatory and inhibitory membrane potential traces, with voltage difference beneath"></canvas>
+            <p class="spectral-chart-caption">Phase plane: horizontal E voltage, vertical I voltage. Voltage balance: mean E and I on the upper axis, E − I on a separate lower axis. Voltages are dimensionless for LIF / adaptive LIF, and model mV for Izhikevich.</p>
+          </div>
+          <p class="wavelet-explainer">Nominal Δt changes the spectral analysis clock and the 5-second Welch window, <strong>not the neural simulation equations</strong>. Nominal Hz is not calibrated physiological Hz. Signal: fraction of excitatory neurons spiking at each simulation step, measured in the central patch (radius 10 cells) or across the full lattice. The <strong>5 s mean PSD</strong> uses a moving-window Welch estimate with frequencies in nominal Hz. The <strong>Morlet CWT</strong> is displayed only as a scalogram, updated approximately every 84 simulation steps, with its own axis in cycles/step. Both estimates come from the same actual spike-rate signal. Wavelet edge estimates are approximate; orange lines mark stimulus onsets.</p>
         </section>
       </section>
       <aside class="side" aria-label="Simulation controls">
@@ -154,10 +179,16 @@
           <button data-preset="maze" aria-pressed="false">Labyrinth</button>
           <button data-preset="islands" aria-pressed="false">Islands</button>
         </div>
+        <p id="presetDescription" class="preset-desc">Spots: E→I = 13, local E radius = 2, inhibitory radius = 8. Often isolated patches.</p>
         <div class="control">
           <div class="labelrow"><label for="exc">Local excitation (E → E)</label><output id="excValue">13.0</output></div>
           <input type="range" id="exc" min="9" max="18" value="13" step="0.5" />
           <div class="hint">Strength of local positive coupling between excitatory neurons</div>
+        </div>
+        <div class="control">
+          <div class="labelrow"><label for="iexc">E → I recruitment</label><output id="iexcValue">13.0</output></div>
+          <input type="range" id="iexc" min="2" max="18" value="13" step="0.5" />
+          <div class="hint">Excitatory drive onto inhibitory neurons; reduced in Labyrinth.</div>
         </div>
         <div class="control">
           <div class="labelrow"><label for="inh">Surround inhibition (I → E)</label><output id="inhValue">10.0</output></div>
@@ -165,10 +196,31 @@
           <div class="hint">Strength of inhibition delivered by the inhibitory population</div>
         </div>
         <div class="control">
+          <div class="labelrow"><label for="iinh">Recurrent inhibition (I → I)</label><output id="iinhValue">0.70</output></div>
+          <input id="iinh" type="range" min="0" max="2.5" value="0.7" step="0.05" />
+          <div class="hint">Inhibitory-to-inhibitory coupling across nearby inhibitory cells (using the local interaction radius).</div>
+        </div>
+        <div class="control">
           <div class="labelrow"><label for="radius">Inhibitory radius (cells)</label><output id="radiusValue">8</output></div>
           <input type="range" id="radius" min="4" max="13" value="8" step="1" />
           <div class="hint">Larger radii produce more spatially extended interactions</div>
         </div>
+        <div class="control">
+          <div class="labelrow"><label for="local">Local E and I→I radius (cells)</label><output id="localValue">2</output></div>
+          <input type="range" id="local" min="1" max="5" value="2" step="1" />
+          <div class="hint">Used for E→E, E→I and local I→I coupling; increased in Islands.</div>
+        </div>
+        <div class="section-title">Propagation and delay</div>
+        <div class="control">
+          <div class="labelrow"><label for="synDelay">Baseline synaptic delay (steps)</label><output id="synDelayValue">0</output></div>
+          <input id="synDelay" type="range" min="0" max="12" value="0" step="1" />
+        </div>
+        <div class="control">
+          <div class="labelrow"><label for="conductionSpeed">Conduction speed (cells/step)</label><output id="conductionSpeedValue">16.0</output></div>
+          <input id="conductionSpeed" type="range" min="0.5" max="16" value="16" step="0.5" />
+        </div>
+        <p class="propagation-note" id="effectiveDelays">Effective delays E: 0 steps, I: 0 steps.</p>
+        <p class="propagation-note">Approximation: characteristic pathway distance ≈ ⅔ of each coupling radius; these are lattice cells/step, not physical m/s. Changes apply without resetting the ongoing dynamics.</p>
         <div class="control">
           <div class="labelrow"><label for="seed">Random seed</label></div>
           <input type="number" id="seed" min="1" max="2147483647" step="1" value="2026" inputmode="numeric" />
@@ -211,7 +263,7 @@
     <section class="about" aria-label="Scientific model and limitations">
       <div>
         <h2>What is simulated?</h2>
-        <p>A recurrent two-population E/I lattice is simulated with your choice of LIF, adaptive LIF (with spike-triggered recovery), or Izhikevich neurons (regular-spiking E and fast-spiking I). All three produce discrete spikes and feed the same spatial excitatory/inhibitory synaptic coupling. The central perturbation is an added Gaussian external input to excitatory neurons, with adjustable intensity, spread and pulse duration.</p>
+        <p>A recurrent two-population E/I lattice is simulated with your choice of LIF, adaptive LIF (with spike-triggered recovery), or Izhikevich neurons (regular-spiking E and fast-spiking I). All three produce discrete spikes and drive spatial E→E, E→I, I→E and I→I interactions. Recurrent synaptic fields can be delayed using a characteristic-distance conduction approximation. The central perturbation is an added Gaussian external input to excitatory neurons, with adjustable intensity, spread and pulse duration.</p>
       </div>
       <div>
         <h2>How is the artwork made?</h2>
@@ -238,19 +290,48 @@
     const image = tinyCtx.createImageData(N, N);
     const $ = id => document.getElementById(id);
     const presets = {
-      spots:   {exc:13, inh:10, radius:8, iexc:13, driveE:1.03,driveI:.90,local:2},
-      maze:    {exc:13, inh:10, radius:8, iexc:5,  driveE:1.03,driveI:.90,local:2},
-      islands: {exc:13, inh:10, radius:12,iexc:13, driveE:1.03,driveI:.90,local:3}
+      spots:   {exc:13, inh:10, iinh:.7, radius:8, iexc:13, driveE:1.03,driveI:.90,local:2},
+      maze:    {exc:13, inh:10, iinh:.7, radius:8, iexc:5,  driveE:1.03,driveI:.90,local:2},
+      islands: {exc:13, inh:10, iinh:.7, radius:12,iexc:13, driveE:1.03,driveI:.90,local:3}
     };
+    const presetDescriptions=Object.freeze({
+      spots:'Spots: E→I = 13, local E radius = 2, inhibitory radius = 8. Often isolated patches.',
+      maze:'Labyrinth: E→I = 5, local E radius = 2, inhibitory radius = 8. Often interlinked bands.',
+      islands:'Islands: E→I = 13, local E radius = 3, inhibitory radius = 12. Larger spatial scales.'
+    });
     const cfg = {...presets.spots};
     const vE = new Float32Array(LEN), vI = new Float32Array(LEN);
     const eTrace = new Float32Array(LEN), iTrace = new Float32Array(LEN);
     const refE = new Uint8Array(LEN), refI = new Uint8Array(LEN);
-    const blurE = new Float32Array(LEN), blurI = new Float32Array(LEN);
+    const blurE = new Float32Array(LEN), blurI = new Float32Array(LEN), blurILocal = new Float32Array(LEN);
     const blurScratch = new Float32Array(LEN), imageSmooth = new Float32Array(LEN);
     const adaptE = new Float32Array(LEN), adaptI = new Float32Array(LEN);
     const uE = new Float32Array(LEN), uI = new Float32Array(LEN);
     const stimMask = new Float32Array(LEN);
+    // Delayed recurrent synaptic traces use an independent history per population.
+    // Effective delay combines a baseline and a characteristic-distance term.
+    const D_RING=64,D_MASK=D_RING-1;
+    const eDelayRing=new Float32Array(LEN*D_RING);
+    const iDelayRing=new Float32Array(LEN*D_RING);
+    const zeroTrace=new Float32Array(LEN);
+    let synDelay=0,conductionSpeed=16;
+    function effectiveDelay(radius){
+      return Math.min(D_RING-1,synDelay+Math.round(2*radius/(3*conductionSpeed)));
+    }
+    function historyField(ring,lag){
+      if(stepCount<lag)return zeroTrace;
+      const offset=((stepCount-lag)&D_MASK)*LEN;
+      return ring.subarray(offset,offset+LEN);
+    }
+    // Population voltage measurements recorded after threshold/reset processing.
+    const V_HISTORY=360;
+    const meanVHistoryE=new Float32Array(V_HISTORY);
+    const meanVHistoryI=new Float32Array(V_HISTORY);
+    const voltageSteps=new Float64Array(V_HISTORY);
+    let voltageIndex=0,voltageCount=0,meanLastVE=0,meanLastVI=0;
+    const phaseCtx=$('phasePlane').getContext('2d');
+    const voltageCtx=$('voltageBalance').getContext('2d');
+
     // A fixed circular central ROI, without changing neuronal dynamics.
     const centerMask = new Uint8Array(LEN);
     let centerCellCount=0;
@@ -262,8 +343,19 @@
     const W_LOG_MIN=-8, W_LOG_MAX=-2;
     const waveWhole=new Float32Array(W_HISTORY),waveCenter=new Float32Array(W_HISTORY);
     let waveCount=0,waveLastStep=-1e9,waveCache=null;
-    const wavePSDCtx=$('waveletPSD').getContext('2d');
     const waveMapCtx=$('waveletMap').getContext('2d');
+    // A Welch PSD computed on the last 5 nominal seconds, distinct from CWT.
+    const P_RING=1000,P_WINDOW_MS=5000,P_INTERVAL=84;
+    const pWhole=new Float32Array(P_RING),pCenter=new Float32Array(P_RING);
+    const meanPSDCtx=$('meanPSD').getContext('2d');
+    const welchKernels={};
+    let pIndex=0,pFilled=0,pLastStep=-1e9,pCache=null;
+    function analysisDt(){return Number($('analysisStepMs').value)||10;}
+    function requiredPsdSamples(){return Math.round(P_WINDOW_MS/analysisDt());}
+    function clearWelch(){
+      pWhole.fill(0);pCenter.fill(0);pIndex=0;pFilled=0;pLastStep=-1e9;pCache=null;
+    }
+
     const WAVELETS=Array.from({length:W_BANDS},(_,j)=>{
       const freq=W_MIN*Math.pow(W_MAX/W_MIN,j/(W_BANDS-1));
       const sigma=W_OMEGA/(2*Math.PI*freq),radius=Math.ceil(3*sigma);
@@ -286,6 +378,7 @@
     let randomState = 1, stepCount = 0, lastSpikesE = 0, running = true;
     let stimRemaining = 0, stimAmplitude = 0, stimRadiusActive = 5, lastPulseEnd = -1;
     let stimHistory = [], parameterHistory = [], initialCoupling = {...cfg};
+    let initialPropagation={baselineDelay:0,conductionSpeed:16};
     let frameId = null;
     function reseed(seed) { randomState = (seed >>> 0) || 1; }
     function rand() {
@@ -337,17 +430,21 @@
       if(!running) start(); else render();
     }
     function runOneStep() {
-      blurWrap(eTrace, blurE, cfg.local);
-      blurWrap(iTrace, blurI, cfg.radius);
+      const traceOffset=(stepCount&D_MASK)*LEN;
+      eDelayRing.set(eTrace,traceOffset);
+      iDelayRing.set(iTrace,traceOffset);
+      blurWrap(historyField(eDelayRing,effectiveDelay(cfg.local)),blurE,cfg.local);
+      blurWrap(historyField(iDelayRing,effectiveDelay(cfg.radius)),blurI,cfg.radius);
+      blurWrap(historyField(iDelayRing,effectiveDelay(cfg.local)),blurILocal,cfg.local);
       const stimulate = stimRemaining > 0;
-      let spikesE = 0,centerSpikes = 0;
+      let spikesE = 0,centerSpikes = 0,sumVE=0,sumVI=0;
       for (let j=0; j<LEN; ++j) {
         // Three uniforms centered at zero approximate Gaussian background drive.
         const jitterE = (rand()+rand()+rand()-1.5)*0.24;
         const jitterI = (rand()+rand()+rand()-1.5)*0.24;
         const pulse = stimulate ? stimAmplitude*stimMask[j] : 0;
         const netE = cfg.driveE+cfg.exc*blurE[j]-cfg.inh*blurI[j]+jitterE+pulse;
-        const netI = cfg.driveI+cfg.iexc*blurE[j]-0.7*iTrace[j]+jitterI;
+        const netI = cfg.driveI+cfg.iexc*blurE[j]-cfg.iinh*blurILocal[j]+jitterI;
         let spikeE=0, spikeI=0;
         if(model==='izh') {
           // Izhikevich (2003) quadratic integrate-and-fire with recovery variable.
@@ -384,6 +481,7 @@
             if (vI[j]>=1.0) {spikeI=1;vI[j]=0;refI[j]=2;if(model==='alif')adaptI[j]+=.025;}
           }
         }
+        sumVE+=vE[j];sumVI+=vI[j];
         if(spikeE && centerMask[j])centerSpikes++;
         eTrace[j]=TRACE_DECAY*eTrace[j]+(1-TRACE_DECAY)*spikeE;
         iTrace[j]=TRACE_DECAY*iTrace[j]+(1-TRACE_DECAY)*spikeI;
@@ -395,6 +493,14 @@
       waveWhole[wi]=spikesE/LEN;
       waveCenter[wi]=centerSpikes/centerCellCount;
       waveCount++;
+      pWhole[pIndex]=spikesE/LEN;pCenter[pIndex]=centerSpikes/centerCellCount;
+      pIndex=(pIndex+1)%P_RING;pFilled=Math.min(P_RING,pFilled+1);
+      meanLastVE=sumVE/LEN;meanLastVI=sumVI/LEN;
+      meanVHistoryE[voltageIndex]=meanLastVE;
+      meanVHistoryI[voltageIndex]=meanLastVI;
+      voltageSteps[voltageIndex]=stepCount;
+      voltageIndex=(voltageIndex+1)%V_HISTORY;
+      voltageCount=Math.min(V_HISTORY,voltageCount+1);
     }
     function interpolateColor(x) {
       // Original artwork's conceptual low / mid / high = blue / white / red.
@@ -426,11 +532,9 @@
       const columns=Math.min(W_COLUMNS,available);
       const times=new Float64Array(columns);
       const power=new Float32Array(W_BANDS*columns);
-      const spectrum=new Float64Array(W_BANDS);
       for(let t=0;t<columns;t++)times[t]=Math.round(t*(available-1)/(columns-1));
       for(let b=0;b<W_BANDS;b++){
         const wave=WAVELETS[b],r=wave.radius;
-        let interiorSum=0,interiorN=0,allSum=0;
         for(let t=0;t<columns;t++){
           const center=times[t],lo=Math.max(-r,-center),hi=Math.min(r,available-1-center);
           let re=0,im=0,dcRe=0,dcIm=0,weightedX=0,weightedG=0,norm2=0;
@@ -444,16 +548,11 @@
           re-=localMean*dcRe;im-=localMean*dcIm;
           const p=Math.max(0,(re*re+im*im)/Math.max(1e-20,norm2*wave.sigma));
           power[b*columns+t]=p;
-          allSum+=p;
-          if(center>=Math.min(r,available*.34)&&available-1-center>=Math.min(r,available*.34)){
-            interiorSum+=p;interiorN++;
-          }
         }
-        spectrum[b]=interiorN?interiorSum/interiorN:allSum/columns;
       }
       const steps=new Float64Array(columns);
       for(let i=0;i<columns;i++)steps[i]=stepCount-available+1+times[i];
-      return {power,spectrum,steps,columns,available,scope:$('waveletRegion').value,step:stepCount};
+      return {power,steps,columns,available,scope:$('waveletRegion').value,step:stepCount};
     }
     const POWER_STOPS=[
       [7,24,55],[20,84,156],[132,186,223],
@@ -474,37 +573,6 @@
       g.fillStyle='#081123';g.fillRect(0,0,g.canvas.width,g.canvas.height);
       g.strokeStyle='#496080';g.lineWidth=1;g.strokeRect(x,y,w,h);
       g.fillStyle='#9cb5d5';g.font='15px system-ui';
-    }
-    function drawWaveletPSD(cache){
-      const g=wavePSDCtx,cvs=g.canvas;
-      const x=72,y=17,w=cvs.width-91,h=cvs.height-64;
-      waveletGrid(g,x,y,w,h);
-      g.strokeStyle='#293b58';g.lineWidth=1;
-      for(const exp of [-8,-6,-4,-2]){
-        const yy=y+h-(exp-W_LOG_MIN)/(W_LOG_MAX-W_LOG_MIN)*h;
-        g.beginPath();g.moveTo(x,yy);g.lineTo(x+w,yy);g.stroke();
-        g.fillStyle='#9cb5d5';g.textAlign='right';g.fillText('10^'+exp,x-10,yy+5);
-      }
-      const mapX=f=>x+w*Math.log(f/W_MIN)/Math.log(W_MAX/W_MIN);
-      for(const f of [1/64,1/32,1/16,1/8]){
-        const xx=mapX(f);
-        g.strokeStyle='#243451';g.beginPath();g.moveTo(xx,y);g.lineTo(xx,y+h);g.stroke();
-        g.fillStyle='#b3c8e9';g.textAlign='center';g.fillText(f.toFixed(3),xx,y+h+23);
-      }
-      g.save();g.beginPath();g.rect(x,y,w,h);g.clip();
-      g.beginPath();
-      for(let b=0;b<W_BANDS;b++){
-        const xx=mapX(WAVELETS[b].freq);
-        const lg=Math.log10(Math.max(1e-12,cache.spectrum[b]));
-        const yy=y+h-(Math.max(W_LOG_MIN,Math.min(W_LOG_MAX,lg))-W_LOG_MIN)/(W_LOG_MAX-W_LOG_MIN)*h;
-        if(b===0)g.moveTo(xx,yy);else g.lineTo(xx,yy);
-      }
-      g.lineWidth=3.2;g.strokeStyle='#9fe0e1';g.lineJoin='round';g.stroke();
-      g.restore();
-      g.fillStyle='#b9cae4';g.textAlign='center';g.font='14px system-ui';
-      g.fillText('Frequency (cycles / simulation step)',x+w/2,cvs.height-7);
-      g.save();g.translate(17,y+h/2);g.rotate(-Math.PI/2);g.fillText('Relative power',0,0);g.restore();
-      g.textAlign='left';
     }
     function drawWaveletMap(cache){
       const g=waveMapCtx,cvs=g.canvas;
@@ -546,9 +614,112 @@
       g.strokeStyle='#63758d';g.strokeRect(x,y,w,h);
       g.textAlign='left';
     }
+
+    function welchKernel(nfft){
+      if(welchKernels[nfft])return welchKernels[nfft];
+      const half=nfft/2,twCos=new Float64Array((half+1)*nfft);
+      const twSin=new Float64Array((half+1)*nfft);
+      const hann=new Float64Array(nfft);
+      let energy=0;
+      for(let j=0;j<nfft;j++){
+        hann[j]=.5-.5*Math.cos(2*Math.PI*j/(nfft-1));
+        energy+=hann[j]*hann[j];
+      }
+      for(let k=1;k<=half;k++){
+        const o=k*nfft;
+        for(let j=0;j<nfft;j++){
+          const angle=2*Math.PI*k*j/nfft;
+          twCos[o+j]=Math.cos(angle);twSin[o+j]=Math.sin(angle);
+        }
+      }
+      return (welchKernels[nfft]={half,twCos,twSin,hann,energy});
+    }
+    function computeMeanPSD(){
+      const count=requiredPsdSamples();
+      if(pFilled<count)return null;
+      const sample=$('waveletRegion').value==='center'?pCenter:pWhole;
+      const sequence=new Float64Array(count);
+      const start=(pIndex-count+P_RING)%P_RING;
+      for(let i=0;i<count;i++)sequence[i]=sample[(start+i)%P_RING];
+      const nfft=count>=512?256:128,hop=nfft/2,fs=1000/analysisDt();
+      const kernel=welchKernel(nfft),bins=kernel.half,psd=new Float64Array(bins+1);
+      const x=new Float64Array(nfft);
+      let segments=0;
+      for(let begin=0;begin+nfft<=count;begin+=hop){
+        let mean=0;
+        for(let j=0;j<nfft;j++)mean+=sequence[begin+j];
+        mean/=nfft;
+        for(let j=0;j<nfft;j++)x[j]=(sequence[begin+j]-mean)*kernel.hann[j];
+        for(let k=1;k<=bins;k++){
+          let re=0,im=0;
+          const off=k*nfft;
+          for(let j=0;j<nfft;j++){
+            re+=x[j]*kernel.twCos[off+j];
+            im-=x[j]*kernel.twSin[off+j];
+          }
+          psd[k]+=(re*re+im*im)/(fs*kernel.energy)*(k===bins?1:2);
+        }
+        segments++;
+      }
+      if(!segments)return null;
+      for(let k=1;k<=bins;k++)psd[k]/=segments;
+      return {psd,nfft,segments,dtMs:analysisDt(),scope:$('waveletRegion').value,windowSamples:count,step:stepCount};
+    }
+    function drawMeanPSD(d){
+      const g=meanPSDCtx,c=g.canvas,x=78,y=17,w=c.width-99,h=c.height-63;
+      waveletGrid(g,x,y,w,h);
+      const half=d.nfft/2,fs=1000/d.dtMs,nyquist=fs/2;
+      let peak=1e-13;
+      for(let k=1;k<=half;k++)peak=Math.max(peak,d.psd[k]);
+      const upper=Math.ceil(Math.log10(peak)),lower=upper-4;
+      g.font='13px system-ui';
+      g.textAlign='right';
+      for(let exponent=lower;exponent<=upper;exponent++){
+        const yy=y+h-(exponent-lower)/4*h;
+        g.strokeStyle='#2e3e5e';g.lineWidth=1;
+        g.beginPath();g.moveTo(x,yy);g.lineTo(x+w,yy);g.stroke();
+        g.fillStyle='#a8bad7';g.fillText('10^'+exponent,x-8,yy+5);
+      }
+      g.textAlign='center';
+      for(let q=0;q<=4;q++){
+        const xx=x+w*q/4;
+        g.fillStyle='#a8bad7';g.fillText((nyquist*q/4).toFixed(1),xx,y+h+20);
+      }
+      g.save();g.beginPath();g.rect(x,y,w,h);g.clip();
+      g.beginPath();
+      for(let k=1;k<=half;k++){
+        const xp=x+w*k/half;
+        const val=Math.log10(Math.max(1e-15,d.psd[k]));
+        const yp=y+h-(Math.max(lower,Math.min(upper,val))-lower)/4*h;
+        if(k===1)g.moveTo(xp,yp);else g.lineTo(xp,yp);
+      }
+      g.strokeStyle='#99e3e5';g.lineWidth=2.5;g.lineJoin='round';g.stroke();g.restore();
+      g.fillStyle='#bccce5';g.textAlign='center';g.font='13px system-ui';
+      g.fillText('Nominal frequency (Hz)',x+w/2,c.height-6);
+      g.save();g.translate(16,y+h/2);g.rotate(-Math.PI/2);
+      g.fillText('Spike fraction²/nominal Hz',0,0);g.restore();g.textAlign='left';
+    }
+    function renderMeanPSD(force){
+      const needed=requiredPsdSamples();
+      if(pFilled<needed){
+        const g=meanPSDCtx,c=g.canvas;waveletGrid(g,78,17,c.width-99,c.height-63);
+        g.fillStyle='#adc4e4';g.font='14px system-ui';
+        g.fillText('Collecting '+pFilled+' / '+needed+' nominal samples…',108,c.height/2);
+        $('meanPSDExport').disabled=true;
+        $('meanPSDInfo').textContent='Waiting for the first 5 s ('+needed+' steps at '+analysisDt()+' ms/step).';
+        return;
+      }
+      if(!force&&stepCount-pLastStep<P_INTERVAL)return;
+      pCache=computeMeanPSD();
+      if(!pCache)return;
+      pLastStep=stepCount;
+      drawMeanPSD(pCache);
+      $('meanPSDExport').disabled=false;
+      $('meanPSDInfo').textContent=(pCache.scope==='center'?'Central E':'Whole E')+
+        ' · 5.0 nominal seconds · '+pCache.segments+' Welch segments · last updated at step '+stepCount;
+    }
     function renderWavelet(force){
       if(waveCount<112){
-        waveletEmpty(wavePSDCtx,$('waveletPSD'));
         waveletEmpty(waveMapCtx,$('waveletMap'));
         $('waveletExport').disabled=true;
         $('waveletInfo').textContent='Collecting spike activity ('+waveCount+'/112 steps)…';
@@ -557,11 +728,127 @@
       if(!force && stepCount-waveLastStep<84)return;
       waveCache=computeWavelet();
       waveLastStep=stepCount;
-      drawWaveletPSD(waveCache);
       drawWaveletMap(waveCache);
       $('waveletExport').disabled=false;
       $('waveletInfo').textContent=(waveCache.scope==='center'?'Central E':'Whole-network E')
         +' spike rate · '+waveCache.available+' steps · updated at step '+stepCount;
+    }
+
+    function recentVoltages(){
+      const n=voltageCount,e=new Float64Array(n),i=new Float64Array(n),t=new Float64Array(n);
+      const from=(voltageIndex-n+V_HISTORY)%V_HISTORY;
+      for(let k=0;k<n;k++){
+        const j=(from+k)%V_HISTORY;
+        e[k]=meanVHistoryE[j];i[k]=meanVHistoryI[j];t[k]=voltageSteps[j];
+      }
+      return {n,e,i,t};
+    }
+    function paddedRange(lo,hi){
+      if(!Number.isFinite(lo)||!Number.isFinite(hi))return [-1,1];
+      const padding=Math.max(0.005,(hi-lo)*.12);
+      return [lo-padding,hi+padding];
+    }
+    function drawVoltageAxis(g,x,y,w,h,range){
+      g.strokeStyle='#4a5d7c';g.lineWidth=1;g.strokeRect(x,y,w,h);
+      g.fillStyle='#a5bada';g.font='13px system-ui';g.textAlign='right';
+      for(let j=0;j<=4;j++){
+        const v=range[1]-(range[1]-range[0])*j/4,yy=y+h*j/4;
+        g.strokeStyle='#283c58';g.beginPath();g.moveTo(x,yy);g.lineTo(x+w,yy);g.stroke();
+        g.fillText(v.toFixed(Math.abs(v)>100?0:2),x-7,yy+4);
+      }
+      g.textAlign='left';
+    }
+    function drawPhasePlane(tr){
+      const g=phaseCtx,c=g.canvas,x=74,y=17,w=c.width-104,h=c.height-76;
+      waveletGrid(g,x,y,w,h);
+      if(tr.n<2)return;
+      let emin=Infinity,emax=-Infinity,imin=Infinity,imax=-Infinity;
+      for(let j=0;j<tr.n;j++){
+        emin=Math.min(emin,tr.e[j]);emax=Math.max(emax,tr.e[j]);
+        imin=Math.min(imin,tr.i[j]);imax=Math.max(imax,tr.i[j]);
+      }
+      const er=paddedRange(emin,emax),ir=paddedRange(imin,imax);
+      const px=v=>x+w*(v-er[0])/(er[1]-er[0]);
+      const py=v=>y+h*(1-(v-ir[0])/(ir[1]-ir[0]));
+      g.strokeStyle='#344962';g.lineWidth=1;
+      g.fillStyle='#a7bcda';g.font='13px system-ui';
+      for(let j=0;j<=4;j++){
+        const xx=x+w*j/4,yy=y+h*j/4;
+        g.beginPath();g.moveTo(xx,y);g.lineTo(xx,y+h);g.stroke();
+        g.beginPath();g.moveTo(x,yy);g.lineTo(x+w,yy);g.stroke();
+        g.textAlign='center';g.fillText((er[0]+(er[1]-er[0])*j/4).toFixed(2),xx,y+h+18);
+        g.textAlign='right';g.fillText((ir[1]-(ir[1]-ir[0])*j/4).toFixed(2),x-6,yy+4);
+      }
+      g.save();g.beginPath();g.rect(x,y,w,h);g.clip();
+      // A monotone-color trajectory shows the recent direction of evolution.
+      for(let j=1;j<tr.n;j++){
+        const v=j/Math.max(1,tr.n-1);
+        g.strokeStyle='rgba(104,225,233,'+(.16+.8*v).toFixed(3)+')';
+        g.lineWidth=1.4+v;
+        g.beginPath();g.moveTo(px(tr.e[j-1]),py(tr.i[j-1]));
+        g.lineTo(px(tr.e[j]),py(tr.i[j]));g.stroke();
+      }
+      g.fillStyle='#ffd18e';g.beginPath();
+      g.arc(px(tr.e[tr.n-1]),py(tr.i[tr.n-1]),5,0,2*Math.PI);g.fill();
+      g.restore();
+      const units=model==='izh'?'model mV':'normalized';
+      g.fillStyle='#c7d8ef';g.font='13px system-ui';g.textAlign='center';
+      g.fillText('Mean E membrane voltage ('+units+')',x+w/2,c.height-6);
+      g.save();g.translate(16,y+h/2);g.rotate(-Math.PI/2);
+      g.fillText('Mean I voltage ('+units+')',0,0);g.restore();
+      g.textAlign='left';g.fillStyle='#b7c9e2';g.fillText('Latest point',x+w-90,y+18);
+    }
+    function drawVoltageBalance(tr){
+      const g=voltageCtx,c=g.canvas;
+      g.fillStyle='#081123';g.fillRect(0,0,c.width,c.height);
+      const x=76,w=c.width-100,upperY=18,upperH=132,lowerY=193,lowerH=76;
+      if(tr.n<2)return;
+      let lo=Infinity,hi=-Infinity,dLo=Infinity,dHi=-Infinity;
+      for(let j=0;j<tr.n;j++){
+        lo=Math.min(lo,tr.e[j],tr.i[j]);hi=Math.max(hi,tr.e[j],tr.i[j]);
+        const delta=tr.e[j]-tr.i[j];dLo=Math.min(dLo,delta);dHi=Math.max(dHi,delta);
+      }
+      const range=paddedRange(lo,hi),differenceRange=paddedRange(dLo,dHi);
+      drawVoltageAxis(g,x,upperY,w,upperH,range);
+      drawVoltageAxis(g,x,lowerY,w,lowerH,differenceRange);
+      const pointX=j=>x+w*j/Math.max(1,tr.n-1);
+      const plot=(getter,range,y,h,color)=>{
+        g.save();g.beginPath();g.rect(x,y,w,h);g.clip();
+        g.beginPath();
+        for(let j=0;j<tr.n;j++){
+          const val=getter(j),yy=y+h*(1-(val-range[0])/(range[1]-range[0]));
+          if(j===0)g.moveTo(pointX(j),yy);else g.lineTo(pointX(j),yy);
+        }
+        g.strokeStyle=color;g.lineWidth=2.1;g.lineJoin='round';g.stroke();g.restore();
+      };
+      plot(j=>tr.e[j],range,upperY,upperH,'#85d7e9');
+      plot(j=>tr.i[j],range,upperY,upperH,'#ff9cab');
+      plot(j=>tr.e[j]-tr.i[j],differenceRange,lowerY,lowerH,'#ffe1a0');
+      g.font='13px system-ui';
+      g.textAlign='left';g.fillStyle='#85d7e9';g.fillText('E',x+8,upperY+15);
+      g.fillStyle='#ff9cab';g.fillText('I',x+31,upperY+15);
+      g.fillStyle='#ffe1a0';g.fillText('ΔV = E − I',x+8,lowerY+15);
+      g.textAlign='center';g.fillStyle='#b0c6e3';
+      for(let j=0;j<=4;j++){
+        const xx=x+w*j/4;
+        const when=Math.round(tr.t[0]+(tr.t[tr.n-1]-tr.t[0])*j/4);
+        g.fillText(String(when),xx,lowerY+lowerH+20);
+      }
+      g.fillText('Simulation step',x+w/2,c.height-6);
+      g.textAlign='left';
+    }
+    function renderVoltageMeasurements(){
+      const tr=recentVoltages();
+      if(tr.n<2){
+        waveletGrid(phaseCtx,74,17,phaseCtx.canvas.width-104,phaseCtx.canvas.height-76);
+        waveletGrid(voltageCtx,76,18,voltageCtx.canvas.width-100,132);
+        $('voltageInfo').textContent='Collecting membrane-potential samples…';
+        return;
+      }
+      drawPhasePlane(tr);drawVoltageBalance(tr);
+      const units=model==='izh'?'model mV':'dimensionless';
+      $('voltageInfo').textContent='Mean E '+meanLastVE.toFixed(3)+' · mean I '+meanLastVI.toFixed(3)+
+        ' · ΔV '+(meanLastVE-meanLastVI).toFixed(3)+' ('+units+') · '+tr.n+' steps';
     }
     function render() {
       blurWrap(eTrace, imageSmooth, 1); // Display smoothing only.
@@ -593,6 +880,8 @@
       $('led').classList.toggle('pause',!running);
       $('toggle').textContent=running?'Ⅱ  Pause':'▶  Resume';
       renderWavelet(false);
+      renderMeanPSD(false);
+      renderVoltageMeasurements();
     }
     function loop() {
       frameId=null;
@@ -613,9 +902,13 @@
         seed=2026;$('seed').value=String(seed);
       }
       reseed(seed);stepCount=0;lastSpikesE=0;
-      stimRemaining=0;stimHistory=[];parameterHistory=[];initialCoupling={...cfg};lastPulseEnd=-1;
+      stimRemaining=0;stimHistory=[];parameterHistory=[];initialCoupling={...cfg};initialPropagation={baselineDelay:synDelay,conductionSpeed};lastPulseEnd=-1;
       waveCount=0;waveLastStep=-1e9;waveCache=null;waveWhole.fill(0);waveCenter.fill(0);
+      clearWelch();
       eTrace.fill(0);iTrace.fill(0);refE.fill(0);refI.fill(0);
+      eDelayRing.fill(0);iDelayRing.fill(0);
+      meanVHistoryE.fill(0);meanVHistoryI.fill(0);voltageSteps.fill(0);
+      voltageIndex=0;voltageCount=0;meanLastVE=0;meanLastVI=0;
       adaptE.fill(0);adaptI.fill(0);uE.fill(0);uI.fill(0);
       for(let i=0;i<LEN;i++) {
         if(model==='izh') {
@@ -626,6 +919,7 @@
       start();
     }
     function markCustom() {
+      $('presetDescription').textContent='Custom coupling values: altered from the named spatial presets.';
       document.querySelectorAll('[data-preset]').forEach(button=>{
         button.classList.remove('selected');button.setAttribute('aria-pressed','false');
       });
@@ -633,7 +927,14 @@
     function updateSliderLabels() {
       $('excValue').textContent=Number(cfg.exc).toFixed(1);
       $('inhValue').textContent=Number(cfg.inh).toFixed(1);
+      $('iexcValue').textContent=Number(cfg.iexc).toFixed(1);
+      $('localValue').textContent=String(cfg.local);
+      $('iinhValue').textContent=Number(cfg.iinh).toFixed(2);
       $('radiusValue').textContent=String(cfg.radius);
+      $('synDelayValue').textContent=String(synDelay);
+      $('conductionSpeedValue').textContent=conductionSpeed.toFixed(1);
+      $('effectiveDelays').textContent='Effective field delay: E = '+effectiveDelay(cfg.local)+
+        ' steps, I = '+effectiveDelay(cfg.radius)+' steps; local I→I = '+effectiveDelay(cfg.local)+' steps.';
     }
     function updateStimulusLabels() {
       $('stimIntensityValue').textContent=Number($('stimIntensity').value).toFixed(2);
@@ -654,21 +955,46 @@
     for (const button of document.querySelectorAll('[data-preset]')) {
       button.addEventListener('click',()=>{
         Object.assign(cfg,presets[button.dataset.preset]);
-        $('exc').value=cfg.exc;$('inh').value=cfg.inh;$('radius').value=cfg.radius;
+        $('exc').value=cfg.exc;$('iexc').value=cfg.iexc;$('inh').value=cfg.inh;$('iinh').value=cfg.iinh;$('radius').value=cfg.radius;$('local').value=cfg.local;
         updateSliderLabels();
         markCustom();button.classList.add('selected');button.setAttribute('aria-pressed','true');
+        $('presetDescription').textContent=presetDescriptions[button.dataset.preset];
         reset();
       });
     }
-    for (const name of ['exc','inh','radius']) {
+    for (const name of ['exc','iexc','inh','iinh','radius','local']) {
       $(name).addEventListener('input',()=>{
         cfg[name]=Number($(name).value);updateSliderLabels();markCustom();
         parameterHistory.push({atStep:stepCount,field:name,value:cfg[name]});
       });
     }
+    for (const name of ['synDelay','conductionSpeed']){
+      $(name).addEventListener('input',()=>{
+        if(name==='synDelay')synDelay=Number($('synDelay').value);
+        else conductionSpeed=Number($('conductionSpeed').value);
+        updateSliderLabels();
+        parameterHistory.push({atStep:stepCount,field:name,value:name==='synDelay'?synDelay:conductionSpeed});
+      });
+    }
     for(const name of ['stimIntensity','stimRadius','stimDuration']) $(name).addEventListener('input',updateStimulusLabels);
     $('stimulate').addEventListener('click',triggerStimulus);
-    $('waveletRegion').addEventListener('change',()=>renderWavelet(true));
+    $('waveletRegion').addEventListener('change',()=>{
+      renderWavelet(true);renderMeanPSD(true);
+    });
+    $('analysisStepMs').addEventListener('change',()=>renderMeanPSD(true));
+    $('meanPSDExport').addEventListener('click',()=>{
+      const data=computeMeanPSD();if(!data)return;
+      const fs=1000/data.dtMs,rows=[
+        '# Five-second rolling mean Welch PSD, spiking E population rate',
+        '# model='+model+', seed='+$('seed').value+', scope='+data.scope+', step='+stepCount,
+        '# nominal step time='+data.dtMs+' ms, duration=5 s; not a biologically calibrated timebase',
+        '# nfft='+data.nfft+', overlap=50%, segments='+data.segments+', Hann window, segment mean removed',
+        'nominal_frequency_hz,power_spike_fraction_squared_per_nominal_hz'
+      ];
+      for(let k=1;k<data.psd.length;k++)rows.push((k*fs/data.nfft).toPrecision(10)+','+data.psd[k].toExponential(10));
+      downloadBlob(new Blob([rows.join('\n')+'\n'],{type:'text/csv;charset=utf-8'}),
+        'neural-turing-welch-5s-'+model+'-'+data.scope+'-step-'+stepCount+'.csv');
+    });
     $('waveletExport').addEventListener('click',()=>{
       if(waveCount<112)return;
       // Recompute on demand so the CSV reflects the exact current simulation step.
@@ -714,16 +1040,25 @@
         seed:Number($('seed').value),step:stepCount,grid:[N,N],neurons:LEN*2,
         model:model,model_label:modelLabels[model],
         coupling:{...cfg},initial_coupling:initialCoupling,
+        propagation:{initial:initialPropagation,baseline_synaptic_delay_steps:synDelay,conduction_speed_cells_per_step:conductionSpeed,
+          field_delays_steps:{excitatory:effectiveDelay(cfg.local),inhibitory:effectiveDelay(cfg.radius),local_inhibitory_to_inhibitory:effectiveDelay(cfg.local)},
+          approximation:'Characteristic path distance=2*field_radius/3; circular signal-history ring; not an axonal path-resolved simulator.'},
+        voltage_analysis:{signals:['spatial mean E membrane voltage','spatial mean I membrane voltage','E-I difference'],
+          phase_plane:'population mean E versus population mean I',units:model==='izh'?'model mV':'dimensionless LIF voltage',history_steps:V_HISTORY},
         neuron_dynamics:model==='izh'?{excitatory:{a:.02,b:.2,c:-65,d:8},inhibitory:{a:.1,b:.2,c:-65,d:2},current_e:'14+12*(netE-1)',current_i:'8+12*(netI-0.9)'}:model==='alif'?{alpha:DT_ALPHA,threshold:1,refractory_steps:2,adaptation_e:{decay:.985,spike_increment:.05},adaptation_i:{decay:.975,spike_increment:.025}}:{alpha:DT_ALPHA,threshold:1,refractory_steps:2},
         synaptic_trace_decay:TRACE_DECAY,noise_jitter_factor:.24,
         central_stimulation:{target:'excitatory population',spatial_profile:'Gaussian, cut at 3 sigma',settings:{intensity:Number($('stimIntensity').value),spreadSigmaCells:Number($('stimRadius').value),durationSteps:Number($('stimDuration').value)},pulse_events:stimHistory.map((pulse,index)=>({...pulse,appliedSteps:(index===stimHistory.length-1&&stimRemaining>0)?stepCount-pulse.onsetStep:pulse.appliedSteps}))},
         parameter_change_events:parameterHistory,
-        spectral_analysis:{signal:$('waveletRegion').value==='center'?'mean excitatory spike fraction within central 10-cell radius':'mean excitatory spike fraction across the whole E population',method:'complex Morlet CWT (omega0=6); edge-aware local mean removal; relative power normalized by kernel energy and scale',history_steps:W_HISTORY,frequency_bands:W_BANDS,time_columns:W_COLUMNS,min_frequency_cycles_per_step:W_MIN,max_frequency_cycles_per_step:W_MAX,update_interval_steps:84,units:'cycles per simulation step, NOT calibrated Hz',spectrum:'time-average of wavelet power; approximate relative PSD'},
+        mean_psd_5s:{method:'Welch',duration_nominal_seconds:5,nominal_timestep_ms:analysisDt(),
+          selected_signal:$('waveletRegion').value,window:'Hann',overlap_fraction:0.5,
+          detrending:'per-segment mean',units:'spike fraction squared / nominal Hz (NOT calibrated physiological Hz)'},
+        spectral_analysis:{signal:$('waveletRegion').value==='center'?'mean excitatory spike fraction within central 10-cell radius':'mean excitatory spike fraction across the whole E population',method:'complex Morlet CWT (omega0=6); edge-aware local mean removal; relative power normalized by kernel energy and scale',history_steps:W_HISTORY,frequency_bands:W_BANDS,time_columns:W_COLUMNS,min_frequency_cycles_per_step:W_MIN,max_frequency_cycles_per_step:W_MAX,update_interval_steps:84,units:'cycles per simulation step, NOT calibrated Hz',spectrum:'Morlet CWT scalogram only; wavelet-averaged PSD display intentionally removed'},
         note:'To reproduce a run, use this HTML implementation, seed, model, coupling values, parameter change events and scheduled stimulus pulse events. Step counts are discrete and not calibrated as milliseconds.'
       };
       downloadBlob(new Blob([JSON.stringify(saved,null,2)],{type:'application/json'}),`neural-turing-seed-${$('seed').value}.json`);
     });
     updateStimulusLabels();
+    updateSliderLabels();
     reset();
   </script>
 </body>
