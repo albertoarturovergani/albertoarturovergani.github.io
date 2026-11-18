@@ -27,6 +27,9 @@
     canvas{display:block;width:100%;height:100%;object-fit:contain}
     .corner-label{position:absolute;top:13px;left:13px;background:rgba(8,15,28,.7);backdrop-filter:blur(7px);border:1px solid rgba(235,242,255,.16);padding:7px 10px;border-radius:7px;color:#fff;font-size:11px;letter-spacing:.08em;text-transform:uppercase;pointer-events:none}
     .art-caption{margin:14px 1px 2px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;color:var(--muted);font-size:12px}
+    .render-detail{display:inline-flex;align-items:center;gap:7px;flex-wrap:wrap}
+    .render-detail label{margin:0;font-size:11px;color:#bdcee9}
+    .render-detail select{background:#101d32;border:1px solid #3b5172;color:#e1efff;border-radius:7px;padding:5px 8px;font-size:11px}
 
     /* Real-time CWT analysis, kept beneath the generated image. */
     .wavelet-panel{margin-top:21px;padding:18px 2px 2px;border-top:1px solid var(--line)}
@@ -60,6 +63,11 @@
     .section-title{font-size:11px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);font-weight:800;margin:20px 0 12px}
     .presets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:19px}
     .model-presets button{padding:11px 5px;font-size:12px;line-height:1.2}
+    .wave-presets button{min-height:43px;font-size:11.5px}
+    .wave-controls[hidden]{display:none}
+    .wave-controls{padding:13px 15px 16px;background:#142541;border:1px solid #3d5679;border-radius:9px;margin:-6px 0 19px}
+    .wave-controls .control{margin-top:12px}
+    .wave-controls .hint{color:#b1c6e4}
     .model-description{color:#a9bbd8;font-size:11.5px;line-height:1.55;min-height:36px;margin:-8px 0 20px}
     .stim-panel{margin-top:23px;padding:17px 14px 15px;border:1px solid #405475;border-radius:12px;background:linear-gradient(140deg,#1c2d49,#152238)}
     .stim-panel .section-title{margin:0 0 10px;color:#d0e4ff}
@@ -116,6 +124,12 @@
         <div class="art-caption">
           <span><span id="led" class="live-dot"></span><span id="status" role="status" aria-live="polite">Simulating</span></span>
           <span>Blue = low activity · White = intermediate · Red = high activity</span>
+          <span class="render-detail"><label for="renderDetail">Image detail</label>
+            <select id="renderDetail" aria-label="Choose sharp or smooth display">
+              <option value="sharp" selected>Sharp · no blur</option>
+              <option value="smooth">Smooth</option>
+            </select>
+          </span>
         </div>
         <section class="wavelet-panel" aria-label="Real-time wavelet spectral analysis">
           <div class="wavelet-heading">
@@ -131,19 +145,18 @@
               </select>
               <label for="analysisStepMs">Nominal Δt</label>
               <select id="analysisStepMs" aria-label="Nominal analysis time per simulation step">
-                <option value="5">5 ms/step</option>
-                <option value="10" selected>10 ms/step</option>
-                <option value="20">20 ms/step</option>
+                <option value="1" selected>1 ms/step · Nyquist 500 Hz</option>
+                <option value="0.5">0.5 ms/step · Nyquist 1000 Hz</option>
               </select>
               <button id="meanPSDExport" type="button" disabled>↓ Save 5 s PSD</button>
               <button id="waveletExport" type="button" disabled>↓ Save wavelet CSV</button>
             </div>
           </div>
           <div class="wavelet-chart">
-            <h3>5 s rolling mean PSD · Welch estimate</h3>
+            <h3>5 s rolling mean PSD · log-log · 1–500 nominal Hz</h3>
             <p id="meanPSDInfo" class="spectral-description">Collecting the first 5-second analysis window…</p>
-            <canvas id="meanPSD" width="760" height="220" role="img" aria-label="Live five-second rolling Welch PSD of excitatory population spike rate"></canvas>
-            <p class="spectral-chart-caption">Hann-windowed, mean-detrended periodograms, 50% overlap. Sliding window: 5 seconds in the chosen nominal analysis timebase, not wall-clock time.</p>
+            <canvas id="meanPSD" width="760" height="260" role="img" aria-label="Log-log Welch mean PSD from 1 to 500 nominal Hz, computed from a five-second sliding window of excitatory population spikes"></canvas>
+            <p class="spectral-chart-caption">Hann-windowed, mean-detrended 1024/2048-point FFT periodograms, 50% overlap, averaged over the last 5 nominal seconds once available (clearly labeled partial preview during warm-up). Both axes use logarithmic scales; zero frequency is omitted. Nominal 1 ms/step gives a 500 Hz Nyquist limit.</p>
           </div>
           <div class="wavelet-chart">
             <h3>Morlet scalogram · time–frequency power</h3>
@@ -160,7 +173,7 @@
             <canvas id="voltageBalance" width="760" height="312" role="img" aria-label="Live mean excitatory and inhibitory membrane potential traces, with voltage difference beneath"></canvas>
             <p class="spectral-chart-caption">Phase plane: horizontal E voltage, vertical I voltage. Voltage balance: mean E and I on the upper axis, E − I on a separate lower axis. Voltages are dimensionless for LIF / adaptive LIF, and model mV for Izhikevich.</p>
           </div>
-          <p class="wavelet-explainer">Nominal Δt changes the spectral analysis clock and the 5-second Welch window, <strong>not the neural simulation equations</strong>. Nominal Hz is not calibrated physiological Hz. Signal: fraction of excitatory neurons spiking at each simulation step, measured in the central patch (radius 10 cells) or across the full lattice. The <strong>5 s mean PSD</strong> uses a moving-window Welch estimate with frequencies in nominal Hz. The <strong>Morlet CWT</strong> is displayed only as a scalogram, updated approximately every 84 simulation steps, with its own axis in cycles/step. Both estimates come from the same actual spike-rate signal. Wavelet edge estimates are approximate; orange lines mark stimulus onsets.</p>
+          <p class="wavelet-explainer">Nominal Δt changes the spectral analysis clock and the 5-second Welch window, <strong>not the neural simulation equations</strong>. Even at 500 Hz Nyquist, nominal Hz is <strong>not calibrated physiological Hz</strong>. Signal: fraction of excitatory neurons spiking at each simulation step, measured in the central patch (radius 22 cells) or across the full lattice. The <strong>5 s mean PSD</strong> uses a moving-window Welch estimate with frequencies in nominal Hz. The <strong>Morlet CWT</strong> is displayed only as a scalogram, updated approximately every 84 simulation steps, with its own axis in cycles/step. Both estimates come from the same actual spike-rate signal. Wavelet edge estimates are approximate; orange lines mark stimulus onsets.</p>
         </section>
       </section>
       <aside class="side" aria-label="Simulation controls">
@@ -174,12 +187,26 @@
         </div>
         <p class="model-description" id="modelDescription">Leaky integrate-and-fire: membrane leakage, threshold, reset and refractory period.</p>
         <div class="section-title">Dynamics preset</div>
-        <div class="presets" role="group" aria-label="Select a dynamics preset">
+        <div class="presets wave-presets" role="group" aria-label="Select a dynamics preset">
           <button class="selected" data-preset="spots" aria-pressed="true">Spots</button>
           <button data-preset="maze" aria-pressed="false">Labyrinth</button>
           <button data-preset="islands" aria-pressed="false">Islands</button>
+          <button data-preset="traveling" aria-pressed="false">Traveling waves</button>
+          <button data-preset="spiral" aria-pressed="false">Spiral waves</button>
+          <button data-preset="brunel" aria-pressed="false">Brunel-balanced</button>
         </div>
-        <p id="presetDescription" class="preset-desc">Spots: E→I = 13, local E radius = 2, inhibitory radius = 8. Often isolated patches.</p>
+        <p id="presetDescription" class="preset-desc">Spots: E→I = 13, local E radius = 5, inhibitory radius = 18. Often isolated patches.</p>
+        <div id="waveControls" class="wave-controls" hidden>
+          <p class="hint">Driven-wave modes: a propagating or rotating spatial input drives the genuine E/I spiking network. Wavefronts are therefore stimulated responses, not proven self-sustaining waves.</p>
+          <div class="control">
+            <div class="labelrow"><label for="wavePeriod">Drive period (steps)</label><output id="wavePeriodValue">150</output></div>
+            <input type="range" id="wavePeriod" min="50" max="300" step="10" value="150"/>
+          </div>
+          <div class="control">
+            <div class="labelrow"><label for="waveAmplitude">Wave drive amplitude</label><output id="waveAmplitudeValue">1.40</output></div>
+            <input type="range" id="waveAmplitude" min="0.25" max="2.5" step="0.05" value="1.4"/>
+          </div>
+        </div>
         <div class="control">
           <div class="labelrow"><label for="exc">Local excitation (E → E)</label><output id="excValue">13.0</output></div>
           <input type="range" id="exc" min="9" max="18" value="13" step="0.5" />
@@ -201,13 +228,13 @@
           <div class="hint">Inhibitory-to-inhibitory coupling across nearby inhibitory cells (using the local interaction radius).</div>
         </div>
         <div class="control">
-          <div class="labelrow"><label for="radius">Inhibitory radius (cells)</label><output id="radiusValue">8</output></div>
-          <input type="range" id="radius" min="4" max="13" value="8" step="1" />
+          <div class="labelrow"><label for="radius">Inhibitory radius (cells)</label><output id="radiusValue">18</output></div>
+          <input type="range" id="radius" min="6" max="36" value="18" step="1" />
           <div class="hint">Larger radii produce more spatially extended interactions</div>
         </div>
         <div class="control">
-          <div class="labelrow"><label for="local">Local E and I→I radius (cells)</label><output id="localValue">2</output></div>
-          <input type="range" id="local" min="1" max="5" value="2" step="1" />
+          <div class="labelrow"><label for="local">Local E and I→I radius (cells)</label><output id="localValue">5</output></div>
+          <input type="range" id="local" min="2" max="12" value="5" step="1" />
           <div class="hint">Used for E→E, E→I and local I→I coupling; increased in Islands.</div>
         </div>
         <div class="section-title">Propagation and delay</div>
@@ -216,8 +243,8 @@
           <input id="synDelay" type="range" min="0" max="12" value="0" step="1" />
         </div>
         <div class="control">
-          <div class="labelrow"><label for="conductionSpeed">Conduction speed (cells/step)</label><output id="conductionSpeedValue">16.0</output></div>
-          <input id="conductionSpeed" type="range" min="0.5" max="16" value="16" step="0.5" />
+          <div class="labelrow"><label for="conductionSpeed">Conduction speed (cells/step)</label><output id="conductionSpeedValue">36.0</output></div>
+          <input id="conductionSpeed" type="range" min="1" max="60" value="36" step="1" />
         </div>
         <p class="propagation-note" id="effectiveDelays">Effective delays E: 0 steps, I: 0 steps.</p>
         <p class="propagation-note">Approximation: characteristic pathway distance ≈ ⅔ of each coupling radius; these are lattice cells/step, not physical m/s. Changes apply without resetting the ongoing dynamics.</p>
@@ -233,8 +260,8 @@
             <input type="range" id="stimIntensity" min="0.25" max="2.5" step="0.25" value="1" />
           </div>
           <div class="control">
-            <div class="labelrow"><label for="stimRadius">Spatial spread σ (cells)</label><output id="stimRadiusValue">5</output></div>
-            <input type="range" id="stimRadius" min="2" max="12" step="1" value="5" />
+            <div class="labelrow"><label for="stimRadius">Spatial spread σ (cells)</label><output id="stimRadiusValue">11</output></div>
+            <input type="range" id="stimRadius" min="4" max="27" step="1" value="11" />
           </div>
           <div class="control">
             <div class="labelrow"><label for="stimDuration">Duration (simulation steps)</label><output id="stimDurationValue">350</output></div>
@@ -253,7 +280,7 @@
           <button id="config">↓ &nbsp;Save parameters</button>
         </div>
         <div class="stats" aria-label="Simulation data">
-          <div class="stat"><div class="stat-title">Neurons (E + I)</div><div class="stat-value" id="neurons">10,368</div></div>
+          <div class="stat"><div class="stat-title">Neurons (E + I)</div><div class="stat-value" id="neurons">51,200</div></div>
           <div class="stat"><div class="stat-title">Simulation step</div><div class="stat-value" id="step">0</div></div>
           <div class="stat"><div class="stat-title">Mean E activity</div><div class="stat-value" id="activity">0.000</div></div>
           <div class="stat"><div class="stat-title">Neuron model</div><div class="stat-value" id="modelStat">LIF</div></div>
@@ -263,7 +290,7 @@
     <section class="about" aria-label="Scientific model and limitations">
       <div>
         <h2>What is simulated?</h2>
-        <p>A recurrent two-population E/I lattice is simulated with your choice of LIF, adaptive LIF (with spike-triggered recovery), or Izhikevich neurons (regular-spiking E and fast-spiking I). All three produce discrete spikes and drive spatial E→E, E→I, I→E and I→I interactions. Recurrent synaptic fields can be delayed using a characteristic-distance conduction approximation. The central perturbation is an added Gaussian external input to excitatory neurons, with adjustable intensity, spread and pulse duration.</p>
+        <p>A recurrent two-population E/I lattice is simulated with your choice of LIF, adaptive LIF (with spike-triggered recovery), or Izhikevich neurons (regular-spiking E and fast-spiking I). All three produce discrete spikes and drive spatial E→E, E→I, I→E and I→I interactions. Recurrent synaptic fields can be delayed using a characteristic-distance conduction approximation. The central perturbation is an added Gaussian external input to excitatory neurons, with adjustable intensity, spread and pulse duration. The Brunel-balanced preset is a <strong>Brunel-inspired inhibition-dominated heuristic</strong> with stochastic external drive inside this equal-sized spatial E/I lattice, not a faithful Brunel sparse random network or proof of a balanced asynchronous irregular state.</p>
       </div>
       <div>
         <h2>How is the artwork made?</h2>
@@ -278,11 +305,11 @@
   <script>
     'use strict';
     // Experimental E/I spatial SNN with interchangeable LIF, adaptive LIF and Izhikevich neuron equations.
-    // 72 × 72 excitatory cells + 72 × 72 inhibitory cells; toroidal lattice.
+    // 160 × 160 excitatory + 160 × 160 inhibitory cells = 51,200; toroidal lattice.
     // Synaptic fields are normalized periodic square-kernel convolutions of the
     // exponential spike traces. This is a model-generating algorithm, not a GIF
     // or a precomputed reaction-diffusion texture.
-    const N = 72, LEN = N * N, DT_ALPHA = 0.17, TRACE_DECAY = 0.90;
+    const N = 160, LEN = N * N, DT_ALPHA = 0.17, TRACE_DECAY = 0.90;
     const canvas = document.getElementById('art');
     const ctx = canvas.getContext('2d', { alpha: false });
     const tiny = document.createElement('canvas'); tiny.width = N; tiny.height = N;
@@ -290,16 +317,39 @@
     const image = tinyCtx.createImageData(N, N);
     const $ = id => document.getElementById(id);
     const presets = {
-      spots:   {exc:13, inh:10, iinh:.7, radius:8, iexc:13, driveE:1.03,driveI:.90,local:2},
-      maze:    {exc:13, inh:10, iinh:.7, radius:8, iexc:5,  driveE:1.03,driveI:.90,local:2},
-      islands: {exc:13, inh:10, iinh:.7, radius:12,iexc:13, driveE:1.03,driveI:.90,local:3}
+      spots:    {exc:13,inh:10,iinh:.7,radius:18,iexc:13,driveE:1.03,driveI:.90,local:5,poissonRate:0,poissonKick:0},
+      maze:     {exc:13,inh:10,iinh:.7,radius:18,iexc:5, driveE:1.03,driveI:.90,local:5,poissonRate:0,poissonKick:0},
+      islands:  {exc:13,inh:10,iinh:.7,radius:27,iexc:13,driveE:1.03,driveI:.90,local:7,poissonRate:0,poissonKick:0},
+      traveling:{exc:13,inh:10,iinh:.7,radius:18,iexc:13,driveE:.90, driveI:.90,local:5,poissonRate:0,poissonKick:0},
+      spiral:   {exc:13,inh:10,iinh:.7,radius:18,iexc:13,driveE:.90, driveI:.90,local:5,poissonRate:0,poissonKick:0},
+      brunel:   {exc:14,inh:17,iinh:.50,radius:18,iexc:13,driveE:1.65,driveI:.99,local:5,poissonRate:.10,poissonKick:1.25}
     };
     const presetDescriptions=Object.freeze({
-      spots:'Spots: E→I = 13, local E radius = 2, inhibitory radius = 8. Often isolated patches.',
-      maze:'Labyrinth: E→I = 5, local E radius = 2, inhibitory radius = 8. Often interlinked bands.',
-      islands:'Islands: E→I = 13, local E radius = 3, inhibitory radius = 12. Larger spatial scales.'
+      spots:'Spots: E→I = 13, local E radius = 5, inhibitory radius = 18. Often isolated patches.',
+      maze:'Labyrinth: E→I = 5, local E radius = 5, inhibitory radius = 18. Often interlinked bands.',
+      islands:'Islands: E→I = 13, local E radius = 7, inhibitory radius = 27. Larger spatial scales.',
+      traveling:'Traveling waves: moving-plane external drive through the recurrent spiking lattice. Driven, not demonstrated self-sustaining propagation.',
+      spiral:'Spiral waves: rotating spiral-shaped external drive through the recurrent spiking lattice. Driven, not demonstrated self-sustaining spirals.',
+      brunel:'Brunel-inspired balanced: stronger inhibition and stochastic external input encourage irregular E/I activity. Lattice approximation, not a Brunel random sparse graph.'
     });
     const cfg = {...presets.spots};
+    const waveCos=new Float32Array(LEN),waveSin=new Float32Array(LEN),waveMask=new Float32Array(LEN);
+    let waveMode='none',wavePeriod=150,waveAmplitude=1.4;
+    function configureWaveMode(next){
+      waveMode=next;
+      $('waveControls').hidden=waveMode==='none';
+      if(waveMode==='none')return;
+      const mid=(N-1)/2;
+      for(let y=0;y<N;y++)for(let x=0;x<N;x++){
+        const dx=x-mid,dy=y-mid,r=Math.hypot(dx,dy),j=y*N+x;
+        const phase=waveMode==='traveling'
+          ?(2*Math.PI)*(dx/58+dy/293)
+          :Math.atan2(dy,dx)+(2*Math.PI)*r/53;
+        waveCos[j]=Math.cos(phase);
+        waveSin[j]=Math.sin(phase);
+        waveMask[j]=waveMode==='spiral'?r*r/(r*r+44):1;
+      }
+    }
     const vE = new Float32Array(LEN), vI = new Float32Array(LEN);
     const eTrace = new Float32Array(LEN), iTrace = new Float32Array(LEN);
     const refE = new Uint8Array(LEN), refI = new Uint8Array(LEN);
@@ -314,7 +364,7 @@
     const eDelayRing=new Float32Array(LEN*D_RING);
     const iDelayRing=new Float32Array(LEN*D_RING);
     const zeroTrace=new Float32Array(LEN);
-    let synDelay=0,conductionSpeed=16;
+    let synDelay=0,conductionSpeed=36;
     function effectiveDelay(radius){
       return Math.min(D_RING-1,synDelay+Math.round(2*radius/(3*conductionSpeed)));
     }
@@ -337,7 +387,7 @@
     let centerCellCount=0;
     for(let y=0;y<N;y++) for(let x=0;x<N;x++){
       const dx=x-(N-1)/2,dy=y-(N-1)/2;
-      if(dx*dx+dy*dy<=100){centerMask[y*N+x]=1;centerCellCount++;}
+      if(dx*dx+dy*dy<=484){centerMask[y*N+x]=1;centerCellCount++;}
     }
     const W_HISTORY=512, W_BANDS=22, W_COLUMNS=96, W_MIN=1/64, W_MAX=1/6, W_OMEGA=6;
     const W_LOG_MIN=-8, W_LOG_MAX=-2;
@@ -345,12 +395,12 @@
     let waveCount=0,waveLastStep=-1e9,waveCache=null;
     const waveMapCtx=$('waveletMap').getContext('2d');
     // A Welch PSD computed on the last 5 nominal seconds, distinct from CWT.
-    const P_RING=1000,P_WINDOW_MS=5000,P_INTERVAL=84;
+    const P_RING=10000,P_WINDOW_MS=5000,P_INTERVAL=84;
     const pWhole=new Float32Array(P_RING),pCenter=new Float32Array(P_RING);
     const meanPSDCtx=$('meanPSD').getContext('2d');
     const welchKernels={};
     let pIndex=0,pFilled=0,pLastStep=-1e9,pCache=null;
-    function analysisDt(){return Number($('analysisStepMs').value)||10;}
+    function analysisDt(){return Number($('analysisStepMs').value)||1;}
     function requiredPsdSamples(){return Math.round(P_WINDOW_MS/analysisDt());}
     function clearWelch(){
       pWhole.fill(0);pCenter.fill(0);pIndex=0;pFilled=0;pLastStep=-1e9;pCache=null;
@@ -376,9 +426,9 @@
     const modelLabels = {lif:'LIF',alif:'Adaptive LIF',izh:'Izhikevich'};
     let model = 'lif';
     let randomState = 1, stepCount = 0, lastSpikesE = 0, running = true;
-    let stimRemaining = 0, stimAmplitude = 0, stimRadiusActive = 5, lastPulseEnd = -1;
+    let stimRemaining = 0, stimAmplitude = 0, stimRadiusActive = 11, lastPulseEnd = -1;
     let stimHistory = [], parameterHistory = [], initialCoupling = {...cfg};
-    let initialPropagation={baselineDelay:0,conductionSpeed:16};
+    let initialPropagation={baselineDelay:0,conductionSpeed:36};
     let frameId = null;
     function reseed(seed) { randomState = (seed >>> 0) || 1; }
     function rand() {
@@ -437,14 +487,25 @@
       blurWrap(historyField(iDelayRing,effectiveDelay(cfg.radius)),blurI,cfg.radius);
       blurWrap(historyField(iDelayRing,effectiveDelay(cfg.local)),blurILocal,cfg.local);
       const stimulate = stimRemaining > 0;
+      const drivingWave = waveMode!=='none';
+      const waveTheta=drivingWave?2*Math.PI*stepCount/wavePeriod:0;
+      const waveCt=drivingWave?Math.cos(waveTheta):0;
+      const waveSt=drivingWave?Math.sin(waveTheta):0;
       let spikesE = 0,centerSpikes = 0,sumVE=0,sumVI=0;
       for (let j=0; j<LEN; ++j) {
         // Three uniforms centered at zero approximate Gaussian background drive.
         const jitterE = (rand()+rand()+rand()-1.5)*0.24;
         const jitterI = (rand()+rand()+rand()-1.5)*0.24;
         const pulse = stimulate ? stimAmplitude*stimMask[j] : 0;
-        const netE = cfg.driveE+cfg.exc*blurE[j]-cfg.inh*blurI[j]+jitterE+pulse;
-        const netI = cfg.driveI+cfg.iexc*blurE[j]-cfg.iinh*blurILocal[j]+jitterI;
+        const wavePhase=drivingWave?waveCos[j]*waveCt+waveSin[j]*waveSt:0;
+        const waveCrest=drivingWave?Math.max(0,wavePhase):0;
+        const waveCurrent=drivingWave?waveAmplitude*waveMask[j]*(waveCrest*waveCrest*waveCrest*waveCrest-.17):0;
+        // Brunel-inspired mode adds independent Bernoulli external excitatory kicks.
+        // Unlike Brunel (2000), recurrent connectivity here remains a local spatial field.
+        const extE=cfg.poissonRate>0&&rand()<cfg.poissonRate?cfg.poissonKick:0;
+        const extI=cfg.poissonRate>0&&rand()<cfg.poissonRate?cfg.poissonKick*.65:0;
+        const netE = cfg.driveE+cfg.exc*blurE[j]-cfg.inh*blurI[j]+jitterE+pulse+waveCurrent+extE;
+        const netI = cfg.driveI+cfg.iexc*blurE[j]-cfg.iinh*blurILocal[j]+jitterI+extI;
         let spikeE=0, spikeI=0;
         if(model==='izh') {
           // Izhikevich (2003) quadratic integrate-and-fire with recovery variable.
@@ -617,96 +678,132 @@
 
     function welchKernel(nfft){
       if(welchKernels[nfft])return welchKernels[nfft];
-      const half=nfft/2,twCos=new Float64Array((half+1)*nfft);
-      const twSin=new Float64Array((half+1)*nfft);
       const hann=new Float64Array(nfft);
       let energy=0;
       for(let j=0;j<nfft;j++){
-        hann[j]=.5-.5*Math.cos(2*Math.PI*j/(nfft-1));
-        energy+=hann[j]*hann[j];
+        const w=.5-.5*Math.cos(2*Math.PI*j/(nfft-1));
+        hann[j]=w;energy+=w*w;
       }
-      for(let k=1;k<=half;k++){
-        const o=k*nfft;
-        for(let j=0;j<nfft;j++){
-          const angle=2*Math.PI*k*j/nfft;
-          twCos[o+j]=Math.cos(angle);twSin[o+j]=Math.sin(angle);
+      return (welchKernels[nfft]={half:nfft/2,hann,energy});
+    }
+    // Iterative Cooley–Tukey radix-2 FFT for browser-friendly 5 s Welch windows.
+    function fftInPlace(re,im){
+      const n=re.length;
+      for(let i=1,j=0;i<n;i++){
+        let bit=n>>1;
+        while(j&bit){j^=bit;bit>>=1;}
+        j^=bit;
+        if(i<j){
+          const r=re[i];re[i]=re[j];re[j]=r;
+          const q=im[i];im[i]=im[j];im[j]=q;
         }
       }
-      return (welchKernels[nfft]={half,twCos,twSin,hann,energy});
+      for(let len=2;len<=n;len*=2){
+        const angle=-2*Math.PI/len,wrStep=Math.cos(angle),wiStep=Math.sin(angle);
+        for(let start=0;start<n;start+=len){
+          let wr=1,wi=0;
+          const half=len>>1;
+          for(let k=0;k<half;k++){
+            const a=start+k,b=a+half;
+            const tr=wr*re[b]-wi*im[b],ti=wr*im[b]+wi*re[b];
+            re[b]=re[a]-tr;im[b]=im[a]-ti;
+            re[a]+=tr;im[a]+=ti;
+            const nextWr=wr*wrStep-wi*wiStep;
+            wi=wr*wiStep+wi*wrStep;wr=nextWr;
+          }
+        }
+      }
     }
     function computeMeanPSD(){
-      const count=requiredPsdSamples();
-      if(pFilled<count)return null;
+      const requested=requiredPsdSamples();
+      const count=Math.min(pFilled,requested);
+      // Show an explicitly labeled preview before the full 5 s window fills.
+      if(count<256)return null;
       const sample=$('waveletRegion').value==='center'?pCenter:pWhole;
       const sequence=new Float64Array(count);
       const start=(pIndex-count+P_RING)%P_RING;
       for(let i=0;i<count;i++)sequence[i]=sample[(start+i)%P_RING];
-      const nfft=count>=512?256:128,hop=nfft/2,fs=1000/analysisDt();
+      // 1 ms: 1 kHz sampling with 500 Hz Nyquist, 1024-point FFT.
+      // 0.5 ms: 2 kHz sampling, 2048-point FFT; plot is capped at 500 Hz.
+      const dtMs=analysisDt();
+      const fullFFT=dtMs<=.5?2048:1024;
+      const nfft=count>=fullFFT?fullFFT:(count>=1024?1024:count>=512?512:256);
+      const hop=nfft/2,fs=1000/dtMs;
       const kernel=welchKernel(nfft),bins=kernel.half,psd=new Float64Array(bins+1);
-      const x=new Float64Array(nfft);
+      const re=new Float64Array(nfft),im=new Float64Array(nfft);
       let segments=0;
       for(let begin=0;begin+nfft<=count;begin+=hop){
         let mean=0;
         for(let j=0;j<nfft;j++)mean+=sequence[begin+j];
         mean/=nfft;
-        for(let j=0;j<nfft;j++)x[j]=(sequence[begin+j]-mean)*kernel.hann[j];
+        for(let j=0;j<nfft;j++)re[j]=(sequence[begin+j]-mean)*kernel.hann[j];
+        im.fill(0);
+        fftInPlace(re,im);
         for(let k=1;k<=bins;k++){
-          let re=0,im=0;
-          const off=k*nfft;
-          for(let j=0;j<nfft;j++){
-            re+=x[j]*kernel.twCos[off+j];
-            im-=x[j]*kernel.twSin[off+j];
-          }
-          psd[k]+=(re*re+im*im)/(fs*kernel.energy)*(k===bins?1:2);
+          psd[k]+=(re[k]*re[k]+im[k]*im[k])/(fs*kernel.energy)*(k===bins?1:2);
         }
         segments++;
       }
       if(!segments)return null;
       for(let k=1;k<=bins;k++)psd[k]/=segments;
-      return {psd,nfft,segments,dtMs:analysisDt(),scope:$('waveletRegion').value,windowSamples:count,step:stepCount};
+      return {psd,nfft,segments,dtMs,scope:$('waveletRegion').value,windowSamples:count,
+        requestedSamples:requested,complete:count>=requested,step:stepCount};
     }
     function drawMeanPSD(d){
-      const g=meanPSDCtx,c=g.canvas,x=78,y=17,w=c.width-99,h=c.height-63;
+      const g=meanPSDCtx,c=g.canvas,x=79,y=20,w=c.width-105,h=c.height-78;
       waveletGrid(g,x,y,w,h);
-      const half=d.nfft/2,fs=1000/d.dtMs,nyquist=fs/2;
-      let peak=1e-13;
-      for(let k=1;k<=half;k++)peak=Math.max(peak,d.psd[k]);
-      const upper=Math.ceil(Math.log10(peak)),lower=upper-4;
-      g.font='13px system-ui';
-      g.textAlign='right';
-      for(let exponent=lower;exponent<=upper;exponent++){
-        const yy=y+h-(exponent-lower)/4*h;
-        g.strokeStyle='#2e3e5e';g.lineWidth=1;
-        g.beginPath();g.moveTo(x,yy);g.lineTo(x+w,yy);g.stroke();
-        g.fillStyle='#a8bad7';g.fillText('10^'+exponent,x-8,yy+5);
+      const fs=1000/d.dtMs,minFreq=1,maxFreq=500,logWidth=Math.log(maxFreq/minFreq);
+      const px=f=>x+w*Math.log(f/minFreq)/logWidth;
+      let peak=1e-16,minPositive=Infinity;
+      for(let k=1;k<d.psd.length;k++){
+        const f=k*fs/d.nfft;
+        if(f<minFreq||f>maxFreq+1e-9)continue;
+        const p=d.psd[k];
+        if(p>0){peak=Math.max(peak,p);minPositive=Math.min(minPositive,p);}
       }
-      g.textAlign='center';
-      for(let q=0;q<=4;q++){
-        const xx=x+w*q/4;
-        g.fillStyle='#a8bad7';g.fillText((nyquist*q/4).toFixed(1),xx,y+h+20);
+      const upper=Math.ceil(Math.log10(peak));
+      const lower=Number.isFinite(minPositive)
+        ?Math.min(upper-3,Math.max(upper-8,Math.floor(Math.log10(minPositive))))
+        :upper-5;
+      const py=power=>{
+        const lg=Math.log10(Math.max(1e-30,power));
+        return y+h-(Math.max(lower,Math.min(upper,lg))-lower)/(upper-lower)*h;
+      };
+      g.font='13px system-ui';
+      for(let exp=lower;exp<=upper;exp++){
+        const yy=py(Math.pow(10,exp));
+        g.strokeStyle='#30445f';g.lineWidth=1;
+        g.beginPath();g.moveTo(x,yy);g.lineTo(x+w,yy);g.stroke();
+        g.fillStyle='#a9bedb';g.textAlign='right';g.fillText('10^'+exp,x-9,yy+4);
+      }
+      for(const f of [1,2,5,10,20,50,100,200,500]){
+        const xx=px(f);
+        g.strokeStyle='#293a53';g.beginPath();g.moveTo(xx,y);g.lineTo(xx,y+h);g.stroke();
+        g.fillStyle='#b9cdea';g.textAlign='center';g.fillText(String(f),xx,y+h+23);
       }
       g.save();g.beginPath();g.rect(x,y,w,h);g.clip();
-      g.beginPath();
-      for(let k=1;k<=half;k++){
-        const xp=x+w*k/half;
-        const val=Math.log10(Math.max(1e-15,d.psd[k]));
-        const yp=y+h-(Math.max(lower,Math.min(upper,val))-lower)/4*h;
-        if(k===1)g.moveTo(xp,yp);else g.lineTo(xp,yp);
+      g.beginPath();let first=true;
+      for(let k=1;k<d.psd.length;k++){
+        const f=k*fs/d.nfft;
+        if(f<minFreq||f>maxFreq+1e-9)continue;
+        const xx=px(f),yy=py(d.psd[k]);
+        if(first){g.moveTo(xx,yy);first=false;}else g.lineTo(xx,yy);
       }
-      g.strokeStyle='#99e3e5';g.lineWidth=2.5;g.lineJoin='round';g.stroke();g.restore();
-      g.fillStyle='#bccce5';g.textAlign='center';g.font='13px system-ui';
-      g.fillText('Nominal frequency (Hz)',x+w/2,c.height-6);
-      g.save();g.translate(16,y+h/2);g.rotate(-Math.PI/2);
-      g.fillText('Spike fraction²/nominal Hz',0,0);g.restore();g.textAlign='left';
+      g.strokeStyle='#a1e8e7';g.lineWidth=2.5;g.lineJoin='round';g.stroke();
+      g.restore();
+      g.fillStyle='#c2d3ee';g.font='13px system-ui';g.textAlign='center';
+      g.fillText('Nominal frequency (Hz, log scale)',x+w/2,c.height-10);
+      g.save();g.translate(15,y+h/2);g.rotate(-Math.PI/2);
+      g.fillText('PSD (fraction²/nominal Hz, log)',0,0);g.restore();g.textAlign='left';
     }
     function renderMeanPSD(force){
       const needed=requiredPsdSamples();
-      if(pFilled<needed){
+      if(pFilled<256){
         const g=meanPSDCtx,c=g.canvas;waveletGrid(g,78,17,c.width-99,c.height-63);
         g.fillStyle='#adc4e4';g.font='14px system-ui';
         g.fillText('Collecting '+pFilled+' / '+needed+' nominal samples…',108,c.height/2);
         $('meanPSDExport').disabled=true;
-        $('meanPSDInfo').textContent='Waiting for the first 5 s ('+needed+' steps at '+analysisDt()+' ms/step).';
+        $('meanPSDInfo').textContent='Collecting data for the first spectral preview ('+pFilled+'/'+needed+' steps).';
         return;
       }
       if(!force&&stepCount-pLastStep<P_INTERVAL)return;
@@ -714,9 +811,11 @@
       if(!pCache)return;
       pLastStep=stepCount;
       drawMeanPSD(pCache);
-      $('meanPSDExport').disabled=false;
+      $('meanPSDExport').disabled=!pCache.complete;
+      const elapsed=(pCache.windowSamples*pCache.dtMs/1000).toFixed(2);
       $('meanPSDInfo').textContent=(pCache.scope==='center'?'Central E':'Whole E')+
-        ' · 5.0 nominal seconds · '+pCache.segments+' Welch segments · last updated at step '+stepCount;
+        (pCache.complete?' · 5.0 s rolling mean PSD':' · PREVIEW '+elapsed+'/5.00 nominal seconds')+
+        ' · '+pCache.segments+' Welch segments · last updated at step '+stepCount;
     }
     function renderWavelet(force){
       if(waveCount<112){
@@ -851,17 +950,19 @@
         ' · ΔV '+(meanLastVE-meanLastVI).toFixed(3)+' ('+units+') · '+tr.n+' steps';
     }
     function render() {
-      blurWrap(eTrace, imageSmooth, 1); // Display smoothing only.
+      const sharp=$('renderDetail').value==='sharp';
+      if(!sharp)blurWrap(eTrace,imageSmooth,1); // Optional display-only smoothing.
+      const displayTrace=sharp?eTrace:imageSmooth;
       let mean=0;
       for(let i=0;i<LEN;i++) {
         mean+=eTrace[i];
-        const normalized = Math.max(0,Math.min(1,(imageSmooth[i]-.008)/.185));
+        const normalized = Math.max(0,Math.min(1,(displayTrace[i]-.008)/.185));
         const c = LUT[Math.round(normalized*255)];
         const k=i*4;
         image.data[k]=c[0];image.data[k+1]=c[1];image.data[k+2]=c[2];image.data[k+3]=255;
       }
       tinyCtx.putImageData(image,0,0);
-      ctx.imageSmoothingEnabled=true;
+      ctx.imageSmoothingEnabled=!sharp;
       ctx.clearRect(0,0,canvas.width,canvas.height);
       ctx.drawImage(tiny,0,0,canvas.width,canvas.height);
       if(stimRemaining>0) {
@@ -887,7 +988,8 @@
       frameId=null;
       if (!running) return;
       // Simulation is deliberately bounded per animation frame to keep UI responsive.
-      for(let i=0;i<7;i++) runOneStep();
+      // One simulation step per visual frame favors responsiveness on ~50k-neuron networks.
+      runOneStep();
       render();
       frameId=requestAnimationFrame(loop);
     }
@@ -919,7 +1021,9 @@
       start();
     }
     function markCustom() {
-      $('presetDescription').textContent='Custom coupling values: altered from the named spatial presets.';
+      $('presetDescription').textContent=waveMode==='none'
+        ?'Custom E/I coupling values: altered from the named spatial presets.'
+        :'Custom E/I coupling with externally driven '+(waveMode==='traveling'?'traveling':'spiral')+' waves still active.';
       document.querySelectorAll('[data-preset]').forEach(button=>{
         button.classList.remove('selected');button.setAttribute('aria-pressed','false');
       });
@@ -933,6 +1037,8 @@
       $('radiusValue').textContent=String(cfg.radius);
       $('synDelayValue').textContent=String(synDelay);
       $('conductionSpeedValue').textContent=conductionSpeed.toFixed(1);
+      $('wavePeriodValue').textContent=String(wavePeriod);
+      $('waveAmplitudeValue').textContent=waveAmplitude.toFixed(2);
       $('effectiveDelays').textContent='Effective field delay: E = '+effectiveDelay(cfg.local)+
         ' steps, I = '+effectiveDelay(cfg.radius)+' steps; local I→I = '+effectiveDelay(cfg.local)+' steps.';
     }
@@ -955,6 +1061,7 @@
     for (const button of document.querySelectorAll('[data-preset]')) {
       button.addEventListener('click',()=>{
         Object.assign(cfg,presets[button.dataset.preset]);
+        configureWaveMode(['traveling','spiral'].includes(button.dataset.preset)?button.dataset.preset:'none');
         $('exc').value=cfg.exc;$('iexc').value=cfg.iexc;$('inh').value=cfg.inh;$('iinh').value=cfg.iinh;$('radius').value=cfg.radius;$('local').value=cfg.local;
         updateSliderLabels();
         markCustom();button.classList.add('selected');button.setAttribute('aria-pressed','true');
@@ -968,6 +1075,14 @@
         parameterHistory.push({atStep:stepCount,field:name,value:cfg[name]});
       });
     }
+    for (const name of ['wavePeriod','waveAmplitude']){
+      $(name).addEventListener('input',()=>{
+        if(name==='wavePeriod')wavePeriod=Number($('wavePeriod').value);
+        else waveAmplitude=Number($('waveAmplitude').value);
+        updateSliderLabels();
+        parameterHistory.push({atStep:stepCount,field:name,value:name==='wavePeriod'?wavePeriod:waveAmplitude});
+      });
+    }
     for (const name of ['synDelay','conductionSpeed']){
       $(name).addEventListener('input',()=>{
         if(name==='synDelay')synDelay=Number($('synDelay').value);
@@ -977,21 +1092,26 @@
       });
     }
     for(const name of ['stimIntensity','stimRadius','stimDuration']) $(name).addEventListener('input',updateStimulusLabels);
+    $('renderDetail').addEventListener('change',render);
     $('stimulate').addEventListener('click',triggerStimulus);
     $('waveletRegion').addEventListener('change',()=>{
       renderWavelet(true);renderMeanPSD(true);
     });
     $('analysisStepMs').addEventListener('change',()=>renderMeanPSD(true));
     $('meanPSDExport').addEventListener('click',()=>{
-      const data=computeMeanPSD();if(!data)return;
+      const data=computeMeanPSD();if(!data||!data.complete)return;
       const fs=1000/data.dtMs,rows=[
         '# Five-second rolling mean Welch PSD, spiking E population rate',
         '# model='+model+', seed='+$('seed').value+', scope='+data.scope+', step='+stepCount,
         '# nominal step time='+data.dtMs+' ms, duration=5 s; not a biologically calibrated timebase',
         '# nfft='+data.nfft+', overlap=50%, segments='+data.segments+', Hann window, segment mean removed',
+        '# log-log chart range=1..500 nominal Hz; zero frequency excluded',
         'nominal_frequency_hz,power_spike_fraction_squared_per_nominal_hz'
       ];
-      for(let k=1;k<data.psd.length;k++)rows.push((k*fs/data.nfft).toPrecision(10)+','+data.psd[k].toExponential(10));
+      for(let k=1;k<data.psd.length;k++){
+        const f=k*fs/data.nfft;
+        if(f>=1&&f<=500+1e-9)rows.push(f.toPrecision(10)+','+data.psd[k].toExponential(10));
+      }
       downloadBlob(new Blob([rows.join('\n')+'\n'],{type:'text/csv;charset=utf-8'}),
         'neural-turing-welch-5s-'+model+'-'+data.scope+'-step-'+stepCount+'.csv');
     });
@@ -1040,6 +1160,13 @@
         seed:Number($('seed').value),step:stepCount,grid:[N,N],neurons:LEN*2,
         model:model,model_label:modelLabels[model],
         coupling:{...cfg},initial_coupling:initialCoupling,
+        spatial_sampling:{excitatory_grid:[N,N],inhibitory_grid:[N,N],total_neurons:LEN*2,
+          visual_mode:$('renderDetail').value,display_blur_radius_cells:$('renderDetail').value==='sharp'?0:1},
+        brunel_inspired_mode:{enabled:cfg.poissonRate>0,stochastic_kick_probability_per_step:cfg.poissonRate,
+          stochastic_kick_strength:cfg.poissonKick,caveat:'Spatial 1:1 E/I lattice with stochastic external kicks and stronger inhibition; not a classic Brunel 2000 random sparse 4:1 E/I network.'},
+        wave_drive:{mode:waveMode,period_steps:wavePeriod,amplitude:waveAmplitude,
+          implementation:waveMode==='none'?'none':'external rotating/propagating phase-dependent input added to E neuron drive; active spiking response, not demonstrated self-sustaining wave',
+          geometry:waveMode==='traveling'?'plane wave, x pitch 58 cells (slightly tilted)':waveMode==='spiral'?'one-arm theta + radial phase winding (radial pitch 53 cells)':'none'},
         propagation:{initial:initialPropagation,baseline_synaptic_delay_steps:synDelay,conduction_speed_cells_per_step:conductionSpeed,
           field_delays_steps:{excitatory:effectiveDelay(cfg.local),inhibitory:effectiveDelay(cfg.radius),local_inhibitory_to_inhibitory:effectiveDelay(cfg.local)},
           approximation:'Characteristic path distance=2*field_radius/3; circular signal-history ring; not an axonal path-resolved simulator.'},
@@ -1051,8 +1178,10 @@
         parameter_change_events:parameterHistory,
         mean_psd_5s:{method:'Welch',duration_nominal_seconds:5,nominal_timestep_ms:analysisDt(),
           selected_signal:$('waveletRegion').value,window:'Hann',overlap_fraction:0.5,
-          detrending:'per-segment mean',units:'spike fraction squared / nominal Hz (NOT calibrated physiological Hz)'},
-        spectral_analysis:{signal:$('waveletRegion').value==='center'?'mean excitatory spike fraction within central 10-cell radius':'mean excitatory spike fraction across the whole E population',method:'complex Morlet CWT (omega0=6); edge-aware local mean removal; relative power normalized by kernel energy and scale',history_steps:W_HISTORY,frequency_bands:W_BANDS,time_columns:W_COLUMNS,min_frequency_cycles_per_step:W_MIN,max_frequency_cycles_per_step:W_MAX,update_interval_steps:84,units:'cycles per simulation step, NOT calibrated Hz',spectrum:'Morlet CWT scalogram only; wavelet-averaged PSD display intentionally removed'},
+          detrending:'per-segment mean',fft_length:analysisDt()<=.5?2048:1024,
+          plot:{frequency_min_nominal_hz:1,frequency_max_nominal_hz:500,x_scale:'log',y_scale:'log',exclude_dc:true},
+          units:'spike fraction squared / nominal Hz (NOT calibrated physiological Hz)'},
+        spectral_analysis:{signal:$('waveletRegion').value==='center'?'mean excitatory spike fraction within central 22-cell radius':'mean excitatory spike fraction across the whole E population',method:'complex Morlet CWT (omega0=6); edge-aware local mean removal; relative power normalized by kernel energy and scale',history_steps:W_HISTORY,frequency_bands:W_BANDS,time_columns:W_COLUMNS,min_frequency_cycles_per_step:W_MIN,max_frequency_cycles_per_step:W_MAX,update_interval_steps:84,units:'cycles per simulation step, NOT calibrated Hz',spectrum:'Morlet CWT scalogram only; wavelet-averaged PSD display intentionally removed'},
         note:'To reproduce a run, use this HTML implementation, seed, model, coupling values, parameter change events and scheduled stimulus pulse events. Step counts are discrete and not calibrated as milliseconds.'
       };
       downloadBlob(new Blob([JSON.stringify(saved,null,2)],{type:'application/json'}),`neural-turing-seed-${$('seed').value}.json`);
