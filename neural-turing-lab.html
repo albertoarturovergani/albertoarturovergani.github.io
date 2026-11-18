@@ -160,7 +160,7 @@
             <canvas id="voltageBalance" width="760" height="312" role="img" aria-label="Live mean excitatory and inhibitory membrane potential traces, with voltage difference beneath"></canvas>
             <p class="spectral-chart-caption">Phase plane: horizontal E voltage, vertical I voltage. Voltage balance: mean E and I on the upper axis, E − I on a separate lower axis. Voltages are dimensionless for LIF / adaptive LIF, and model mV for Izhikevich.</p>
           </div>
-          <p class="wavelet-explainer">Nominal Δt changes the spectral analysis clock and the 5-second Welch window, <strong>not the neural simulation equations</strong>. Nominal Hz is not calibrated physiological Hz. Signal: fraction of excitatory neurons spiking at each simulation step, measured in the central patch (radius 10 cells) or across the full lattice. Morlet CWT, updated approximately every 84 simulation steps; the PSD is a <strong>relative wavelet-power estimate</strong> averaged across the displayed time window. Frequencies are in <strong>cycles/step, not Hz</strong>, because the three exploratory models do not share a calibrated biological timebase. Wavelet edge estimates are approximate; orange lines mark stimulus onsets.</p>
+          <p class="wavelet-explainer">Nominal Δt changes the spectral analysis clock and the 5-second Welch window, <strong>not the neural simulation equations</strong>. Nominal Hz is not calibrated physiological Hz. Signal: fraction of excitatory neurons spiking at each simulation step, measured in the central patch (radius 10 cells) or across the full lattice. The <strong>5 s mean PSD</strong> uses a moving-window Welch estimate with frequencies in nominal Hz. The <strong>Morlet CWT</strong> is displayed only as a scalogram, updated approximately every 84 simulation steps, with its own axis in cycles/step. Both estimates come from the same actual spike-rate signal. Wavelet edge estimates are approximate; orange lines mark stimulus onsets.</p>
         </section>
       </section>
       <aside class="side" aria-label="Simulation controls">
@@ -193,7 +193,7 @@
         <div class="control">
           <div class="labelrow"><label for="iinh">Recurrent inhibition (I → I)</label><output id="iinhValue">0.70</output></div>
           <input id="iinh" type="range" min="0" max="2.5" value="0.7" step="0.05" />
-          <div class="hint">Strength of local self-inhibitory feedback within the inhibitory population.</div>
+          <div class="hint">Inhibitory-to-inhibitory coupling across nearby inhibitory cells (using the local interaction radius).</div>
         </div>
         <div class="control">
           <div class="labelrow"><label for="radius">Inhibitory radius (cells)</label><output id="radiusValue">8</output></div>
@@ -253,7 +253,7 @@
     <section class="about" aria-label="Scientific model and limitations">
       <div>
         <h2>What is simulated?</h2>
-        <p>A recurrent two-population E/I lattice is simulated with your choice of LIF, adaptive LIF (with spike-triggered recovery), or Izhikevich neurons (regular-spiking E and fast-spiking I). All three produce discrete spikes and feed the same spatial excitatory/inhibitory synaptic coupling. The central perturbation is an added Gaussian external input to excitatory neurons, with adjustable intensity, spread and pulse duration.</p>
+        <p>A recurrent two-population E/I lattice is simulated with your choice of LIF, adaptive LIF (with spike-triggered recovery), or Izhikevich neurons (regular-spiking E and fast-spiking I). All three produce discrete spikes and drive spatial E→E, E→I, I→E and I→I interactions. Recurrent synaptic fields can be delayed using a characteristic-distance conduction approximation. The central perturbation is an added Gaussian external input to excitatory neurons, with adjustable intensity, spread and pulse duration.</p>
       </div>
       <div>
         <h2>How is the artwork made?</h2>
@@ -293,7 +293,7 @@
     const vE = new Float32Array(LEN), vI = new Float32Array(LEN);
     const eTrace = new Float32Array(LEN), iTrace = new Float32Array(LEN);
     const refE = new Uint8Array(LEN), refI = new Uint8Array(LEN);
-    const blurE = new Float32Array(LEN), blurI = new Float32Array(LEN);
+    const blurE = new Float32Array(LEN), blurI = new Float32Array(LEN), blurILocal = new Float32Array(LEN);
     const blurScratch = new Float32Array(LEN), imageSmooth = new Float32Array(LEN);
     const adaptE = new Float32Array(LEN), adaptI = new Float32Array(LEN);
     const uE = new Float32Array(LEN), uI = new Float32Array(LEN);
@@ -368,6 +368,7 @@
     let randomState = 1, stepCount = 0, lastSpikesE = 0, running = true;
     let stimRemaining = 0, stimAmplitude = 0, stimRadiusActive = 5, lastPulseEnd = -1;
     let stimHistory = [], parameterHistory = [], initialCoupling = {...cfg};
+    let initialPropagation={baselineDelay:0,conductionSpeed:16};
     let frameId = null;
     function reseed(seed) { randomState = (seed >>> 0) || 1; }
     function rand() {
@@ -424,7 +425,7 @@
       iDelayRing.set(iTrace,traceOffset);
       blurWrap(historyField(eDelayRing,effectiveDelay(cfg.local)),blurE,cfg.local);
       blurWrap(historyField(iDelayRing,effectiveDelay(cfg.radius)),blurI,cfg.radius);
-      const recurrentILocal=historyField(iDelayRing,synDelay);
+      blurWrap(historyField(iDelayRing,effectiveDelay(cfg.local)),blurILocal,cfg.local);
       const stimulate = stimRemaining > 0;
       let spikesE = 0,centerSpikes = 0,sumVE=0,sumVI=0;
       for (let j=0; j<LEN; ++j) {
@@ -433,7 +434,7 @@
         const jitterI = (rand()+rand()+rand()-1.5)*0.24;
         const pulse = stimulate ? stimAmplitude*stimMask[j] : 0;
         const netE = cfg.driveE+cfg.exc*blurE[j]-cfg.inh*blurI[j]+jitterE+pulse;
-        const netI = cfg.driveI+cfg.iexc*blurE[j]-cfg.iinh*recurrentILocal[j]+jitterI;
+        const netI = cfg.driveI+cfg.iexc*blurE[j]-cfg.iinh*blurILocal[j]+jitterI;
         let spikeE=0, spikeI=0;
         if(model==='izh') {
           // Izhikevich (2003) quadratic integrate-and-fire with recovery variable.
@@ -891,7 +892,7 @@
         seed=2026;$('seed').value=String(seed);
       }
       reseed(seed);stepCount=0;lastSpikesE=0;
-      stimRemaining=0;stimHistory=[];parameterHistory=[];initialCoupling={...cfg};lastPulseEnd=-1;
+      stimRemaining=0;stimHistory=[];parameterHistory=[];initialCoupling={...cfg};initialPropagation={baselineDelay:synDelay,conductionSpeed};lastPulseEnd=-1;
       waveCount=0;waveLastStep=-1e9;waveCache=null;waveWhole.fill(0);waveCenter.fill(0);
       clearWelch();
       eTrace.fill(0);iTrace.fill(0);refE.fill(0);refI.fill(0);
@@ -921,7 +922,7 @@
       $('synDelayValue').textContent=String(synDelay);
       $('conductionSpeedValue').textContent=conductionSpeed.toFixed(1);
       $('effectiveDelays').textContent='Effective field delay: E = '+effectiveDelay(cfg.local)+
-        ' steps, I = '+effectiveDelay(cfg.radius)+' steps; local I→I = '+synDelay+' steps.';
+        ' steps, I = '+effectiveDelay(cfg.radius)+' steps; local I→I = '+effectiveDelay(cfg.local)+' steps.';
     }
     function updateStimulusLabels() {
       $('stimIntensityValue').textContent=Number($('stimIntensity').value).toFixed(2);
@@ -1027,8 +1028,8 @@
         seed:Number($('seed').value),step:stepCount,grid:[N,N],neurons:LEN*2,
         model:model,model_label:modelLabels[model],
         coupling:{...cfg},initial_coupling:initialCoupling,
-        propagation:{baseline_synaptic_delay_steps:synDelay,conduction_speed_cells_per_step:conductionSpeed,
-          field_delays_steps:{excitatory:effectiveDelay(cfg.local),inhibitory:effectiveDelay(cfg.radius),local_inhibitory_to_inhibitory:synDelay},
+        propagation:{initial:initialPropagation,baseline_synaptic_delay_steps:synDelay,conduction_speed_cells_per_step:conductionSpeed,
+          field_delays_steps:{excitatory:effectiveDelay(cfg.local),inhibitory:effectiveDelay(cfg.radius),local_inhibitory_to_inhibitory:effectiveDelay(cfg.local)},
           approximation:'Characteristic path distance=2*field_radius/3; circular signal-history ring; not an axonal path-resolved simulator.'},
         voltage_analysis:{signals:['spatial mean E membrane voltage','spatial mean I membrane voltage','E-I difference'],
           phase_plane:'population mean E versus population mean I',units:model==='izh'?'model mV':'dimensionless LIF voltage',history_steps:V_HISTORY},
