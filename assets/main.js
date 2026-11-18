@@ -395,24 +395,6 @@ async function initializePublications() {
 
 
 
-function initializeContactForm() {
-  const form = document.getElementById('contact-form');
-  if (!form) return;
-  form.addEventListener('submit', event => {
-    event.preventDefault();
-    if (!form.reportValidity()) return;
-    const name = form.querySelector('#contact-name').value.trim();
-    const email = form.querySelector('#contact-email').value.trim();
-    const subject = form.querySelector('#contact-subject').value.trim();
-    const message = form.querySelector('#contact-message').value.trim();
-    const body = 'From: ' + name + ' (' + email + ')' + String.fromCharCode(10,10) + message;
-    const mailto = 'mailto:albertoarturo.vergani@unipv.it?subject=' +
-      encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-    window.location.href = mailto;
-  });
-}
-
 document.getElementById('current-year')?.replaceChildren(String(new Date().getFullYear()));
 initializeNavigation();
 initializePublications();
-initializeContactForm();
