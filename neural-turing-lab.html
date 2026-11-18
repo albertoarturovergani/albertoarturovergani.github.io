@@ -45,6 +45,12 @@
     .wavelet-scale-gradient{height:7px;flex:0 1 125px;border-radius:99px;background:linear-gradient(90deg,#071837,#14549c,#84badf,#f5e9c8,#f38b8e,#bf236a)}
     .wavelet-explainer{font-size:11px;line-height:1.6;color:#9aafcc;margin:5px 1px 0}
     .wavelet-info{color:#c6d9f6}
+
+    .preset-desc{margin:-9px 0 17px;color:#abbcda;font-size:11.5px;line-height:1.6}
+    .propagation-note{color:#a8bfda;line-height:1.55;margin:6px 0 2px;font-size:11px}
+    .spectral-description{margin:4px 0 9px;color:#abc0da;font-size:11px;line-height:1.6}
+    .spectral-description strong{color:#ddeafc}
+    .spectral-chart-caption{margin:8px 0 1px;font-size:11px;color:#a9bfdb;line-height:1.5}
     .live-dot{width:7px;height:7px;border-radius:100%;background:#95efc8;display:inline-block;margin-right:8px;box-shadow:0 0 9px #95efc8}
     .live-dot.pause{background:#bac7de;box-shadow:none}
     .side{padding:23px}
@@ -114,7 +120,7 @@
         <section class="wavelet-panel" aria-label="Real-time wavelet spectral analysis">
           <div class="wavelet-heading">
             <div>
-              <h2>Wavelet PSD <span aria-hidden="true">·</span> live</h2>
+              <h2>Live dynamics and spectral analysis</h2>
               <p id="waveletInfo" class="wavelet-info" aria-live="off">Collecting spike activity…</p>
             </div>
             <div class="wavelet-tools">
@@ -123,19 +129,38 @@
                 <option value="center" selected>Central E region</option>
                 <option value="whole">Whole E network</option>
               </select>
-              <button id="waveletExport" type="button" disabled>↓ Save CSV</button>
+              <label for="analysisStepMs">Nominal Δt</label>
+              <select id="analysisStepMs" aria-label="Nominal analysis time per simulation step">
+                <option value="5">5 ms/step</option>
+                <option value="10" selected>10 ms/step</option>
+                <option value="20">20 ms/step</option>
+              </select>
+              <button id="meanPSDExport" type="button" disabled>↓ Save 5 s PSD</button>
+              <button id="waveletExport" type="button" disabled>↓ Save wavelet CSV</button>
             </div>
           </div>
           <div class="wavelet-chart">
-            <h3>Wavelet-derived PSD · time-averaged power</h3>
-            <canvas id="waveletPSD" width="760" height="218" role="img" aria-label="Live wavelet-derived spectral power of the selected excitatory spike-rate signal versus frequency in cycles per simulation step"></canvas>
+            <h3>5 s rolling mean PSD · Welch estimate</h3>
+            <p id="meanPSDInfo" class="spectral-description">Collecting the first 5-second analysis window…</p>
+            <canvas id="meanPSD" width="760" height="220" role="img" aria-label="Live five-second rolling Welch PSD of excitatory population spike rate"></canvas>
+            <p class="spectral-chart-caption">Hann-windowed, mean-detrended periodograms, 50% overlap. Sliding window: 5 seconds in the chosen nominal analysis timebase, not wall-clock time.</p>
           </div>
           <div class="wavelet-chart">
             <h3>Morlet scalogram · time–frequency power</h3>
             <div class="wavelet-scale"><span>Low</span><span class="wavelet-scale-gradient" aria-hidden="true"></span><span>High power (fixed log scale)</span></div>
             <canvas id="waveletMap" width="760" height="280" role="img" aria-label="Live continuous Morlet wavelet time–frequency power map with stimulation onset markers"></canvas>
           </div>
-          <p class="wavelet-explainer">Signal: fraction of excitatory neurons spiking at each simulation step, measured in the central patch (radius 10 cells) or across the full lattice. Morlet CWT, updated approximately every 84 simulation steps; the PSD is a <strong>relative wavelet-power estimate</strong> averaged across the displayed time window. Frequencies are in <strong>cycles/step, not Hz</strong>, because the three exploratory models do not share a calibrated biological timebase. Wavelet edge estimates are approximate; orange lines mark stimulus onsets.</p>
+          <div class="wavelet-chart">
+            <h3>E–I phase plane · mean membrane potential trajectory</h3>
+            <canvas id="phasePlane" width="760" height="275" role="img" aria-label="Real-time population phase-plane trajectory of mean excitatory versus inhibitory neuron membrane potentials"></canvas>
+          </div>
+          <div class="wavelet-chart">
+            <h3>E/I voltage balance · live</h3>
+            <p id="voltageInfo" class="spectral-description">Collecting membrane-potential samples…</p>
+            <canvas id="voltageBalance" width="760" height="312" role="img" aria-label="Live mean excitatory and inhibitory membrane potential traces, with voltage difference beneath"></canvas>
+            <p class="spectral-chart-caption">Phase plane: horizontal E voltage, vertical I voltage. Voltage balance: mean E and I on the upper axis, E − I on a separate lower axis. Voltages are dimensionless for LIF / adaptive LIF, and model mV for Izhikevich.</p>
+          </div>
+          <p class="wavelet-explainer">Nominal Δt changes the spectral analysis clock and the 5-second Welch window, <strong>not the neural simulation equations</strong>. Nominal Hz is not calibrated physiological Hz. Signal: fraction of excitatory neurons spiking at each simulation step, measured in the central patch (radius 10 cells) or across the full lattice. Morlet CWT, updated approximately every 84 simulation steps; the PSD is a <strong>relative wavelet-power estimate</strong> averaged across the displayed time window. Frequencies are in <strong>cycles/step, not Hz</strong>, because the three exploratory models do not share a calibrated biological timebase. Wavelet edge estimates are approximate; orange lines mark stimulus onsets.</p>
         </section>
       </section>
       <aside class="side" aria-label="Simulation controls">
@@ -154,6 +179,7 @@
           <button data-preset="maze" aria-pressed="false">Labyrinth</button>
           <button data-preset="islands" aria-pressed="false">Islands</button>
         </div>
+        <p id="presetDescription" class="preset-desc">Spots: E→I = 13, local E radius = 2, inhibitory radius = 8. Often isolated patches.</p>
         <div class="control">
           <div class="labelrow"><label for="exc">Local excitation (E → E)</label><output id="excValue">13.0</output></div>
           <input type="range" id="exc" min="9" max="18" value="13" step="0.5" />
@@ -165,10 +191,26 @@
           <div class="hint">Strength of inhibition delivered by the inhibitory population</div>
         </div>
         <div class="control">
+          <div class="labelrow"><label for="iinh">Recurrent inhibition (I → I)</label><output id="iinhValue">0.70</output></div>
+          <input id="iinh" type="range" min="0" max="2.5" value="0.7" step="0.05" />
+          <div class="hint">Strength of local self-inhibitory feedback within the inhibitory population.</div>
+        </div>
+        <div class="control">
           <div class="labelrow"><label for="radius">Inhibitory radius (cells)</label><output id="radiusValue">8</output></div>
           <input type="range" id="radius" min="4" max="13" value="8" step="1" />
           <div class="hint">Larger radii produce more spatially extended interactions</div>
         </div>
+        <div class="section-title">Propagation and delay</div>
+        <div class="control">
+          <div class="labelrow"><label for="synDelay">Baseline synaptic delay (steps)</label><output id="synDelayValue">0</output></div>
+          <input id="synDelay" type="range" min="0" max="12" value="0" step="1" />
+        </div>
+        <div class="control">
+          <div class="labelrow"><label for="conductionSpeed">Conduction speed (cells/step)</label><output id="conductionSpeedValue">16.0</output></div>
+          <input id="conductionSpeed" type="range" min="0.5" max="16" value="16" step="0.5" />
+        </div>
+        <p class="propagation-note" id="effectiveDelays">Effective delays E: 0 steps, I: 0 steps.</p>
+        <p class="propagation-note">Approximation: characteristic pathway distance ≈ ⅔ of each coupling radius; these are lattice cells/step, not physical m/s. Changes apply without resetting the ongoing dynamics.</p>
         <div class="control">
           <div class="labelrow"><label for="seed">Random seed</label></div>
           <input type="number" id="seed" min="1" max="2147483647" step="1" value="2026" inputmode="numeric" />
