@@ -27,6 +27,9 @@
     canvas{display:block;width:100%;height:100%;object-fit:contain}
     .corner-label{position:absolute;top:13px;left:13px;background:rgba(8,15,28,.7);backdrop-filter:blur(7px);border:1px solid rgba(235,242,255,.16);padding:7px 10px;border-radius:7px;color:#fff;font-size:11px;letter-spacing:.08em;text-transform:uppercase;pointer-events:none}
     .art-caption{margin:14px 1px 2px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;color:var(--muted);font-size:12px}
+    .render-detail{display:inline-flex;align-items:center;gap:7px;flex-wrap:wrap}
+    .render-detail label{margin:0;font-size:11px;color:#bdcee9}
+    .render-detail select{background:#101d32;border:1px solid #3b5172;color:#e1efff;border-radius:7px;padding:5px 8px;font-size:11px}
 
     /* Real-time CWT analysis, kept beneath the generated image. */
     .wavelet-panel{margin-top:21px;padding:18px 2px 2px;border-top:1px solid var(--line)}
@@ -121,6 +124,12 @@
         <div class="art-caption">
           <span><span id="led" class="live-dot"></span><span id="status" role="status" aria-live="polite">Simulating</span></span>
           <span>Blue = low activity · White = intermediate · Red = high activity</span>
+          <span class="render-detail"><label for="renderDetail">Image detail</label>
+            <select id="renderDetail" aria-label="Choose sharp or smooth display">
+              <option value="sharp" selected>Sharp · no blur</option>
+              <option value="smooth">Smooth</option>
+            </select>
+          </span>
         </div>
         <section class="wavelet-panel" aria-label="Real-time wavelet spectral analysis">
           <div class="wavelet-heading">
@@ -164,7 +173,7 @@
             <canvas id="voltageBalance" width="760" height="312" role="img" aria-label="Live mean excitatory and inhibitory membrane potential traces, with voltage difference beneath"></canvas>
             <p class="spectral-chart-caption">Phase plane: horizontal E voltage, vertical I voltage. Voltage balance: mean E and I on the upper axis, E − I on a separate lower axis. Voltages are dimensionless for LIF / adaptive LIF, and model mV for Izhikevich.</p>
           </div>
-          <p class="wavelet-explainer">Nominal Δt changes the spectral analysis clock and the 5-second Welch window, <strong>not the neural simulation equations</strong>. Even at 500 Hz Nyquist, nominal Hz is <strong>not calibrated physiological Hz</strong>. Signal: fraction of excitatory neurons spiking at each simulation step, measured in the central patch (radius 10 cells) or across the full lattice. The <strong>5 s mean PSD</strong> uses a moving-window Welch estimate with frequencies in nominal Hz. The <strong>Morlet CWT</strong> is displayed only as a scalogram, updated approximately every 84 simulation steps, with its own axis in cycles/step. Both estimates come from the same actual spike-rate signal. Wavelet edge estimates are approximate; orange lines mark stimulus onsets.</p>
+          <p class="wavelet-explainer">Nominal Δt changes the spectral analysis clock and the 5-second Welch window, <strong>not the neural simulation equations</strong>. Even at 500 Hz Nyquist, nominal Hz is <strong>not calibrated physiological Hz</strong>. Signal: fraction of excitatory neurons spiking at each simulation step, measured in the central patch (radius 22 cells) or across the full lattice. The <strong>5 s mean PSD</strong> uses a moving-window Welch estimate with frequencies in nominal Hz. The <strong>Morlet CWT</strong> is displayed only as a scalogram, updated approximately every 84 simulation steps, with its own axis in cycles/step. Both estimates come from the same actual spike-rate signal. Wavelet edge estimates are approximate; orange lines mark stimulus onsets.</p>
         </section>
       </section>
       <aside class="side" aria-label="Simulation controls">
@@ -184,8 +193,9 @@
           <button data-preset="islands" aria-pressed="false">Islands</button>
           <button data-preset="traveling" aria-pressed="false">Traveling waves</button>
           <button data-preset="spiral" aria-pressed="false">Spiral waves</button>
+          <button data-preset="brunel" aria-pressed="false">Brunel-balanced</button>
         </div>
-        <p id="presetDescription" class="preset-desc">Spots: E→I = 13, local E radius = 2, inhibitory radius = 8. Often isolated patches.</p>
+        <p id="presetDescription" class="preset-desc">Spots: E→I = 13, local E radius = 5, inhibitory radius = 18. Often isolated patches.</p>
         <div id="waveControls" class="wave-controls" hidden>
           <p class="hint">Driven-wave modes: a propagating or rotating spatial input drives the genuine E/I spiking network. Wavefronts are therefore stimulated responses, not proven self-sustaining waves.</p>
           <div class="control">
@@ -218,13 +228,13 @@
           <div class="hint">Inhibitory-to-inhibitory coupling across nearby inhibitory cells (using the local interaction radius).</div>
         </div>
         <div class="control">
-          <div class="labelrow"><label for="radius">Inhibitory radius (cells)</label><output id="radiusValue">8</output></div>
-          <input type="range" id="radius" min="4" max="13" value="8" step="1" />
+          <div class="labelrow"><label for="radius">Inhibitory radius (cells)</label><output id="radiusValue">18</output></div>
+          <input type="range" id="radius" min="6" max="36" value="18" step="1" />
           <div class="hint">Larger radii produce more spatially extended interactions</div>
         </div>
         <div class="control">
-          <div class="labelrow"><label for="local">Local E and I→I radius (cells)</label><output id="localValue">2</output></div>
-          <input type="range" id="local" min="1" max="5" value="2" step="1" />
+          <div class="labelrow"><label for="local">Local E and I→I radius (cells)</label><output id="localValue">5</output></div>
+          <input type="range" id="local" min="2" max="12" value="5" step="1" />
           <div class="hint">Used for E→E, E→I and local I→I coupling; increased in Islands.</div>
         </div>
         <div class="section-title">Propagation and delay</div>
@@ -233,8 +243,8 @@
           <input id="synDelay" type="range" min="0" max="12" value="0" step="1" />
         </div>
         <div class="control">
-          <div class="labelrow"><label for="conductionSpeed">Conduction speed (cells/step)</label><output id="conductionSpeedValue">16.0</output></div>
-          <input id="conductionSpeed" type="range" min="0.5" max="16" value="16" step="0.5" />
+          <div class="labelrow"><label for="conductionSpeed">Conduction speed (cells/step)</label><output id="conductionSpeedValue">36.0</output></div>
+          <input id="conductionSpeed" type="range" min="1" max="60" value="36" step="1" />
         </div>
         <p class="propagation-note" id="effectiveDelays">Effective delays E: 0 steps, I: 0 steps.</p>
         <p class="propagation-note">Approximation: characteristic pathway distance ≈ ⅔ of each coupling radius; these are lattice cells/step, not physical m/s. Changes apply without resetting the ongoing dynamics.</p>
@@ -250,8 +260,8 @@
             <input type="range" id="stimIntensity" min="0.25" max="2.5" step="0.25" value="1" />
           </div>
           <div class="control">
-            <div class="labelrow"><label for="stimRadius">Spatial spread σ (cells)</label><output id="stimRadiusValue">5</output></div>
-            <input type="range" id="stimRadius" min="2" max="12" step="1" value="5" />
+            <div class="labelrow"><label for="stimRadius">Spatial spread σ (cells)</label><output id="stimRadiusValue">11</output></div>
+            <input type="range" id="stimRadius" min="4" max="27" step="1" value="11" />
           </div>
           <div class="control">
             <div class="labelrow"><label for="stimDuration">Duration (simulation steps)</label><output id="stimDurationValue">350</output></div>
@@ -270,7 +280,7 @@
           <button id="config">↓ &nbsp;Save parameters</button>
         </div>
         <div class="stats" aria-label="Simulation data">
-          <div class="stat"><div class="stat-title">Neurons (E + I)</div><div class="stat-value" id="neurons">10,368</div></div>
+          <div class="stat"><div class="stat-title">Neurons (E + I)</div><div class="stat-value" id="neurons">51,200</div></div>
           <div class="stat"><div class="stat-title">Simulation step</div><div class="stat-value" id="step">0</div></div>
           <div class="stat"><div class="stat-title">Mean E activity</div><div class="stat-value" id="activity">0.000</div></div>
           <div class="stat"><div class="stat-title">Neuron model</div><div class="stat-value" id="modelStat">LIF</div></div>
@@ -295,11 +305,11 @@
   <script>
     'use strict';
     // Experimental E/I spatial SNN with interchangeable LIF, adaptive LIF and Izhikevich neuron equations.
-    // 72 × 72 excitatory cells + 72 × 72 inhibitory cells; toroidal lattice.
+    // 160 × 160 excitatory + 160 × 160 inhibitory cells = 51,200; toroidal lattice.
     // Synaptic fields are normalized periodic square-kernel convolutions of the
     // exponential spike traces. This is a model-generating algorithm, not a GIF
     // or a precomputed reaction-diffusion texture.
-    const N = 72, LEN = N * N, DT_ALPHA = 0.17, TRACE_DECAY = 0.90;
+    const N = 160, LEN = N * N, DT_ALPHA = 0.17, TRACE_DECAY = 0.90;
     const canvas = document.getElementById('art');
     const ctx = canvas.getContext('2d', { alpha: false });
     const tiny = document.createElement('canvas'); tiny.width = N; tiny.height = N;
@@ -307,18 +317,20 @@
     const image = tinyCtx.createImageData(N, N);
     const $ = id => document.getElementById(id);
     const presets = {
-      spots:    {exc:13, inh:10, iinh:.7, radius:8, iexc:13, driveE:1.03,driveI:.90,local:2},
-      maze:     {exc:13, inh:10, iinh:.7, radius:8, iexc:5,  driveE:1.03,driveI:.90,local:2},
-      islands:  {exc:13, inh:10, iinh:.7, radius:12,iexc:13, driveE:1.03,driveI:.90,local:3},
-      traveling:{exc:13, inh:10, iinh:.7, radius:8, iexc:13, driveE:0.90,driveI:.90,local:2},
-      spiral:   {exc:13, inh:10, iinh:.7, radius:8, iexc:13, driveE:0.90,driveI:.90,local:2}
+      spots:    {exc:13,inh:10,iinh:.7,radius:18,iexc:13,driveE:1.03,driveI:.90,local:5,poissonRate:0,poissonKick:0},
+      maze:     {exc:13,inh:10,iinh:.7,radius:18,iexc:5, driveE:1.03,driveI:.90,local:5,poissonRate:0,poissonKick:0},
+      islands:  {exc:13,inh:10,iinh:.7,radius:27,iexc:13,driveE:1.03,driveI:.90,local:7,poissonRate:0,poissonKick:0},
+      traveling:{exc:13,inh:10,iinh:.7,radius:18,iexc:13,driveE:.90, driveI:.90,local:5,poissonRate:0,poissonKick:0},
+      spiral:   {exc:13,inh:10,iinh:.7,radius:18,iexc:13,driveE:.90, driveI:.90,local:5,poissonRate:0,poissonKick:0},
+      brunel:   {exc:14,inh:17,iinh:.50,radius:18,iexc:13,driveE:1.05,driveI:.99,local:5,poissonRate:.055,poissonKick:.75}
     };
     const presetDescriptions=Object.freeze({
-      spots:'Spots: E→I = 13, local E radius = 2, inhibitory radius = 8. Often isolated patches.',
-      maze:'Labyrinth: E→I = 5, local E radius = 2, inhibitory radius = 8. Often interlinked bands.',
-      islands:'Islands: E→I = 13, local E radius = 3, inhibitory radius = 12. Larger spatial scales.',
-      traveling:'Traveling waves: a moving plane-wave drive excites the recurrent spiking lattice. This is an externally driven wave response.',
-      spiral:'Spiral waves: a rotating, radially varying drive excites the recurrent spiking lattice. This is an externally driven spiral response.'
+      spots:'Spots: E→I = 13, local E radius = 5, inhibitory radius = 18. Often isolated patches.',
+      maze:'Labyrinth: E→I = 5, local E radius = 5, inhibitory radius = 18. Often interlinked bands.',
+      islands:'Islands: E→I = 13, local E radius = 7, inhibitory radius = 27. Larger spatial scales.',
+      traveling:'Traveling waves: moving-plane external drive through the recurrent spiking lattice. Driven, not demonstrated self-sustaining propagation.',
+      spiral:'Spiral waves: rotating spiral-shaped external drive through the recurrent spiking lattice. Driven, not demonstrated self-sustaining spirals.',
+      brunel:'Brunel-inspired balanced: stronger inhibition and stochastic external input encourage irregular E/I activity. Lattice approximation, not a Brunel random sparse graph.'
     });
     const cfg = {...presets.spots};
     const waveCos=new Float32Array(LEN),waveSin=new Float32Array(LEN),waveMask=new Float32Array(LEN);
@@ -331,11 +343,11 @@
       for(let y=0;y<N;y++)for(let x=0;x<N;x++){
         const dx=x-mid,dy=y-mid,r=Math.hypot(dx,dy),j=y*N+x;
         const phase=waveMode==='traveling'
-          ?(2*Math.PI)*(dx/26+dy/132)
-          :Math.atan2(dy,dx)+(2*Math.PI)*r/24;
+          ?(2*Math.PI)*(dx/58+dy/293)
+          :Math.atan2(dy,dx)+(2*Math.PI)*r/53;
         waveCos[j]=Math.cos(phase);
         waveSin[j]=Math.sin(phase);
-        waveMask[j]=waveMode==='spiral'?r*r/(r*r+9):1;
+        waveMask[j]=waveMode==='spiral'?r*r/(r*r+44):1;
       }
     }
     const vE = new Float32Array(LEN), vI = new Float32Array(LEN);
@@ -352,7 +364,7 @@
     const eDelayRing=new Float32Array(LEN*D_RING);
     const iDelayRing=new Float32Array(LEN*D_RING);
     const zeroTrace=new Float32Array(LEN);
-    let synDelay=0,conductionSpeed=16;
+    let synDelay=0,conductionSpeed=36;
     function effectiveDelay(radius){
       return Math.min(D_RING-1,synDelay+Math.round(2*radius/(3*conductionSpeed)));
     }
@@ -375,7 +387,7 @@
     let centerCellCount=0;
     for(let y=0;y<N;y++) for(let x=0;x<N;x++){
       const dx=x-(N-1)/2,dy=y-(N-1)/2;
-      if(dx*dx+dy*dy<=100){centerMask[y*N+x]=1;centerCellCount++;}
+      if(dx*dx+dy*dy<=484){centerMask[y*N+x]=1;centerCellCount++;}
     }
     const W_HISTORY=512, W_BANDS=22, W_COLUMNS=96, W_MIN=1/64, W_MAX=1/6, W_OMEGA=6;
     const W_LOG_MIN=-8, W_LOG_MAX=-2;
@@ -414,9 +426,9 @@
     const modelLabels = {lif:'LIF',alif:'Adaptive LIF',izh:'Izhikevich'};
     let model = 'lif';
     let randomState = 1, stepCount = 0, lastSpikesE = 0, running = true;
-    let stimRemaining = 0, stimAmplitude = 0, stimRadiusActive = 5, lastPulseEnd = -1;
+    let stimRemaining = 0, stimAmplitude = 0, stimRadiusActive = 11, lastPulseEnd = -1;
     let stimHistory = [], parameterHistory = [], initialCoupling = {...cfg};
-    let initialPropagation={baselineDelay:0,conductionSpeed:16};
+    let initialPropagation={baselineDelay:0,conductionSpeed:36};
     let frameId = null;
     function reseed(seed) { randomState = (seed >>> 0) || 1; }
     function rand() {
@@ -927,17 +939,19 @@
         ' · ΔV '+(meanLastVE-meanLastVI).toFixed(3)+' ('+units+') · '+tr.n+' steps';
     }
     function render() {
-      blurWrap(eTrace, imageSmooth, 1); // Display smoothing only.
+      const sharp=$('renderDetail').value==='sharp';
+      if(!sharp)blurWrap(eTrace,imageSmooth,1); // Optional display-only smoothing.
+      const displayTrace=sharp?eTrace:imageSmooth;
       let mean=0;
       for(let i=0;i<LEN;i++) {
         mean+=eTrace[i];
-        const normalized = Math.max(0,Math.min(1,(imageSmooth[i]-.008)/.185));
+        const normalized = Math.max(0,Math.min(1,(displayTrace[i]-.008)/.185));
         const c = LUT[Math.round(normalized*255)];
         const k=i*4;
         image.data[k]=c[0];image.data[k+1]=c[1];image.data[k+2]=c[2];image.data[k+3]=255;
       }
       tinyCtx.putImageData(image,0,0);
-      ctx.imageSmoothingEnabled=true;
+      ctx.imageSmoothingEnabled=!sharp;
       ctx.clearRect(0,0,canvas.width,canvas.height);
       ctx.drawImage(tiny,0,0,canvas.width,canvas.height);
       if(stimRemaining>0) {
@@ -963,7 +977,8 @@
       frameId=null;
       if (!running) return;
       // Simulation is deliberately bounded per animation frame to keep UI responsive.
-      for(let i=0;i<7;i++) runOneStep();
+      // Cap per-frame steps for responsiveness on ~50k-neuron networks.
+      for(let i=0;i<2;i++) runOneStep();
       render();
       frameId=requestAnimationFrame(loop);
     }
@@ -1066,6 +1081,7 @@
       });
     }
     for(const name of ['stimIntensity','stimRadius','stimDuration']) $(name).addEventListener('input',updateStimulusLabels);
+    $('renderDetail').addEventListener('change',render);
     $('stimulate').addEventListener('click',triggerStimulus);
     $('waveletRegion').addEventListener('change',()=>{
       renderWavelet(true);renderMeanPSD(true);
@@ -1133,9 +1149,13 @@
         seed:Number($('seed').value),step:stepCount,grid:[N,N],neurons:LEN*2,
         model:model,model_label:modelLabels[model],
         coupling:{...cfg},initial_coupling:initialCoupling,
+        spatial_sampling:{excitatory_grid:[N,N],inhibitory_grid:[N,N],total_neurons:LEN*2,
+          visual_mode:$('renderDetail').value,display_blur_radius_cells:$('renderDetail').value==='sharp'?0:1},
+        brunel_inspired_mode:{enabled:cfg.poissonRate>0,stochastic_kick_probability_per_step:cfg.poissonRate,
+          stochastic_kick_strength:cfg.poissonKick,caveat:'Spatial 1:1 E/I lattice with stochastic external kicks and stronger inhibition; not a classic Brunel 2000 random sparse 4:1 E/I network.'},
         wave_drive:{mode:waveMode,period_steps:wavePeriod,amplitude:waveAmplitude,
           implementation:waveMode==='none'?'none':'external rotating/propagating phase-dependent input added to E neuron drive; active spiking response, not demonstrated self-sustaining wave',
-          geometry:waveMode==='traveling'?'plane wave, x pitch 26 cells (slightly tilted)':waveMode==='spiral'?'one-arm theta + radial phase winding (radial pitch 24 cells)':'none'},
+          geometry:waveMode==='traveling'?'plane wave, x pitch 58 cells (slightly tilted)':waveMode==='spiral'?'one-arm theta + radial phase winding (radial pitch 53 cells)':'none'},
         propagation:{initial:initialPropagation,baseline_synaptic_delay_steps:synDelay,conduction_speed_cells_per_step:conductionSpeed,
           field_delays_steps:{excitatory:effectiveDelay(cfg.local),inhibitory:effectiveDelay(cfg.radius),local_inhibitory_to_inhibitory:effectiveDelay(cfg.local)},
           approximation:'Characteristic path distance=2*field_radius/3; circular signal-history ring; not an axonal path-resolved simulator.'},
@@ -1150,7 +1170,7 @@
           detrending:'per-segment mean',fft_length:analysisDt()<=.5?2048:1024,
           plot:{frequency_min_nominal_hz:1,frequency_max_nominal_hz:500,x_scale:'log',y_scale:'log',exclude_dc:true},
           units:'spike fraction squared / nominal Hz (NOT calibrated physiological Hz)'},
-        spectral_analysis:{signal:$('waveletRegion').value==='center'?'mean excitatory spike fraction within central 10-cell radius':'mean excitatory spike fraction across the whole E population',method:'complex Morlet CWT (omega0=6); edge-aware local mean removal; relative power normalized by kernel energy and scale',history_steps:W_HISTORY,frequency_bands:W_BANDS,time_columns:W_COLUMNS,min_frequency_cycles_per_step:W_MIN,max_frequency_cycles_per_step:W_MAX,update_interval_steps:84,units:'cycles per simulation step, NOT calibrated Hz',spectrum:'Morlet CWT scalogram only; wavelet-averaged PSD display intentionally removed'},
+        spectral_analysis:{signal:$('waveletRegion').value==='center'?'mean excitatory spike fraction within central 22-cell radius':'mean excitatory spike fraction across the whole E population',method:'complex Morlet CWT (omega0=6); edge-aware local mean removal; relative power normalized by kernel energy and scale',history_steps:W_HISTORY,frequency_bands:W_BANDS,time_columns:W_COLUMNS,min_frequency_cycles_per_step:W_MIN,max_frequency_cycles_per_step:W_MAX,update_interval_steps:84,units:'cycles per simulation step, NOT calibrated Hz',spectrum:'Morlet CWT scalogram only; wavelet-averaged PSD display intentionally removed'},
         note:'To reproduce a run, use this HTML implementation, seed, model, coupling values, parameter change events and scheduled stimulus pulse events. Step counts are discrete and not calibrated as milliseconds.'
       };
       downloadBlob(new Blob([JSON.stringify(saved,null,2)],{type:'application/json'}),`neural-turing-seed-${$('seed').value}.json`);
