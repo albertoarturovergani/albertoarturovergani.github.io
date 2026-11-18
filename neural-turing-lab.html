@@ -383,12 +383,12 @@
     let waveCount=0,waveLastStep=-1e9,waveCache=null;
     const waveMapCtx=$('waveletMap').getContext('2d');
     // A Welch PSD computed on the last 5 nominal seconds, distinct from CWT.
-    const P_RING=1000,P_WINDOW_MS=5000,P_INTERVAL=84;
+    const P_RING=10000,P_WINDOW_MS=5000,P_INTERVAL=84;
     const pWhole=new Float32Array(P_RING),pCenter=new Float32Array(P_RING);
     const meanPSDCtx=$('meanPSD').getContext('2d');
     const welchKernels={};
     let pIndex=0,pFilled=0,pLastStep=-1e9,pCache=null;
-    function analysisDt(){return Number($('analysisStepMs').value)||10;}
+    function analysisDt(){return Number($('analysisStepMs').value)||1;}
     function requiredPsdSamples(){return Math.round(P_WINDOW_MS/analysisDt());}
     function clearWelch(){
       pWhole.fill(0);pCenter.fill(0);pIndex=0;pFilled=0;pLastStep=-1e9;pCache=null;
@@ -662,22 +662,41 @@
 
     function welchKernel(nfft){
       if(welchKernels[nfft])return welchKernels[nfft];
-      const half=nfft/2,twCos=new Float64Array((half+1)*nfft);
-      const twSin=new Float64Array((half+1)*nfft);
       const hann=new Float64Array(nfft);
       let energy=0;
       for(let j=0;j<nfft;j++){
-        hann[j]=.5-.5*Math.cos(2*Math.PI*j/(nfft-1));
-        energy+=hann[j]*hann[j];
+        const w=.5-.5*Math.cos(2*Math.PI*j/(nfft-1));
+        hann[j]=w;energy+=w*w;
       }
-      for(let k=1;k<=half;k++){
-        const o=k*nfft;
-        for(let j=0;j<nfft;j++){
-          const angle=2*Math.PI*k*j/nfft;
-          twCos[o+j]=Math.cos(angle);twSin[o+j]=Math.sin(angle);
+      return (welchKernels[nfft]={half:nfft/2,hann,energy});
+    }
+    // Iterative Cooley–Tukey radix-2 FFT for browser-friendly 5 s Welch windows.
+    function fftInPlace(re,im){
+      const n=re.length;
+      for(let i=1,j=0;i<n;i++){
+        let bit=n>>1;
+        while(j&bit){j^=bit;bit>>=1;}
+        j^=bit;
+        if(i<j){
+          const r=re[i];re[i]=re[j];re[j]=r;
+          const q=im[i];im[i]=im[j];im[j]=q;
         }
       }
-      return (welchKernels[nfft]={half,twCos,twSin,hann,energy});
+      for(let len=2;len<=n;len*=2){
+        const angle=-2*Math.PI/len,wrStep=Math.cos(angle),wiStep=Math.sin(angle);
+        for(let start=0;start<n;start+=len){
+          let wr=1,wi=0;
+          const half=len>>1;
+          for(let k=0;k<half;k++){
+            const a=start+k,b=a+half;
+            const tr=wr*re[b]-wi*im[b],ti=wr*im[b]+wi*re[b];
+            re[b]=re[a]-tr;im[b]=im[a]-ti;
+            re[a]+=tr;im[a]+=ti;
+            const nextWr=wr*wrStep-wi*wiStep;
+            wi=wr*wiStep+wi*wrStep;wr=nextWr;
+          }
+        }
+      }
     }
     function computeMeanPSD(){
       const count=requiredPsdSamples();
@@ -686,63 +705,75 @@
       const sequence=new Float64Array(count);
       const start=(pIndex-count+P_RING)%P_RING;
       for(let i=0;i<count;i++)sequence[i]=sample[(start+i)%P_RING];
-      const nfft=count>=512?256:128,hop=nfft/2,fs=1000/analysisDt();
+      // 1 ms: 1 kHz sampling with 500 Hz Nyquist, 1024-point FFT.
+      // 0.5 ms: 2 kHz sampling, 2048-point FFT; plot is capped at 500 Hz.
+      const dtMs=analysisDt(),nfft=dtMs<=.5?2048:1024;
+      const hop=nfft/2,fs=1000/dtMs;
       const kernel=welchKernel(nfft),bins=kernel.half,psd=new Float64Array(bins+1);
-      const x=new Float64Array(nfft);
+      const re=new Float64Array(nfft),im=new Float64Array(nfft);
       let segments=0;
       for(let begin=0;begin+nfft<=count;begin+=hop){
         let mean=0;
         for(let j=0;j<nfft;j++)mean+=sequence[begin+j];
         mean/=nfft;
-        for(let j=0;j<nfft;j++)x[j]=(sequence[begin+j]-mean)*kernel.hann[j];
+        for(let j=0;j<nfft;j++)re[j]=(sequence[begin+j]-mean)*kernel.hann[j];
+        im.fill(0);
+        fftInPlace(re,im);
         for(let k=1;k<=bins;k++){
-          let re=0,im=0;
-          const off=k*nfft;
-          for(let j=0;j<nfft;j++){
-            re+=x[j]*kernel.twCos[off+j];
-            im-=x[j]*kernel.twSin[off+j];
-          }
-          psd[k]+=(re*re+im*im)/(fs*kernel.energy)*(k===bins?1:2);
+          psd[k]+=(re[k]*re[k]+im[k]*im[k])/(fs*kernel.energy)*(k===bins?1:2);
         }
         segments++;
       }
       if(!segments)return null;
       for(let k=1;k<=bins;k++)psd[k]/=segments;
-      return {psd,nfft,segments,dtMs:analysisDt(),scope:$('waveletRegion').value,windowSamples:count,step:stepCount};
+      return {psd,nfft,segments,dtMs,scope:$('waveletRegion').value,windowSamples:count,step:stepCount};
     }
     function drawMeanPSD(d){
-      const g=meanPSDCtx,c=g.canvas,x=78,y=17,w=c.width-99,h=c.height-63;
+      const g=meanPSDCtx,c=g.canvas,x=79,y=20,w=c.width-105,h=c.height-78;
       waveletGrid(g,x,y,w,h);
-      const half=d.nfft/2,fs=1000/d.dtMs,nyquist=fs/2;
-      let peak=1e-13;
-      for(let k=1;k<=half;k++)peak=Math.max(peak,d.psd[k]);
-      const upper=Math.ceil(Math.log10(peak)),lower=upper-4;
-      g.font='13px system-ui';
-      g.textAlign='right';
-      for(let exponent=lower;exponent<=upper;exponent++){
-        const yy=y+h-(exponent-lower)/4*h;
-        g.strokeStyle='#2e3e5e';g.lineWidth=1;
-        g.beginPath();g.moveTo(x,yy);g.lineTo(x+w,yy);g.stroke();
-        g.fillStyle='#a8bad7';g.fillText('10^'+exponent,x-8,yy+5);
+      const fs=1000/d.dtMs,minFreq=1,maxFreq=500,logWidth=Math.log(maxFreq/minFreq);
+      const px=f=>x+w*Math.log(f/minFreq)/logWidth;
+      let peak=1e-16,minPositive=Infinity;
+      for(let k=1;k<d.psd.length;k++){
+        const f=k*fs/d.nfft;
+        if(f<minFreq||f>maxFreq+1e-9)continue;
+        const p=d.psd[k];
+        if(p>0){peak=Math.max(peak,p);minPositive=Math.min(minPositive,p);}
       }
-      g.textAlign='center';
-      for(let q=0;q<=4;q++){
-        const xx=x+w*q/4;
-        g.fillStyle='#a8bad7';g.fillText((nyquist*q/4).toFixed(1),xx,y+h+20);
+      const upper=Math.ceil(Math.log10(peak));
+      const lower=Number.isFinite(minPositive)
+        ?Math.min(upper-3,Math.max(upper-8,Math.floor(Math.log10(minPositive))))
+        :upper-5;
+      const py=power=>{
+        const lg=Math.log10(Math.max(1e-30,power));
+        return y+h-(Math.max(lower,Math.min(upper,lg))-lower)/(upper-lower)*h;
+      };
+      g.font='13px system-ui';
+      for(let exp=lower;exp<=upper;exp++){
+        const yy=py(Math.pow(10,exp));
+        g.strokeStyle='#30445f';g.lineWidth=1;
+        g.beginPath();g.moveTo(x,yy);g.lineTo(x+w,yy);g.stroke();
+        g.fillStyle='#a9bedb';g.textAlign='right';g.fillText('10^'+exp,x-9,yy+4);
+      }
+      for(const f of [1,2,5,10,20,50,100,200,500]){
+        const xx=px(f);
+        g.strokeStyle='#293a53';g.beginPath();g.moveTo(xx,y);g.lineTo(xx,y+h);g.stroke();
+        g.fillStyle='#b9cdea';g.textAlign='center';g.fillText(String(f),xx,y+h+23);
       }
       g.save();g.beginPath();g.rect(x,y,w,h);g.clip();
-      g.beginPath();
-      for(let k=1;k<=half;k++){
-        const xp=x+w*k/half;
-        const val=Math.log10(Math.max(1e-15,d.psd[k]));
-        const yp=y+h-(Math.max(lower,Math.min(upper,val))-lower)/4*h;
-        if(k===1)g.moveTo(xp,yp);else g.lineTo(xp,yp);
+      g.beginPath();let first=true;
+      for(let k=1;k<d.psd.length;k++){
+        const f=k*fs/d.nfft;
+        if(f<minFreq||f>maxFreq+1e-9)continue;
+        const xx=px(f),yy=py(d.psd[k]);
+        if(first){g.moveTo(xx,yy);first=false;}else g.lineTo(xx,yy);
       }
-      g.strokeStyle='#99e3e5';g.lineWidth=2.5;g.lineJoin='round';g.stroke();g.restore();
-      g.fillStyle='#bccce5';g.textAlign='center';g.font='13px system-ui';
-      g.fillText('Nominal frequency (Hz)',x+w/2,c.height-6);
-      g.save();g.translate(16,y+h/2);g.rotate(-Math.PI/2);
-      g.fillText('Spike fraction²/nominal Hz',0,0);g.restore();g.textAlign='left';
+      g.strokeStyle='#a1e8e7';g.lineWidth=2.5;g.lineJoin='round';g.stroke();
+      g.restore();
+      g.fillStyle='#c2d3ee';g.font='13px system-ui';g.textAlign='center';
+      g.fillText('Nominal frequency (Hz, log scale)',x+w/2,c.height-10);
+      g.save();g.translate(15,y+h/2);g.rotate(-Math.PI/2);
+      g.fillText('PSD (fraction²/nominal Hz, log)',0,0);g.restore();g.textAlign='left';
     }
     function renderMeanPSD(force){
       const needed=requiredPsdSamples();
@@ -1047,9 +1078,13 @@
         '# model='+model+', seed='+$('seed').value+', scope='+data.scope+', step='+stepCount,
         '# nominal step time='+data.dtMs+' ms, duration=5 s; not a biologically calibrated timebase',
         '# nfft='+data.nfft+', overlap=50%, segments='+data.segments+', Hann window, segment mean removed',
+        '# log-log chart range=1..500 nominal Hz; zero frequency excluded',
         'nominal_frequency_hz,power_spike_fraction_squared_per_nominal_hz'
       ];
-      for(let k=1;k<data.psd.length;k++)rows.push((k*fs/data.nfft).toPrecision(10)+','+data.psd[k].toExponential(10));
+      for(let k=1;k<data.psd.length;k++){
+        const f=k*fs/data.nfft;
+        if(f>=1&&f<=500+1e-9)rows.push(f.toPrecision(10)+','+data.psd[k].toExponential(10));
+      }
       downloadBlob(new Blob([rows.join('\n')+'\n'],{type:'text/csv;charset=utf-8'}),
         'neural-turing-welch-5s-'+model+'-'+data.scope+'-step-'+stepCount+'.csv');
     });
@@ -1112,7 +1147,9 @@
         parameter_change_events:parameterHistory,
         mean_psd_5s:{method:'Welch',duration_nominal_seconds:5,nominal_timestep_ms:analysisDt(),
           selected_signal:$('waveletRegion').value,window:'Hann',overlap_fraction:0.5,
-          detrending:'per-segment mean',units:'spike fraction squared / nominal Hz (NOT calibrated physiological Hz)'},
+          detrending:'per-segment mean',fft_length:analysisDt()<=.5?2048:1024,
+          plot:{frequency_min_nominal_hz:1,frequency_max_nominal_hz:500,x_scale:'log',y_scale:'log',exclude_dc:true},
+          units:'spike fraction squared / nominal Hz (NOT calibrated physiological Hz)'},
         spectral_analysis:{signal:$('waveletRegion').value==='center'?'mean excitatory spike fraction within central 10-cell radius':'mean excitatory spike fraction across the whole E population',method:'complex Morlet CWT (omega0=6); edge-aware local mean removal; relative power normalized by kernel energy and scale',history_steps:W_HISTORY,frequency_bands:W_BANDS,time_columns:W_COLUMNS,min_frequency_cycles_per_step:W_MIN,max_frequency_cycles_per_step:W_MAX,update_interval_steps:84,units:'cycles per simulation step, NOT calibrated Hz',spectrum:'Morlet CWT scalogram only; wavelet-averaged PSD display intentionally removed'},
         note:'To reproduce a run, use this HTML implementation, seed, model, coupling values, parameter change events and scheduled stimulus pulse events. Step counts are discrete and not calibrated as milliseconds.'
       };
