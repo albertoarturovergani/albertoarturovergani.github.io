@@ -34,7 +34,9 @@
 
     /* View modes render the same underlying 2D SNN activity; 3D is illustrative. */
     [hidden]{display:none!important}
-    .view-bar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:10px}
+    .view-bar{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-bottom:10px}
+    .boundary-note{color:#abc7db;font-size:11px;line-height:1.55;margin:2px 2px 12px;padding:10px 12px;border:1px solid #28475d;border-radius:8px;background:#102438}
+    .boundary-note strong{color:#d5e9f4}
     .view-bar button{font-size:12px;padding:10px 6px;min-height:42px;font-weight:650}
     .view-options{display:flex;flex-wrap:wrap;gap:13px;padding:12px;margin-bottom:10px;border:1px solid #354c70;background:#12213b;border-radius:9px}
     .view-control{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:13px;row-gap:6px;width:100%;align-items:center}
@@ -46,6 +48,7 @@
     .view-note{color:#a7b9d7;font-size:11px;line-height:1.55;margin:9px 2px 8px}
     .appearance-control select{width:100%;background:#111e34;border:1px solid #455b7a;border-radius:8px;padding:10px 12px;color:#e5eefc;min-height:42px}
     .stim-panel{margin:10px 0 19px;padding:16px 14px}
+    @media(max-width:640px){.view-bar{grid-template-columns:repeat(3,minmax(0,1fr))}}
     @media(max-width:460px){.view-bar button{font-size:11px;padding:10px 4px}}
 
     /* Real-time CWT analysis, kept beneath the generated image. */
@@ -138,6 +141,8 @@
           <button type="button" class="selected" data-view="2d" aria-pressed="true">2D map</button>
           <button type="button" data-view="surface" aria-pressed="false">3D surface</button>
           <button type="button" data-view="rolled" aria-pressed="false">Rolled sheet</button>
+          <button type="button" data-view="sphere" aria-pressed="false">Sphere</button>
+          <button type="button" data-view="torus" aria-pressed="false">Torus / PBC</button>
         </div>
         <div class="view-options" id="surfaceControls" hidden>
           <div class="view-control"><label for="viewDepth">Relief exaggeration</label><output id="viewDepthValue">1.20×</output><input id="viewDepth" type="range" min="0" max="3" step="0.1" value="1.2"></div>
@@ -151,6 +156,7 @@
           <div class="corner-label" id="viewCorner">Neural activity / E population</div>
         </div>
         <p class="view-note" id="viewNote">2D map of the excitatory spike trace. Change viewing mode to explore graphical 3D projections.</p>
+        <p class="boundary-note"><strong>Boundary conditions:</strong> periodic in both directions (left ↔ right, top ↔ bottom). Local E/I interactions connect one continuous periodic lattice, not every neuron to every other neuron. <strong>Torus</strong> represents this topology; <strong>Sphere</strong> is a visual projection, not an equivalent network geometry.</p>
         <div class="art-caption">
           <span><span id="led" class="live-dot"></span><span id="status" role="status" aria-live="polite">Simulating</span></span>
           <span id="paletteCaption">Classic: blue → white → red (low → high E activity)</span>
@@ -342,11 +348,11 @@
     <section class="about" aria-label="Scientific model and limitations">
       <div>
         <h2>What is simulated?</h2>
-        <p>A recurrent two-population E/I lattice is simulated with your choice of LIF, adaptive LIF (with spike-triggered recovery), or Izhikevich neurons (regular-spiking E and fast-spiking I). All three produce discrete spikes and drive spatial E→E, E→I, I→E and I→I interactions. Recurrent synaptic fields can be delayed using a characteristic-distance conduction approximation. The central perturbation is an added Gaussian external input to excitatory neurons, with adjustable intensity, spread and pulse duration. The Brunel-balanced preset is a <strong>Brunel-inspired inhibition-dominated heuristic</strong> with stochastic external drive inside this equal-sized spatial E/I lattice, not a faithful Brunel sparse random network or proof of a balanced asynchronous irregular state.</p>
+        <p>A single spatially periodic (toroidal) two-population E/I lattice is simulated; the left/right edges and top/bottom edges are identified through wraparound, while synaptic interactions remain spatially local, not all-to-all. The Torus view depicts the periodic topology. The Sphere view is an artistic texture mapping with different geometry. A recurrent two-population E/I lattice is simulated with your choice of LIF, adaptive LIF (with spike-triggered recovery), or Izhikevich neurons (regular-spiking E and fast-spiking I). All three produce discrete spikes and drive spatial E→E, E→I, I→E and I→I interactions. Recurrent synaptic fields can be delayed using a characteristic-distance conduction approximation. The central perturbation is an added Gaussian external input to excitatory neurons, with adjustable intensity, spread and pulse duration. The Brunel-balanced preset is a <strong>Brunel-inspired inhibition-dominated heuristic</strong> with stochastic external drive inside this equal-sized spatial E/I lattice, not a faithful Brunel sparse random network or proof of a balanced asynchronous irregular state.</p>
       </div>
       <div>
         <h2>How is the artwork made?</h2>
-        <p>Colors encode exponentially smoothed excitatory spike traces. Palette, hue, contrast and 3D projection alter the rendering only. The 3D surface and rolled sheet visualize the same 2D numerical field without representing neuronal geometry. The pulse marker is an overlay, while stimulation directly enters neuronal dynamics. Results depend on the model, coupling, stimulus history and random seed. This is an exploratory periodic-lattice SNN, not a validated biological model or proof of a mathematical Turing instability.</p>
+        <p>Colors encode exponentially smoothed excitatory spike traces. Palette, hue, contrast and 3D projection alter the rendering only. The 3D surface, rolled sheet, sphere and torus visualize the same 2D numerical field; none is a neuronal anatomical reconstruction. Only the torus depicts both periodic identifications topologically. The pulse marker is an overlay, while stimulation directly enters neuronal dynamics. Results depend on the model, coupling, stimulus history and random seed. This is an exploratory periodic-lattice SNN, not a validated biological model or proof of a mathematical Turing instability.</p>
       </div>
     </section>
     <footer>
@@ -696,36 +702,68 @@
       const cy=Math.cos(viewYaw),sy=Math.sin(viewYaw),cp=Math.cos(viewPitch),sp=Math.sin(viewPitch);
       const relief=Number($('viewDepth').value),roll=Number($('rollAmount').value)/100;
       const sweep=.1+roll*4.5,rad=2/sweep,scale=Math.min(w,h)*.375,cam=3.8;
+      const closed=activeView==='sphere'||activeView==='torus';
+      // On the torus both coordinates wrap without a seam. The sphere is a
+      // longitude-latitude texture projection and collapses each polar edge;
+      // it does not preserve the square lattice's two independent PBC cycles.
+      let polarNorth=0,polarSouth=0;
+      if(activeView==='sphere'){
+        for(let x=0;x<N;x++){polarNorth+=field[x];polarSouth+=field[(N-1)*N+x];}
+        polarNorth/=N;polarSouth/=N;
+      }
       for(let row=0;row<=GRID3D;row++){
-        const v=row/GRID3D,iy=Math.min(N-1,Math.round(v*(N-1)));
+        const v=row/GRID3D;
+        const iy=closed?(row===GRID3D?0:Math.round(v*N)%N):Math.min(N-1,Math.round(v*(N-1)));
         for(let col=0;col<=GRID3D;col++){
-          const u=col/GRID3D,ix=Math.min(N-1,Math.round(u*(N-1)));
-          const val=Math.max(0,Math.min(1,(field[iy*N+ix]-.008)/.185));
+          const u=col/GRID3D;
+          const ix=closed?(col===GRID3D?0:Math.round(u*N)%N):Math.min(N-1,Math.round(u*(N-1)));
+          const sample=activeView==='sphere'&&row===0?polarNorth:
+            activeView==='sphere'&&row===GRID3D?polarSouth:field[iy*N+ix];
+          const val=Math.max(0,Math.min(1,(sample-.008)/.185));
           let px=(u-.5)*2,py=(.5-v)*2,pz=(val-.47)*relief*.82;
+          let nx=0,ny=0,nz=0;
           if(activeView==='rolled'){
             const a=(u-.5)*sweep;
-            px=rad*Math.sin(a);
-            pz=rad*(Math.cos(a)-1);
+            px=rad*Math.sin(a);pz=rad*(Math.cos(a)-1);
+          }else if(activeView==='sphere'){
+            const lon=2*Math.PI*(u-.5),lat=Math.PI*(.5-v);
+            px=Math.cos(lat)*Math.sin(lon);
+            py=Math.sin(lat);
+            pz=Math.cos(lat)*Math.cos(lon);
+            nx=px;ny=py;nz=pz;
+          }else if(activeView==='torus'){
+            // Immersed 2-torus: θ along X and φ along Y of the periodic grid.
+            // Both dimension endpoints meet their corresponding start points.
+            const theta=2*Math.PI*(u-.5),phi=2*Math.PI*v;
+            const R=.67,r=.31;
+            const ring=R+r*Math.cos(phi);
+            px=ring*Math.cos(theta);py=ring*Math.sin(theta);pz=r*Math.sin(phi);
+            nx=Math.cos(phi)*Math.cos(theta);
+            ny=Math.cos(phi)*Math.sin(theta);
+            nz=Math.sin(phi);
           }
           const rx=cy*px+sy*pz,rz=-sy*px+cy*pz;
           const ry=cp*py-sp*rz,depth=sp*py+cp*rz;
+          const normalDepth=sp*ny+cp*(-sy*nx+cy*nz);
           const perspective=cam/Math.max(1.7,cam-depth);
-          verts.push({x:rx,y:ry,z:depth,px:w/2+rx*scale*perspective,
-            py:h/2-ry*scale*perspective,val});
+          verts.push({x:rx,y:ry,z:depth,nz:normalDepth,
+            px:w/2+rx*scale*perspective,py:h/2-ry*scale*perspective,val});
         }
       }
       const rowStride=GRID3D+1;
       for(let y=0;y<GRID3D;y++)for(let x=0;x<GRID3D;x++){
         const k=y*rowStride+x;
         const a=verts[k],b=verts[k+1],c=verts[k+rowStride+1],d=verts[k+rowStride];
+        // Do not paint the hidden back faces of the closed sphere/torus.
+        if(closed&&(a.nz+b.nz+c.nz+d.nz)<-.05)continue;
         const ux=b.x-a.x,uy=b.y-a.y,uz=b.z-a.z;
         const vx=d.x-a.x,vy=d.y-a.y,vz=d.z-a.z;
-        const nx=uy*vz-uz*vy,ny=uz*vx-ux*vz,nz=ux*vy-uy*vx;
-        const norm=Math.max(1e-6,Math.hypot(nx,ny,nz));
-        const light=Math.max(.5,Math.min(1.03,.82+.21*(nx*.28-ny*.3+nz*.9)/norm));
+        const nnx=uy*vz-uz*vy,nny=uz*vx-ux*vz,nnz=ux*vy-uy*vx;
+        const norm=Math.max(1e-6,Math.hypot(nnx,nny,nnz));
+        const lighting=Math.max(.57,Math.min(1.03,.83+.21*(nnx*.28-nny*.3+nnz*.9)/norm));
         const t=(a.val+b.val+c.val+d.val)*.25;
         const base=LUT[Math.max(0,Math.min(255,Math.round(t*255)))];
-        const color='rgb('+Math.round(base[0]*light)+','+Math.round(base[1]*light)+','+Math.round(base[2]*light)+')';
+        const color='rgb('+Math.round(base[0]*lighting)+','+Math.round(base[1]*lighting)+','+Math.round(base[2]*lighting)+')';
         faces.push({a,b,c,d,depth:(a.z+b.z+c.z+d.z)*.25,color});
       }
       faces.sort((a,b)=>a.depth-b.depth);
@@ -741,7 +779,7 @@
       ctx3d.restore();
     }
     function setView(next){
-      activeView=['2d','surface','rolled'].includes(next)?next:'2d';
+      activeView=['2d','surface','rolled','sphere','torus'].includes(next)?next:'2d';
       canvas.hidden=activeView!=='2d';
       canvas3d.hidden=activeView==='2d';
       $('surfaceControls').hidden=activeView!=='surface';
@@ -751,13 +789,20 @@
         b.classList.toggle('selected',selected);
         b.setAttribute('aria-pressed',String(selected));
       });
-      $('viewCorner').textContent=activeView==='2d'?'Neural activity / E population':
-        activeView==='surface'?'3D activity height map (graphic)':'Rolled 2D activity sheet (graphic)';
-      $('viewNote').textContent=activeView==='2d'
-        ?'2D map of the excitatory spike trace. Change viewing mode to explore graphical 3D projections.'
-        :activeView==='surface'
-          ?'Illustrative 3D height map of the same 2D E activity; relief is a display choice, not neuronal anatomy. Drag or use arrow keys to rotate.'
-          :'Illustrative rolled-sheet projection of the same 2D E activity; curvature is a display choice, not a cortical reconstruction. Drag or use arrow keys to rotate.';
+      $('viewCorner').textContent={
+        '2d':'Neural activity / E population',
+        surface:'3D activity height map (graphic)',
+        rolled:'Rolled 2D activity sheet (graphic)',
+        sphere:'Sphere / illustrative activity projection',
+        torus:'Torus / periodic boundary conditions'
+      }[activeView];
+      $('viewNote').textContent={
+        '2d':'2D E spike-trace field. Both grid axes are periodic; no open spatial boundaries.',
+        surface:'Illustrative 3D height map of the 2D E activity. Relief does not represent neuronal anatomy. Drag or use arrow keys to rotate.',
+        rolled:'Illustrative rolled-sheet projection; an open cylindrical arc does not represent both periodic boundary identifications.',
+        sphere:'Illustrative 2D activity texture projected onto a sphere. Pole compression changes neighborhood geometry; this is NOT the topology of the simulated network.',
+        torus:'Topologically faithful illustration of both periodic axes (left/right and top/bottom). Neurons interact locally on the periodic E/I lattice; surface rendering is illustrative, not anatomical.'
+      }[activeView];
       last3DStep=-Infinity;
       render();
     }
@@ -1395,7 +1440,7 @@
         visualization:{view:activeView,palette:paletteName,hue_shift_degrees:hueShift,contrast_gain:contrastGain,
           relief_exaggeration:Number($('viewDepth').value),roll_percent:Number($('rollAmount').value),
           rotation_yaw_radians:viewYaw,rotation_pitch_radians:viewPitch,
-          interpretation:'Display-only 3D projection of the simulated 2D activity map; no anatomical reconstruction.'},
+          interpretation:'Display-only 3D projection of the simulated 2D activity map; the torus has the same periodic topology, sphere/rolled sheet/height map are artistic projections, none is anatomical.',boundary_conditions:'periodic in X and Y (2-torus topology); local E/I convolution uses wraparound.'},
         coupling:{...cfg},initial_coupling:initialCoupling,
         spatial_sampling:{excitatory_grid:[N,N],inhibitory_grid:[N,N],total_neurons:LEN*2,
           visual_mode:$('renderDetail').value,display_blur_radius_cells:$('renderDetail').value==='sharp'?0:1},

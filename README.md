@@ -98,3 +98,9 @@ The parser in `scripts/build_data.py` retains the exact BibTeX block for each in
 - There is intentionally **no fabricated or automatically extracted abstract** and **no abstract-expansion control**: the supplied BibTeX contains no abstract fields. Bibliographic DOI, source links and Copy BibTeX remain available.
 - The research word cloud now includes explicitly curated semantic families and related-term neighborhoods in `content/wordcloud.json`. Hovering or keyboard-focusing an SVG word smoothly brings related concepts near it, while clicking the word continues to filter the bibliography. Reduced-motion preferences are honored, and mobile visitors keep clickable keywords.
 - The Contact details section links academic profiles and a direct mailto email link.
+
+## November 2026: Obsidian website and topology visualizations
+
+The homepage, Full CV and Publications share a high-contrast black-background theme. Interactive Neural Turing Patterns remains a separate self-contained dark lab.
+
+The neural field has periodic boundary conditions on both X and Y of its E/I lattice (a two-torus). The Torus 3D projection visualizes these identifications; Sphere is an illustrative longitude/latitude activity mapping and is **not** an equivalent network topology. These renderings do not alter the SNN topology or dynamics.

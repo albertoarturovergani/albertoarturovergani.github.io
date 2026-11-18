@@ -260,3 +260,154 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{line-height:1.16}h1,h2{letter-spacing:-.04em}h2
   .hero h1.hero-name-line{font-size:clamp(23px,5.3vw,31px);letter-spacing:-.06em}
   .brand-type strong{font-size:13px}
 }
+
+
+/* SITEWIDE OBSIDIAN THEME: black backgrounds, readable text, teal links.
+   This deliberately applies to the homepage, publications, CV and responsive navigation. */
+:root{
+  color-scheme:dark;
+  --ink:#edf3f8;--ink-2:#dce7f0;--muted:#aebeca;
+  --deep:#b8eee8;--deepest:#030507;--accent:#83dfd5;--teal:#82ded1;
+  --cream:#07090c;--sand:#111820;--white:#f6f9fc;--line:#303d49;
+  --shadow:0 18px 46px rgba(0,0,0,.45);
+}
+html,body{background:#000;color:var(--ink)}
+body{color-scheme:dark}
+.skip-link{background:#15232a;color:#f2fbff;border-color:#80dbd0}
+.site-header{background:rgba(0,0,0,.96);border-bottom-color:#29313c}
+.brand:hover,.brand-type strong{color:#f0f6fa}
+.brand-type small{color:#9cacba}
+.site-nav a{color:#d9e3ed}
+.site-nav .nav-contact,.site-nav .nav-contact:hover{background:#194148;color:#fff;border:1px solid #487b7b}
+.nav-toggle span{background:#eef5f9}
+.site-nav a.active:after{background:#88e4d8}
+.eyebrow,.mini-label{color:#83ded3}
+.text-link{color:#b8eee8;border-color:#84bdb8}
+.text-link:hover{color:#e2fff9;border-color:#b4e8df}
+.hero{background:radial-gradient(circle at 76% 19%,#12202e 0%,transparent 37%),linear-gradient(118deg,#000,#070d17 66%,#000)}
+.hero-lines{opacity:.1}
+.hero h1 span,.hero-lead em{color:#a4e7de}
+.hero-description,.hero-affiliation{color:#bfced8}
+.hero .button-outline{border-color:#70928f;color:#effaf8}
+.identity-strip{background:#05080c;border-color:#25343c}
+.strip-inner>.strip-label,.strip-inner>.research-line-link{color:#b9e7e2}
+.strip-inner>.research-line-link:hover,.strip-inner>.research-line-link:focus-visible{color:#f0fffd}
+.research-section{background:#030508}
+.brain-cloud-word text{fill:#a1dce9!important}
+.brain-cloud-word.is-semantic-neighbor text{fill:#ecf9ff!important}
+.brain-cloud-word:hover text,.brain-cloud-word:focus text{fill:#fff!important;stroke:#222e42}
+.brain-cloud-word:focus-visible text{stroke:#8cd9d4}
+.brain-cloud-loading{color:#b5c9d6}
+.brain-cloud-chip{background:#111a23;border-color:#365765;color:#c7e9f0}
+.brain-cloud-chip:hover,.brain-cloud-chip:focus-visible{background:#1b3442;border-color:#77b6c4;color:#f4ffff}
+.brain-cloud-chip small{background:#263946;color:#c2e7ef}
+.research-card,.featured-card,.education-card,.recognition-entry{
+  background:#11151c;border-color:#303a46;box-shadow:none;color:#edf3f8}
+.research-card:hover,.featured-card:hover{border-color:#528d89}
+.research-aside{background:#101c22;border-color:#477e7b}
+.research-aside strong{color:#e8f5f8}
+.topic-tags span,.bib-topic-tag{background:#1b2e32;color:#afe3dd}
+.selected-section{background:#000}
+.featured-card p,.education-card p,.recognition-entry p{color:#aebecb}
+.featured-venue{border-color:#324452}
+.publication-note{color:#b2c0c9}
+.career-section,.education-section{background:#05080d;border-color:#24303c}
+.career-heading>p:not(.eyebrow),.timeline-item p{color:#aebecb}
+.career-education{border-color:#31404a}
+.career-education strong{color:#e3eeee}
+.career-education span:not(.mini-label),.timeline-item small{color:#a6b8c5}
+.timeline{border-color:#43606a}
+.timeline-item:before{background:#06090d;border-color:#82ded1}
+.education-card p strong{color:#f0f4f9}
+.education-card .education-institution,.education-year,.education-degree{color:#9ce4db}
+.education-more{color:#aebec9}
+.education-thesis-link a{color:#a9e8df}
+.education-thesis-link a:hover{color:#e3fffa}
+.recognition-section,.art-section{background:#000}
+.recognition-group h3,.recognition-entry h4{color:#e8f6f8;border-color:#33404b}
+.recognition-entry a{color:#a8e7e0}
+.art-image,.art-card:first-child .art-image{background:#080c13}
+.art-info h3{color:#f0f4fa}
+.art-info>a{border-color:#50616b;color:#ade6e1}
+.art-image:after{background:#17202be9;color:#f6fbff}
+.art-lab-link{background:#102d34;border-color:#4e8c8b;color:#d9faf4}
+.art-lab-link:hover{background:#1c4c54;border-color:#90d8d0;color:#fff}
+.contact-section{background:radial-gradient(circle at 88% 12%,#0f2227 0%,transparent 41%),#030506}
+.contact-section p:not(.eyebrow){color:#b1c4cb}
+.contact-links>a{border-color:#2e4449}
+.site-footer{background:#000;border-top:1px solid #27343a;color:#c0cbd2}
+/* Publications: filter controls, cards and metadata. */
+.pub-hero{background:radial-gradient(circle at 95% 17%,#101b25,transparent 42%),#040609;border-bottom-color:#25313c}
+.pub-hero h1,.pub-hero-side strong{color:#f0f6f9}
+.pub-hero h1 em,.cv-hero h1 em{color:#9de6db}
+.pub-hero-side{border-color:#304750}
+.pub-hero-side p,.pub-hero-intro{color:#afbdcb}
+.bibliography-section{background:#000}
+.bib-toolbar,.bib-year-group,.bib-item,.bibliography-legend{border-color:#283643}
+.bib-download,.filter-pill,.search-control input,.year-control select,.tag-match-tools select{
+  background:#101720;border-color:#40505d;color:#e1ebf1}
+.bib-download:hover,.filter-pill:hover{border-color:#78c9c1}
+.filter-pill span{color:#b4c0cc}
+.filter-pill.active,.topic-pills .filter-pill.active{background:#20565b;color:#f7ffff;border-color:#59a5a0}
+.filter-pill.active span,.topic-pills .filter-pill.active span{color:#e4ffff}
+.search-control svg{color:#b6ced1}
+.search-control input::placeholder{color:#acb9c2}
+.results-head,.bib-venue{color:#a4b2bd}
+.bib-year-number{color:#b8eee8}
+.bib-authors,.bib-status{color:#bac6d0}
+.bib-category{color:#a7e4db}
+.bib-external{border-color:#516575}
+.bib-external:hover{background:#23474f;color:#fff}
+.bib-external-disabled{color:#8192a0}
+.empty-results{border-color:#4d5f6c;color:#d4e5ed}
+.clear-filters{background:#22545b;color:#fff}
+.noscript-note{background:#19232b;color:#dde8f0}
+.pub-cta{background:#081218}
+.pub-cta p:not(.eyebrow){color:#b9cdd5}
+.featured-topic-links a,.topic-filter-block,.topic-pills .filter-pill,.bib-context,
+.cv-main .cv-source-note,.cv-main .cv-publications-link{
+  background:#101921;border-color:#39515b;color:#d4e6eb}
+.featured-topic-links a:hover{background:#24545b;color:#fff;border-color:#6da9a4}
+.topic-filter-intro p:last-child,.type-filter-intro p:last-child{color:#a4b7c2}
+.topic-filter-label,.topic-filter-block .topic-filter-label{color:#a7e4da}
+.bib-topic-tag:hover,.bib-topic-tag:focus-visible{background:#264e50;color:#fff;border-color:#87c8be}
+.bib-context{color:#dceff4}
+.context-clear,.topic-clear-selection{color:#9ce7de}
+.context-clear:hover,.topic-clear-selection:hover{color:#fff}
+.tag-match-tools{color:#bfd6d9}
+.topic-more{border-color:#334650}
+.topic-more summary{color:#b8efe8}
+.bib-copy-button{background:#132128;border-color:#557a7e;color:#d8faf6}
+.bib-copy-button:hover,.bib-copy-button:focus-visible,.bib-copy-button.is-copied{
+  background:#1c3f45;border-color:#76b6ad;color:#fff}
+.bib-identifier-link,.bib-source-link{color:#a8dce7;text-decoration-color:#4c8290}
+.bib-identifier-link:hover,.bib-source-link:hover{color:#fff}
+.site-update-bar{background:#0d151a;border-color:#2e4146;color:#bacbd4}
+.site-update-inner time{color:#d8f9f3}
+.site-update-inner>span:last-child{color:#a5b3bc}
+/* Complete CV: navigation, body text, links, headings and callouts. */
+.cv-aside{border-color:#30424e}
+.cv-aside a{color:#adbfcd}
+.cv-aside .cv-toc-top{color:#e9f4f8}
+.cv-aside a:hover,.cv-aside a:focus-visible{background:#17343b;color:#e2fffa}
+.cv-main{color:#d5e1e9}
+.cv-main > h2{color:#eaf7f8;border-color:#354651}
+.cv-main > h3,.cv-main h4{color:#e2f0f4}
+.cv-main strong{color:#f0f8fb}
+.cv-main a:not(.cv-artwork){color:#9be1df;text-decoration-color:#5f989a}
+.cv-main a:hover{color:#e6fffd}
+.cv-main .cv-pair{border-color:#2d3c47}
+.cv-main .cv-pair dt{color:#8dd8ce}
+.cv-main .cv-source-note{color:#bed0d9;border-left-color:#6daea3}
+.cv-main .cv-artwork{border-color:#354957}
+.cv-main [style*="color: gray"]{color:#b5c3cf!important}
+.cv-main [style*="color: blue"]{color:#8cceff!important}
+.button-outline-dark{background:#111c23;border-color:#53777c;color:#dff6f4}
+.button-outline-dark:hover{background:#21434a;border-color:#84cfc6;color:#fff}
+.cv-aside .cv-toc-top{border-color:#435965}
+@media(max-width:800px){
+  .site-nav{background:#05070a;border-color:#283943;box-shadow:0 20px 30px #000b}
+  .site-nav a{border-bottom-color:#293943}
+  .site-nav .nav-contact{background:#194148;color:#fff}
+  .cv-aside{border-bottom-color:#354652}
+}

@@ -55,7 +55,7 @@
     const max = Math.max(1, ...items.map(item => Number(item.count) || 0));
     const sorted = [...items].filter(item => item.count > 0)
       .sort((a,b) => b.count - a.count || a.label.localeCompare(b.label));
-    const colors = ['#133b51', '#185872', '#226982', '#277b91', '#397e9c'];
+    const colors = ['#e8faff', '#c8f2fb', '#aae3f3', '#93d5ed', '#81c6e4'];
 
     for (let i = 0; i < sorted.length; i++) {
       const item = sorted[i];
