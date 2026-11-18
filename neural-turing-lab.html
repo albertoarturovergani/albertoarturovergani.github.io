@@ -290,7 +290,7 @@
     <section class="about" aria-label="Scientific model and limitations">
       <div>
         <h2>What is simulated?</h2>
-        <p>A recurrent two-population E/I lattice is simulated with your choice of LIF, adaptive LIF (with spike-triggered recovery), or Izhikevich neurons (regular-spiking E and fast-spiking I). All three produce discrete spikes and drive spatial E→E, E→I, I→E and I→I interactions. Recurrent synaptic fields can be delayed using a characteristic-distance conduction approximation. The central perturbation is an added Gaussian external input to excitatory neurons, with adjustable intensity, spread and pulse duration.</p>
+        <p>A recurrent two-population E/I lattice is simulated with your choice of LIF, adaptive LIF (with spike-triggered recovery), or Izhikevich neurons (regular-spiking E and fast-spiking I). All three produce discrete spikes and drive spatial E→E, E→I, I→E and I→I interactions. Recurrent synaptic fields can be delayed using a characteristic-distance conduction approximation. The central perturbation is an added Gaussian external input to excitatory neurons, with adjustable intensity, spread and pulse duration. The Brunel-balanced preset is a <strong>Brunel-inspired inhibition-dominated heuristic</strong> with stochastic external drive inside this equal-sized spatial E/I lattice, not a faithful Brunel sparse random network or proof of a balanced asynchronous irregular state.</p>
       </div>
       <div>
         <h2>How is the artwork made?</h2>
@@ -500,8 +500,12 @@
         const wavePhase=drivingWave?waveCos[j]*waveCt+waveSin[j]*waveSt:0;
         const waveCrest=drivingWave?Math.max(0,wavePhase):0;
         const waveCurrent=drivingWave?waveAmplitude*waveMask[j]*(waveCrest*waveCrest*waveCrest*waveCrest-.17):0;
-        const netE = cfg.driveE+cfg.exc*blurE[j]-cfg.inh*blurI[j]+jitterE+pulse+waveCurrent;
-        const netI = cfg.driveI+cfg.iexc*blurE[j]-cfg.iinh*blurILocal[j]+jitterI;
+        // Brunel-inspired mode adds independent Bernoulli external excitatory kicks.
+        // Unlike Brunel (2000), recurrent connectivity here remains a local spatial field.
+        const extE=cfg.poissonRate>0&&rand()<cfg.poissonRate?cfg.poissonKick:0;
+        const extI=cfg.poissonRate>0&&rand()<cfg.poissonRate?cfg.poissonKick*.65:0;
+        const netE = cfg.driveE+cfg.exc*blurE[j]-cfg.inh*blurI[j]+jitterE+pulse+waveCurrent+extE;
+        const netI = cfg.driveI+cfg.iexc*blurE[j]-cfg.iinh*blurILocal[j]+jitterI+extI;
         let spikeE=0, spikeI=0;
         if(model==='izh') {
           // Izhikevich (2003) quadratic integrate-and-fire with recovery variable.
