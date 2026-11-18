@@ -82,7 +82,9 @@
     label{display:block;color:#e5ecfb;font-size:13px;font-weight:600;margin-bottom:9px}
     .section-title{font-size:11px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);font-weight:800;margin:20px 0 12px}
     .presets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:19px}
+    .model-presets{grid-template-columns:repeat(2,minmax(0,1fr))}
     .model-presets button{padding:11px 5px;font-size:12px;line-height:1.2}
+    .hh-detail{padding:10px 12px;background:#15283a;border:1px solid #315067;border-radius:8px;margin:-7px 0 20px}
     .wave-presets button{min-height:43px;font-size:11.5px}
     .wave-controls[hidden]{display:none}
     .wave-controls{padding:13px 15px 16px;background:#142541;border:1px solid #3d5679;border-radius:9px;margin:-6px 0 19px}
@@ -207,9 +209,9 @@
             <h3>E/I voltage balance · live</h3>
             <p id="voltageInfo" class="spectral-description">Collecting membrane-potential samples…</p>
             <canvas id="voltageBalance" width="760" height="312" role="img" aria-label="Live mean excitatory and inhibitory membrane potential traces, with voltage difference beneath"></canvas>
-            <p class="spectral-chart-caption">Phase plane: horizontal E voltage, vertical I voltage. Voltage balance: mean E and I on the upper axis, E − I on a separate lower axis. Voltages are dimensionless for LIF / adaptive LIF, and model mV for Izhikevich.</p>
+            <p class="spectral-chart-caption">Phase plane: horizontal E voltage, vertical I voltage. Voltage balance: mean E and I on the upper axis, E − I on a separate lower axis. Voltages are dimensionless for LIF / adaptive LIF, and model mV for Izhikevich / Hodgkin–Huxley.</p>
           </div>
-          <p class="wavelet-explainer">Nominal Δt changes the spectral analysis clock and the 5-second Welch window, <strong>not the neural simulation equations</strong>. Even at 500 Hz Nyquist, nominal Hz is <strong>not calibrated physiological Hz</strong>. Signal: fraction of excitatory neurons spiking at each simulation step, measured in the central patch (radius 22 cells) or across the full lattice. The <strong>5 s mean PSD</strong> uses a moving-window Welch estimate with frequencies in nominal Hz. The <strong>Morlet CWT</strong> is displayed only as a scalogram, updated approximately every 84 simulation steps, with its own axis in cycles/step. Both estimates come from the same actual spike-rate signal. Wavelet edge estimates are approximate; orange lines mark stimulus onsets.</p>
+          <p class="wavelet-explainer">Nominal Δt changes the spectral analysis clock and the 5-second Welch window, <strong>not the neural simulation equations</strong>. HH membrane integration advances 0.10 model ms per network step; the nominal plotting Δt is independent and the nominal frequency axis is not the HH model frequency axis. Even at 500 Hz Nyquist, nominal Hz is <strong>not calibrated physiological Hz</strong>. Signal: fraction of excitatory neurons spiking at each simulation step, measured in the central patch (radius 22 cells) or across the full lattice. The <strong>5 s mean PSD</strong> uses a moving-window Welch estimate with frequencies in nominal Hz. The <strong>Morlet CWT</strong> is displayed only as a scalogram, updated approximately every 84 simulation steps, with its own axis in cycles/step. Both estimates come from the same actual spike-rate signal. Wavelet edge estimates are approximate; orange lines mark stimulus onsets.</p>
         </section>
       </section>
       <aside class="side" aria-label="Simulation controls">
@@ -260,8 +262,10 @@
           <button class="selected" data-model="lif" aria-pressed="true">LIF</button>
           <button data-model="alif" aria-pressed="false">Adaptive LIF</button>
           <button data-model="izh" aria-pressed="false">Izhikevich</button>
+          <button data-model="hh" aria-pressed="false" aria-label="Hodgkin-Huxley single-compartment neuron">Hodgkin–Huxley</button>
         </div>
         <p class="model-description" id="modelDescription">Leaky integrate-and-fire: membrane leakage, threshold, reset and refractory period.</p>
+        <p class="model-description hh-detail" id="hhModelNote" hidden>Single-compartment HH membrane: Na⁺, K⁺ and leak currents, with m/h/n gates. Two 0.05-ms integration substeps per network step (0.10 model ms). Spikes are upward 0-mV crossings. The E/I couplings are mapped heuristically into membrane current density; presets are not biophysically calibrated.</p>
         <div class="section-title">Neural coupling</div>
         <div class="control">
           <div class="labelrow"><label for="exc">Local excitation (E → E)</label><output id="excValue">13.0</output></div>
@@ -348,7 +352,7 @@
     <section class="about" aria-label="Scientific model and limitations">
       <div>
         <h2>What is simulated?</h2>
-        <p>A single spatially periodic (toroidal) two-population E/I lattice is simulated; the left/right edges and top/bottom edges are identified through wraparound, while synaptic interactions remain spatially local, not all-to-all. The Torus view depicts the periodic topology. The Sphere view is an artistic texture mapping with different geometry. A recurrent two-population E/I lattice is simulated with your choice of LIF, adaptive LIF (with spike-triggered recovery), or Izhikevich neurons (regular-spiking E and fast-spiking I). All three produce discrete spikes and drive spatial E→E, E→I, I→E and I→I interactions. Recurrent synaptic fields can be delayed using a characteristic-distance conduction approximation. The central perturbation is an added Gaussian external input to excitatory neurons, with adjustable intensity, spread and pulse duration. The Brunel-balanced preset is a <strong>Brunel-inspired inhibition-dominated heuristic</strong> with stochastic external drive inside this equal-sized spatial E/I lattice, not a faithful Brunel sparse random network or proof of a balanced asynchronous irregular state.</p>
+        <p>A single spatially periodic (toroidal) two-population E/I lattice is simulated; the left/right edges and top/bottom edges are identified through wraparound, while synaptic interactions remain spatially local, not all-to-all. The Torus view depicts the periodic topology. The Sphere view is an artistic texture mapping with different geometry. A recurrent two-population E/I lattice is simulated with your choice of LIF, adaptive LIF (with spike-triggered recovery), or Izhikevich neurons (regular-spiking E and fast-spiking I). All three produce discrete spikes and drive spatial E→E, E→I, I→E and I→I interactions. Recurrent synaptic fields can be delayed using a characteristic-distance conduction approximation. The central perturbation is an added Gaussian external input to excitatory neurons, with adjustable intensity, spread and pulse duration. The Hodgkin–Huxley option has classical one-compartment Na⁺, K⁺ and leak conductances and m/h/n gating in both E and I populations. The HH simulation integrates 0.10 model ms per network step; normalized recurrent fields are heuristically mapped to injected current density instead of conductance synapses. The Brunel-balanced preset is a <strong>Brunel-inspired inhibition-dominated heuristic</strong> with stochastic external drive inside this equal-sized spatial E/I lattice, not a faithful Brunel sparse random network or proof of a balanced asynchronous irregular state.</p>
       </div>
       <div>
         <h2>How is the artwork made?</h2>
@@ -362,7 +366,7 @@
   </main>
   <script>
     'use strict';
-    // Experimental E/I spatial SNN with interchangeable LIF, adaptive LIF and Izhikevich neuron equations.
+    // Experimental E/I spatial SNN with interchangeable LIF, adaptive LIF, Izhikevich and single-compartment Hodgkin–Huxley equations.
     // 160 × 160 excitatory + 160 × 160 inhibitory cells = 51,200; toroidal lattice.
     // Synaptic fields are normalized periodic square-kernel convolutions of the
     // exponential spike traces. This is a model-generating algorithm, not a GIF
@@ -415,7 +419,36 @@
     const blurScratch = new Float32Array(LEN), imageSmooth = new Float32Array(LEN);
     const adaptE = new Float32Array(LEN), adaptI = new Float32Array(LEN);
     const uE = new Float32Array(LEN), uI = new Float32Array(LEN);
+    // Classical single-compartment Hodgkin–Huxley channel gates, in E and I.
+    const mE=new Float32Array(LEN),hE=new Float32Array(LEN),nE=new Float32Array(LEN);
+    const mI=new Float32Array(LEN),hI=new Float32Array(LEN),nI=new Float32Array(LEN);
     const stimMask = new Float32Array(LEN);
+    // C=1 µF/cm²; gNa=120, gK=36, gL=0.3 mS/cm²;
+    // ENa=50, EK=-77, EL=-54.387 mV. No voltage reset on a spike.
+    const HH_DT=.05,HH_SUBSTEPS=2,HH_STEP_MS=HH_DT*HH_SUBSTEPS;
+    // 0.25-mV rate table uses stable singularity limits and avoids per-cell exp().
+    const HH_LO=-110,HH_HI=70,HH_INV_BIN=4,HH_N=1+(HH_HI-HH_LO)*HH_INV_BIN;
+    const hhMInf=new Float32Array(HH_N),hhMDecay=new Float32Array(HH_N);
+    const hhHInf=new Float32Array(HH_N),hhHDecay=new Float32Array(HH_N);
+    const hhNInf=new Float32Array(HH_N),hhNDecay=new Float32Array(HH_N);
+    function hhRatio(x,k){return Math.abs(x)<1e-6?k:x/(-Math.expm1(-x/k));}
+    for(let k=0;k<HH_N;k++){
+      const v=HH_LO+k/HH_INV_BIN;
+      const am=.1*hhRatio(v+40,10),bm=4*Math.exp(-(v+65)/18);
+      const ah=.07*Math.exp(-(v+65)/20),bh=1/(1+Math.exp(-(v+35)/10));
+      const an=.01*hhRatio(v+55,10),bn=.125*Math.exp(-(v+65)/80);
+      hhMInf[k]=am/(am+bm);hhMDecay[k]=Math.exp(-HH_DT*(am+bm));
+      hhHInf[k]=ah/(ah+bh);hhHDecay[k]=Math.exp(-HH_DT*(ah+bh));
+      hhNInf[k]=an/(an+bn);hhNDecay[k]=Math.exp(-HH_DT*(an+bn));
+    }
+    function hhIndex(v){return v<=HH_LO?0:v>=HH_HI?HH_N-1:Math.round((v-HH_LO)*HH_INV_BIN);}
+    function hhInjectedCurrent(net,excitatory){
+      // Dimensionless spatial input is converted to injected µA/cm².
+      // Mapping is heuristic, not a fitted HH excitatory/inhibitory synapse.
+      return Math.max(-4,Math.min(35,(excitatory?8:7.6)+8*(net-(excitatory?1:0.9))));
+    }
+    const HH_TRACE_DECAY=Math.exp(-HH_STEP_MS/6),HH_TRACE_KICK=.12;
+
     // Delayed recurrent synaptic traces use an independent history per population.
     // Effective delay combines a baseline and a characteristic-distance term.
     const D_RING=64,D_MASK=D_RING-1;
@@ -479,9 +512,10 @@
     const modelDescriptions = Object.freeze({
       lif:'Leaky integrate-and-fire: membrane leakage, threshold, reset and a two-step refractory period.',
       alif:'Adaptive LIF: LIF plus a decaying, spike-triggered hyperpolarizing current, favoring adaptation.',
-      izh:'Izhikevich quadratic dynamics: regular-spiking excitatory cells and fast-spiking inhibitory cells.'
+      izh:'Izhikevich quadratic dynamics: regular-spiking excitatory cells and fast-spiking inhibitory cells.',
+      hh:'Single-compartment Hodgkin–Huxley: Na/K/leak currents, m/h/n gates and genuine action potentials (0.05-ms substep × 2).'
     });
-    const modelLabels = {lif:'LIF',alif:'Adaptive LIF',izh:'Izhikevich'};
+    const modelLabels = {lif:'LIF',alif:'Adaptive LIF',izh:'Izhikevich',hh:'HH (1-comp)'};
     let model = 'lif';
     let randomState = 1, stepCount = 0, lastSpikesE = 0, running = true;
     let stimRemaining = 0, stimAmplitude = 0, stimRadiusActive = 11, lastPulseEnd = -1;
@@ -565,7 +599,36 @@
         const netE = cfg.driveE+cfg.exc*blurE[j]-cfg.inh*blurI[j]+jitterE+pulse+waveCurrent+extE;
         const netI = cfg.driveI+cfg.iexc*blurE[j]-cfg.iinh*blurILocal[j]+jitterI+extI;
         let spikeE=0, spikeI=0;
-        if(model==='izh') {
+        if(model==='hh') {
+          const currentE=hhInjectedCurrent(netE,true),currentI=hhInjectedCurrent(netI,false);
+          let ve=vE[j],vi=vI[j],me=mE[j],he=hE[j],ne=nE[j],mi=mI[j],hi=hI[j],ni=nI[j];
+          for(let sub=0;sub<HH_SUBSTEPS;sub++){
+            let ix=hhIndex(ve);
+            me=hhMInf[ix]+(me-hhMInf[ix])*hhMDecay[ix];
+            he=hhHInf[ix]+(he-hhHInf[ix])*hhHDecay[ix];
+            ne=hhNInf[ix]+(ne-hhNInf[ix])*hhNDecay[ix];
+            const ina=120*me*me*me*he*(ve-50);
+            const ik=36*ne*ne*ne*ne*(ve+77);
+            const il=.3*(ve+54.387);
+            const prevE=ve;
+            ve+=HH_DT*(currentE-ina-ik-il);
+            if(prevE<0&&ve>=0)spikeE=1;
+            ix=hhIndex(vi);
+            mi=hhMInf[ix]+(mi-hhMInf[ix])*hhMDecay[ix];
+            hi=hhHInf[ix]+(hi-hhHInf[ix])*hhHDecay[ix];
+            ni=hhNInf[ix]+(ni-hhNInf[ix])*hhNDecay[ix];
+            const inaI=120*mi*mi*mi*hi*(vi-50);
+            const ikI=36*ni*ni*ni*ni*(vi+77);
+            const ilI=.3*(vi+54.387);
+            const prevI=vi;
+            vi+=HH_DT*(currentI-inaI-ikI-ilI);
+            if(prevI<0&&vi>=0)spikeI=1;
+          }
+          if(spikeE)spikesE++;
+          vE[j]=ve;vI[j]=vi;
+          mE[j]=me;hE[j]=he;nE[j]=ne;
+          mI[j]=mi;hI[j]=hi;nI[j]=ni;
+        } else if(model==='izh') {
           // Izhikevich (2003) quadratic integrate-and-fire with recovery variable.
           // E: regular-spiking (a=.02,b=.2,c=-65,d=8).
           // I: fast-spiking (a=.1,b=.2,c=-65,d=2).
@@ -602,8 +665,15 @@
         }
         sumVE+=vE[j];sumVI+=vI[j];
         if(spikeE && centerMask[j])centerSpikes++;
-        eTrace[j]=TRACE_DECAY*eTrace[j]+(1-TRACE_DECAY)*spikeE;
-        iTrace[j]=TRACE_DECAY*iTrace[j]+(1-TRACE_DECAY)*spikeI;
+        if(model==='hh'){
+          // Exponentially filtered action potentials: 6-ms HH time constant.
+          // Event amplitude is tuned for this display/network, not comparable to LIF.
+          eTrace[j]=HH_TRACE_DECAY*eTrace[j]+HH_TRACE_KICK*spikeE;
+          iTrace[j]=HH_TRACE_DECAY*iTrace[j]+HH_TRACE_KICK*spikeI;
+        }else{
+          eTrace[j]=TRACE_DECAY*eTrace[j]+(1-TRACE_DECAY)*spikeE;
+          iTrace[j]=TRACE_DECAY*iTrace[j]+(1-TRACE_DECAY)*spikeI;
+        }
       }
       if(stimulate) {stimRemaining--;if(stimRemaining===0)lastPulseEnd=stepCount+1;}
       stepCount++;
@@ -1126,7 +1196,7 @@
       g.fillStyle='#ffd18e';g.beginPath();
       g.arc(px(tr.e[tr.n-1]),py(tr.i[tr.n-1]),5,0,2*Math.PI);g.fill();
       g.restore();
-      const units=model==='izh'?'model mV':'normalized';
+      const units=(model==='izh'||model==='hh')?'model mV':'normalized';
       g.fillStyle='#c7d8ef';g.font='13px system-ui';g.textAlign='center';
       g.fillText('Mean E membrane voltage ('+units+')',x+w/2,c.height-6);
       g.save();g.translate(16,y+h/2);g.rotate(-Math.PI/2);
@@ -1181,7 +1251,7 @@
         return;
       }
       drawPhasePlane(tr);drawVoltageBalance(tr);
-      const units=model==='izh'?'model mV':'dimensionless';
+      const units=(model==='izh'||model==='hh')?'model mV':'dimensionless';
       $('voltageInfo').textContent='Mean E '+meanLastVE.toFixed(3)+' · mean I '+meanLastVI.toFixed(3)+
         ' · ΔV '+(meanLastVE-meanLastVI).toFixed(3)+' ('+units+') · '+tr.n+' steps';
     }
@@ -1253,10 +1323,17 @@
       meanVHistoryE.fill(0);meanVHistoryI.fill(0);voltageSteps.fill(0);
       voltageIndex=0;voltageCount=0;meanLastVE=0;meanLastVI=0;
       adaptE.fill(0);adaptI.fill(0);uE.fill(0);uI.fill(0);
+      mE.fill(0);hE.fill(0);nE.fill(0);mI.fill(0);hI.fill(0);nI.fill(0);
       for(let i=0;i<LEN;i++) {
         if(model==='izh') {
           vE[i]=-65+rand()*4;vI[i]=-65+rand()*4;
           uE[i]=.2*vE[i];uI[i]=.2*vI[i];
+        } else if(model==='hh'){
+          const ve=-68+12*rand(),vi=-68+12*rand();
+          const ie=hhIndex(ve),ii=hhIndex(vi);
+          vE[i]=ve;vI[i]=vi;
+          mE[i]=hhMInf[ie];hE[i]=hhHInf[ie];nE[i]=hhNInf[ie];
+          mI[i]=hhMInf[ii];hI[i]=hhHInf[ii];nI[i]=hhNInf[ii];
         } else {vE[i]=rand()*.95;vI[i]=rand()*.95;}
       }
       start();
@@ -1296,6 +1373,7 @@
           const selected=b===button;b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected));
         });
         $('modelDescription').textContent=modelDescriptions[model];
+        $('hhModelNote').hidden=model!=='hh';
         reset();
       });
     }
@@ -1453,8 +1531,18 @@
           field_delays_steps:{excitatory:effectiveDelay(cfg.local),inhibitory:effectiveDelay(cfg.radius),local_inhibitory_to_inhibitory:effectiveDelay(cfg.local)},
           approximation:'Characteristic path distance=2*field_radius/3; circular signal-history ring; not an axonal path-resolved simulator.'},
         voltage_analysis:{signals:['spatial mean E membrane voltage','spatial mean I membrane voltage','E-I difference'],
-          phase_plane:'population mean E versus population mean I',units:model==='izh'?'model mV':'dimensionless LIF voltage',history_steps:V_HISTORY},
-        neuron_dynamics:model==='izh'?{excitatory:{a:.02,b:.2,c:-65,d:8},inhibitory:{a:.1,b:.2,c:-65,d:2},current_e:'14+12*(netE-1)',current_i:'8+12*(netI-0.9)'}:model==='alif'?{alpha:DT_ALPHA,threshold:1,refractory_steps:2,adaptation_e:{decay:.985,spike_increment:.05},adaptation_i:{decay:.975,spike_increment:.025}}:{alpha:DT_ALPHA,threshold:1,refractory_steps:2},
+          phase_plane:'population mean E versus population mean I',units:(model==='izh'||model==='hh')?'model mV':'dimensionless LIF voltage',history_steps:V_HISTORY},
+        neuron_dynamics:model==='hh'?{
+          type:'classical single-compartment Hodgkin-Huxley',
+          compartments_per_neuron:1,capacitance_uF_cm2:1,
+          conductances_mS_cm2:{Na:120,K:36,leak:.3},reversal_mV:{Na:50,K:-77,leak:-54.387},
+          gating:['m','h','n'],integration:{voltage:'explicit Euler',gates:'exponential Euler with 0.25 mV lookup',
+            substeps_per_step:HH_SUBSTEPS,dt_sub_ms:HH_DT,step_time_ms:HH_STEP_MS},
+          spike_detection:'upward 0-mV crossing; no reset',
+          external_drive:'E=max(-4,min(35,8+8*(netE-1))), I=max(-4,min(35,7.6+8*(netI-.9))); current density µA/cm²',
+          trace:{time_constant_ms:6,event_amplitude:HH_TRACE_KICK},
+          limitation:'Unfitted classical squid-axon channel parameters shared by E/I; E/I coupling mapped heuristically to injected current; nominal PSD Δt is independent of HH time integration.'
+        }:model==='izh'?{excitatory:{a:.02,b:.2,c:-65,d:8},inhibitory:{a:.1,b:.2,c:-65,d:2},current_e:'14+12*(netE-1)',current_i:'8+12*(netI-0.9)'}:model==='alif'?{alpha:DT_ALPHA,threshold:1,refractory_steps:2,adaptation_e:{decay:.985,spike_increment:.05},adaptation_i:{decay:.975,spike_increment:.025}}:{alpha:DT_ALPHA,threshold:1,refractory_steps:2},
         synaptic_trace_decay:TRACE_DECAY,noise_jitter_factor:.24,
         central_stimulation:{target:'excitatory population',spatial_profile:'Gaussian, cut at 3 sigma',settings:{intensity:Number($('stimIntensity').value),spreadSigmaCells:Number($('stimRadius').value),durationSteps:Number($('stimDuration').value)},pulse_events:stimHistory.map((pulse,index)=>({...pulse,appliedSteps:(index===stimHistory.length-1&&stimRemaining>0)?stepCount-pulse.onsetStep:pulse.appliedSteps}))},
         parameter_change_events:parameterHistory,
@@ -1464,7 +1552,7 @@
           plot:{frequency_min_nominal_hz:1,frequency_max_nominal_hz:500,x_scale:'log',y_scale:'log',exclude_dc:true},
           units:'spike fraction squared / nominal Hz (NOT calibrated physiological Hz)'},
         spectral_analysis:{signal:$('waveletRegion').value==='center'?'mean excitatory spike fraction within central 22-cell radius':'mean excitatory spike fraction across the whole E population',method:'complex Morlet CWT (omega0=6); edge-aware local mean removal; relative power normalized by kernel energy and scale',history_steps:W_HISTORY,frequency_bands:W_BANDS,time_columns:W_COLUMNS,min_frequency_cycles_per_step:W_MIN,max_frequency_cycles_per_step:W_MAX,update_interval_steps:84,units:'cycles per simulation step, NOT calibrated Hz',spectrum:'Morlet CWT scalogram only; wavelet-averaged PSD display intentionally removed'},
-        note:'To reproduce a run, use this HTML implementation, seed, model, coupling values, parameter change events and scheduled stimulus pulse events. Step counts are discrete and not calibrated as milliseconds.'
+        note:'To reproduce a run, use this HTML implementation, seed, model, coupling values, parameter change events and scheduled stimulus pulse events. HH simulation steps represent 0.10 ms of HH membrane integration; other models and nominal spectral timebase have distinct definitions.'
       };
       downloadBlob(new Blob([JSON.stringify(saved,null,2)],{type:'application/json'}),`neural-turing-seed-${$('seed').value}.json`);
     });
