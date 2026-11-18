@@ -988,8 +988,8 @@
       frameId=null;
       if (!running) return;
       // Simulation is deliberately bounded per animation frame to keep UI responsive.
-      // Cap per-frame steps for responsiveness on ~50k-neuron networks.
-      for(let i=0;i<2;i++) runOneStep();
+      // One simulation step per visual frame favors responsiveness on ~50k-neuron networks.
+      runOneStep();
       render();
       frameId=requestAnimationFrame(loop);
     }
