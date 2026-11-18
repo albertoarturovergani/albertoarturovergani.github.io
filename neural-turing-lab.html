@@ -27,6 +27,24 @@
     canvas{display:block;width:100%;height:100%;object-fit:contain}
     .corner-label{position:absolute;top:13px;left:13px;background:rgba(8,15,28,.7);backdrop-filter:blur(7px);border:1px solid rgba(235,242,255,.16);padding:7px 10px;border-radius:7px;color:#fff;font-size:11px;letter-spacing:.08em;text-transform:uppercase;pointer-events:none}
     .art-caption{margin:14px 1px 2px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;color:var(--muted);font-size:12px}
+
+    /* Real-time CWT analysis, kept beneath the generated image. */
+    .wavelet-panel{margin-top:21px;padding:18px 2px 2px;border-top:1px solid var(--line)}
+    .wavelet-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:13px;flex-wrap:wrap;margin-bottom:14px}
+    .wavelet-heading h2{font-size:16px;letter-spacing:-.015em;margin:0 0 5px}
+    .wavelet-heading p{font-size:11px;line-height:1.5;color:#9db0ce;margin:0}
+    .wavelet-tools{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+    .wavelet-tools label{font-size:11px;color:#c3d2ec;font-weight:650;margin:0}
+    .wavelet-tools select{background:#111d34;border:1px solid #405171;border-radius:7px;padding:7px 8px;color:#eff5ff;font-size:11px;max-width:180px;min-height:36px}
+    .wavelet-tools button{font-size:11px;padding:7px 10px;min-height:36px}
+    .wavelet-tools button:disabled{cursor:default;opacity:.45}
+    .wavelet-chart{margin:0 0 11px;padding:11px 11px 9px;background:#0c162a;border:1px solid #2d3d5b;border-radius:10px}
+    .wavelet-chart h3{font-size:12px;font-weight:680;color:#ceddf4;margin:0 0 7px}
+    .wavelet-chart canvas{display:block;width:100%;height:auto;aspect-ratio:auto;object-fit:contain;border-radius:5px;background:#081123}
+    .wavelet-scale{display:flex;align-items:center;gap:8px;font-size:10px;color:#96abc8;margin:-1px 0 8px}
+    .wavelet-scale-gradient{height:7px;flex:0 1 125px;border-radius:99px;background:linear-gradient(90deg,#071837,#14549c,#84badf,#f5e9c8,#f38b8e,#bf236a)}
+    .wavelet-explainer{font-size:11px;line-height:1.6;color:#9aafcc;margin:5px 1px 0}
+    .wavelet-info{color:#c6d9f6}
     .live-dot{width:7px;height:7px;border-radius:100%;background:#95efc8;display:inline-block;margin-right:8px;box-shadow:0 0 9px #95efc8}
     .live-dot.pause{background:#bac7de;box-shadow:none}
     .side{padding:23px}
@@ -93,6 +111,32 @@
           <span><span id="led" class="live-dot"></span><span id="status" role="status" aria-live="polite">Simulating</span></span>
           <span>Blue = low activity · White = intermediate · Red = high activity</span>
         </div>
+        <section class="wavelet-panel" aria-label="Real-time wavelet spectral analysis">
+          <div class="wavelet-heading">
+            <div>
+              <h2>Wavelet PSD <span aria-hidden="true">·</span> live</h2>
+              <p id="waveletInfo" class="wavelet-info" aria-live="off">Collecting spike activity…</p>
+            </div>
+            <div class="wavelet-tools">
+              <label for="waveletRegion">Signal</label>
+              <select id="waveletRegion" aria-label="Select the excitatory population activity to analyze">
+                <option value="center" selected>Central E region</option>
+                <option value="whole">Whole E network</option>
+              </select>
+              <button id="waveletExport" type="button" disabled>↓ Save CSV</button>
+            </div>
+          </div>
+          <div class="wavelet-chart">
+            <h3>Wavelet-derived PSD · time-averaged power</h3>
+            <canvas id="waveletPSD" width="760" height="218" role="img" aria-label="Live wavelet-derived spectral power of the selected excitatory spike-rate signal versus frequency in cycles per simulation step"></canvas>
+          </div>
+          <div class="wavelet-chart">
+            <h3>Morlet scalogram · time–frequency power</h3>
+            <div class="wavelet-scale"><span>Low</span><span class="wavelet-scale-gradient" aria-hidden="true"></span><span>High power (fixed log scale)</span></div>
+            <canvas id="waveletMap" width="760" height="280" role="img" aria-label="Live continuous Morlet wavelet time–frequency power map with stimulation onset markers"></canvas>
+          </div>
+          <p class="wavelet-explainer">Signal: fraction of excitatory neurons spiking at each simulation step, measured in the central patch (radius 10 cells) or across the full lattice. Morlet CWT, updated approximately every 84 simulation steps; the PSD is a <strong>relative wavelet-power estimate</strong> averaged across the displayed time window. Frequencies are in <strong>cycles/step, not Hz</strong>, because the three exploratory models do not share a calibrated biological timebase. Wavelet edge estimates are approximate; orange lines mark stimulus onsets.</p>
+        </section>
       </section>
       <aside class="side" aria-label="Simulation controls">
         <h2 class="side-title">Pattern generator</h2>
@@ -207,6 +251,31 @@
     const adaptE = new Float32Array(LEN), adaptI = new Float32Array(LEN);
     const uE = new Float32Array(LEN), uI = new Float32Array(LEN);
     const stimMask = new Float32Array(LEN);
+    // A fixed circular central ROI, without changing neuronal dynamics.
+    const centerMask = new Uint8Array(LEN);
+    let centerCellCount=0;
+    for(let y=0;y<N;y++) for(let x=0;x<N;x++){
+      const dx=x-(N-1)/2,dy=y-(N-1)/2;
+      if(dx*dx+dy*dy<=100){centerMask[y*N+x]=1;centerCellCount++;}
+    }
+    const W_HISTORY=512, W_BANDS=22, W_COLUMNS=96, W_MIN=1/64, W_MAX=1/6, W_OMEGA=6;
+    const W_LOG_MIN=-8, W_LOG_MAX=-2;
+    const waveWhole=new Float32Array(W_HISTORY),waveCenter=new Float32Array(W_HISTORY);
+    let waveCount=0,waveLastStep=-1e9,waveCache=null;
+    const wavePSDCtx=$('waveletPSD').getContext('2d');
+    const waveMapCtx=$('waveletMap').getContext('2d');
+    const WAVELETS=Array.from({length:W_BANDS},(_,j)=>{
+      const freq=W_MIN*Math.pow(W_MAX/W_MIN,j/(W_BANDS-1));
+      const sigma=W_OMEGA/(2*Math.PI*freq),radius=Math.ceil(3*sigma);
+      const gaussian=new Float32Array(2*radius+1);
+      const real=new Float32Array(2*radius+1),imag=new Float32Array(2*radius+1);
+      for(let k=-radius;k<=radius;k++){
+        const z=Math.exp(-.5*(k/sigma)*(k/sigma)),a=2*Math.PI*freq*k;
+        gaussian[k+radius]=z;real[k+radius]=z*Math.cos(a);imag[k+radius]=z*Math.sin(a);
+      }
+      return {freq,sigma,radius,gaussian,real,imag};
+    });
+
     const modelDescriptions = Object.freeze({
       lif:'Leaky integrate-and-fire: membrane leakage, threshold, reset and a two-step refractory period.',
       alif:'Adaptive LIF: LIF plus a decaying, spike-triggered hyperpolarizing current, favoring adaptation.',
@@ -271,7 +340,7 @@
       blurWrap(eTrace, blurE, cfg.local);
       blurWrap(iTrace, blurI, cfg.radius);
       const stimulate = stimRemaining > 0;
-      let spikesE = 0;
+      let spikesE = 0,centerSpikes = 0;
       for (let j=0; j<LEN; ++j) {
         // Three uniforms centered at zero approximate Gaussian background drive.
         const jitterE = (rand()+rand()+rand()-1.5)*0.24;
@@ -315,12 +384,17 @@
             if (vI[j]>=1.0) {spikeI=1;vI[j]=0;refI[j]=2;if(model==='alif')adaptI[j]+=.025;}
           }
         }
+        if(spikeE && centerMask[j])centerSpikes++;
         eTrace[j]=TRACE_DECAY*eTrace[j]+(1-TRACE_DECAY)*spikeE;
         iTrace[j]=TRACE_DECAY*iTrace[j]+(1-TRACE_DECAY)*spikeI;
       }
       if(stimulate) {stimRemaining--;if(stimRemaining===0)lastPulseEnd=stepCount+1;}
       stepCount++;
       lastSpikesE=spikesE;
+      const wi=(stepCount-1)%W_HISTORY;
+      waveWhole[wi]=spikesE/LEN;
+      waveCenter[wi]=centerSpikes/centerCellCount;
+      waveCount++;
     }
     function interpolateColor(x) {
       // Original artwork's conceptual low / mid / high = blue / white / red.
@@ -339,6 +413,156 @@
       return [131,13,54];
     }
     const LUT=Array.from({length:256},(_,i)=>interpolateColor(i/255));
+
+    // A complex Morlet continuous wavelet transform, with an edge-aware
+    // weighted-mean correction to remove DC without wraparound. Dividing
+    // by kernel L2 energy and scale gives relative power comparable across
+    // the analyzed frequencies; this is not an absolute physical PSD.
+    function computeWavelet(){
+      const available=Math.min(waveCount,W_HISTORY),first=waveCount-available;
+      const samples=new Float32Array(available);
+      const signal=$('waveletRegion').value==='center'?waveCenter:waveWhole;
+      for(let i=0;i<available;i++)samples[i]=signal[(first+i)%W_HISTORY];
+      const columns=Math.min(W_COLUMNS,available);
+      const times=new Float64Array(columns);
+      const power=new Float32Array(W_BANDS*columns);
+      const spectrum=new Float64Array(W_BANDS);
+      for(let t=0;t<columns;t++)times[t]=Math.round(t*(available-1)/(columns-1));
+      for(let b=0;b<W_BANDS;b++){
+        const wave=WAVELETS[b],r=wave.radius;
+        let interiorSum=0,interiorN=0,allSum=0;
+        for(let t=0;t<columns;t++){
+          const center=times[t],lo=Math.max(-r,-center),hi=Math.min(r,available-1-center);
+          let re=0,im=0,dcRe=0,dcIm=0,weightedX=0,weightedG=0,norm2=0;
+          for(let lag=lo;lag<=hi;lag++){
+            const ix=lag+r,x=samples[center+lag],g=wave.gaussian[ix];
+            re+=x*wave.real[ix];im+=x*wave.imag[ix];
+            dcRe+=wave.real[ix];dcIm+=wave.imag[ix];
+            weightedX+=x*g;weightedG+=g;norm2+=g*g;
+          }
+          const localMean=weightedX/Math.max(1e-20,weightedG);
+          re-=localMean*dcRe;im-=localMean*dcIm;
+          const p=Math.max(0,(re*re+im*im)/Math.max(1e-20,norm2*wave.sigma));
+          power[b*columns+t]=p;
+          allSum+=p;
+          if(center>=Math.min(r,available*.34)&&available-1-center>=Math.min(r,available*.34)){
+            interiorSum+=p;interiorN++;
+          }
+        }
+        spectrum[b]=interiorN?interiorSum/interiorN:allSum/columns;
+      }
+      const steps=new Float64Array(columns);
+      for(let i=0;i<columns;i++)steps[i]=stepCount-available+1+times[i];
+      return {power,spectrum,steps,columns,available,scope:$('waveletRegion').value,step:stepCount};
+    }
+    const POWER_STOPS=[
+      [7,24,55],[20,84,156],[132,186,223],
+      [245,233,200],[243,139,142],[191,35,106]
+    ];
+    function waveletHeatColor(p){
+      const v=Math.max(0,Math.min(1,(Math.log10(Math.max(1e-12,p))-W_LOG_MIN)/(W_LOG_MAX-W_LOG_MIN)));
+      const z=v*(POWER_STOPS.length-1),i=Math.min(POWER_STOPS.length-2,Math.floor(z)),w=z-i;
+      const a=POWER_STOPS[i],b=POWER_STOPS[i+1];
+      return 'rgb('+Math.round(a[0]+(b[0]-a[0])*w)+','+Math.round(a[1]+(b[1]-a[1])*w)+','+Math.round(a[2]+(b[2]-a[2])*w)+')';
+    }
+    function waveletEmpty(g,cvs){
+      g.fillStyle='#081123';g.fillRect(0,0,cvs.width,cvs.height);
+      g.fillStyle='#a9c2e4';g.font='16px system-ui';
+      g.fillText('Collecting spike-rate samples for live Morlet analysis…',24,cvs.height/2);
+    }
+    function waveletGrid(g,x,y,w,h){
+      g.fillStyle='#081123';g.fillRect(0,0,g.canvas.width,g.canvas.height);
+      g.strokeStyle='#496080';g.lineWidth=1;g.strokeRect(x,y,w,h);
+      g.fillStyle='#9cb5d5';g.font='15px system-ui';
+    }
+    function drawWaveletPSD(cache){
+      const g=wavePSDCtx,cvs=g.canvas;
+      const x=72,y=17,w=cvs.width-91,h=cvs.height-64;
+      waveletGrid(g,x,y,w,h);
+      g.strokeStyle='#293b58';g.lineWidth=1;
+      for(const exp of [-8,-6,-4,-2]){
+        const yy=y+h-(exp-W_LOG_MIN)/(W_LOG_MAX-W_LOG_MIN)*h;
+        g.beginPath();g.moveTo(x,yy);g.lineTo(x+w,yy);g.stroke();
+        g.fillStyle='#9cb5d5';g.textAlign='right';g.fillText('10^'+exp,x-10,yy+5);
+      }
+      const mapX=f=>x+w*Math.log(f/W_MIN)/Math.log(W_MAX/W_MIN);
+      for(const f of [1/64,1/32,1/16,1/8]){
+        const xx=mapX(f);
+        g.strokeStyle='#243451';g.beginPath();g.moveTo(xx,y);g.lineTo(xx,y+h);g.stroke();
+        g.fillStyle='#b3c8e9';g.textAlign='center';g.fillText(f.toFixed(3),xx,y+h+23);
+      }
+      g.save();g.beginPath();g.rect(x,y,w,h);g.clip();
+      g.beginPath();
+      for(let b=0;b<W_BANDS;b++){
+        const xx=mapX(WAVELETS[b].freq);
+        const lg=Math.log10(Math.max(1e-12,cache.spectrum[b]));
+        const yy=y+h-(Math.max(W_LOG_MIN,Math.min(W_LOG_MAX,lg))-W_LOG_MIN)/(W_LOG_MAX-W_LOG_MIN)*h;
+        if(b===0)g.moveTo(xx,yy);else g.lineTo(xx,yy);
+      }
+      g.lineWidth=3.2;g.strokeStyle='#9fe0e1';g.lineJoin='round';g.stroke();
+      g.restore();
+      g.fillStyle='#b9cae4';g.textAlign='center';g.font='14px system-ui';
+      g.fillText('Frequency (cycles / simulation step)',x+w/2,cvs.height-7);
+      g.save();g.translate(17,y+h/2);g.rotate(-Math.PI/2);g.fillText('Relative power',0,0);g.restore();
+      g.textAlign='left';
+    }
+    function drawWaveletMap(cache){
+      const g=waveMapCtx,cvs=g.canvas;
+      const x=72,y=16,w=cvs.width-91,h=cvs.height-61;
+      waveletGrid(g,x,y,w,h);
+      for(let b=0;b<W_BANDS;b++){
+        const plotRow=W_BANDS-1-b;
+        const y0=y+h*plotRow/W_BANDS,y1=y+h*(plotRow+1)/W_BANDS;
+        for(let c=0;c<cache.columns;c++){
+          const left=x+w*c/cache.columns,right=x+w*(c+1)/cache.columns;
+          g.fillStyle=waveletHeatColor(cache.power[b*cache.columns+c]);
+          g.fillRect(left,y0,Math.ceil(right-left)+.15,Math.ceil(y1-y0)+.15);
+        }
+      }
+      g.save();g.beginPath();g.rect(x,y,w,h);g.clip();
+      // Mark stimulation onsets, including already-completed pulses, in time coordinates.
+      const first=cache.steps[0],last=cache.steps[cache.steps.length-1];
+      for(const pulse of stimHistory){
+        if(pulse.onsetStep<first||pulse.onsetStep>last)continue;
+        const xx=x+w*(pulse.onsetStep-first)/Math.max(1,last-first);
+        g.strokeStyle='#ffcb83';g.lineWidth=2.2;g.setLineDash([6,5]);
+        g.beginPath();g.moveTo(xx,y);g.lineTo(xx,y+h);g.stroke();
+      }
+      g.restore();g.setLineDash([]);
+      g.fillStyle='#c1d1ec';g.font='14px system-ui';g.textAlign='right';
+      for(const f of [1/64,1/32,1/16,1/8]){
+        const v=Math.log(f/W_MIN)/Math.log(W_MAX/W_MIN);
+        const yy=y+h*(1-v);
+        g.fillText(f.toFixed(3),x-9,yy+5);
+      }
+      g.textAlign='center';
+      for(let i=0;i<=4;i++){
+        const xx=x+w*i/4;
+        const step=Math.round(cache.steps[0]+(cache.steps[cache.columns-1]-cache.steps[0])*i/4);
+        g.fillText(String(step),xx,y+h+22);
+      }
+      g.fillText('Simulation step',x+w/2,cvs.height-5);
+      g.save();g.translate(18,y+h/2);g.rotate(-Math.PI/2);g.fillText('Cycles / step',0,0);g.restore();
+      g.strokeStyle='#63758d';g.strokeRect(x,y,w,h);
+      g.textAlign='left';
+    }
+    function renderWavelet(force){
+      if(waveCount<112){
+        waveletEmpty(wavePSDCtx,$('waveletPSD'));
+        waveletEmpty(waveMapCtx,$('waveletMap'));
+        $('waveletExport').disabled=true;
+        $('waveletInfo').textContent='Collecting spike activity ('+waveCount+'/112 steps)…';
+        return;
+      }
+      if(!force && stepCount-waveLastStep<84)return;
+      waveCache=computeWavelet();
+      waveLastStep=stepCount;
+      drawWaveletPSD(waveCache);
+      drawWaveletMap(waveCache);
+      $('waveletExport').disabled=false;
+      $('waveletInfo').textContent=(waveCache.scope==='center'?'Central E':'Whole-network E')
+        +' spike rate · '+waveCache.available+' steps · updated at step '+stepCount;
+    }
     function render() {
       blurWrap(eTrace, imageSmooth, 1); // Display smoothing only.
       let mean=0;
@@ -368,6 +592,7 @@
       $('status').textContent=running?'Simulating (live)':'Paused';
       $('led').classList.toggle('pause',!running);
       $('toggle').textContent=running?'Ⅱ  Pause':'▶  Resume';
+      renderWavelet(false);
     }
     function loop() {
       frameId=null;
@@ -389,6 +614,7 @@
       }
       reseed(seed);stepCount=0;lastSpikesE=0;
       stimRemaining=0;stimHistory=[];parameterHistory=[];initialCoupling={...cfg};lastPulseEnd=-1;
+      waveCount=0;waveLastStep=-1e9;waveCache=null;waveWhole.fill(0);waveCenter.fill(0);
       eTrace.fill(0);iTrace.fill(0);refE.fill(0);refI.fill(0);
       adaptE.fill(0);adaptI.fill(0);uE.fill(0);uI.fill(0);
       for(let i=0;i<LEN;i++) {
@@ -442,6 +668,25 @@
     }
     for(const name of ['stimIntensity','stimRadius','stimDuration']) $(name).addEventListener('input',updateStimulusLabels);
     $('stimulate').addEventListener('click',triggerStimulus);
+    $('waveletRegion').addEventListener('change',()=>renderWavelet(true));
+    $('waveletExport').addEventListener('click',()=>{
+      if(waveCount<112)return;
+      // Recompute on demand so the CSV reflects the exact current simulation step.
+      const data=computeWavelet(),rows=[
+        '# Neural Turing Patterns: approximate complex-Morlet CWT power',
+        '# model='+model+', seed='+$('seed').value+', signal='+data.scope+', final_step='+stepCount,
+        '# frequency is cycles/step; time is model steps; relative power is not an absolute PSD in Hz',
+        'step,frequency_cycles_per_step,period_steps,relative_wavelet_power'
+      ];
+      for(let t=0;t<data.columns;t++)for(let b=0;b<W_BANDS;b++){
+        const f=WAVELETS[b].freq;
+        rows.push(data.steps[t]+','+f.toPrecision(8)+','+(1/f).toPrecision(8)+','+
+          data.power[b*data.columns+t].toExponential(8));
+      }
+      const csv=rows.join('\n')+'\n';
+      downloadBlob(new Blob([csv],{type:'text/csv;charset=utf-8'}),
+        'neural-turing-wavelet-'+model+'-'+data.scope+'-step-'+stepCount+'.csv');
+    });
     $('generate').addEventListener('click',()=>{
       // A new independent world at every click, with the new seed visible.
       // Changing the value back reproduces the same initial world and parameters.
@@ -473,6 +718,7 @@
         synaptic_trace_decay:TRACE_DECAY,noise_jitter_factor:.24,
         central_stimulation:{target:'excitatory population',spatial_profile:'Gaussian, cut at 3 sigma',settings:{intensity:Number($('stimIntensity').value),spreadSigmaCells:Number($('stimRadius').value),durationSteps:Number($('stimDuration').value)},pulse_events:stimHistory.map((pulse,index)=>({...pulse,appliedSteps:(index===stimHistory.length-1&&stimRemaining>0)?stepCount-pulse.onsetStep:pulse.appliedSteps}))},
         parameter_change_events:parameterHistory,
+        spectral_analysis:{signal:$('waveletRegion').value==='center'?'mean excitatory spike fraction within central 10-cell radius':'mean excitatory spike fraction across the whole E population',method:'complex Morlet CWT (omega0=6); edge-aware local mean removal; relative power normalized by kernel energy and scale',history_steps:W_HISTORY,frequency_bands:W_BANDS,time_columns:W_COLUMNS,min_frequency_cycles_per_step:W_MIN,max_frequency_cycles_per_step:W_MAX,update_interval_steps:84,units:'cycles per simulation step, NOT calibrated Hz',spectrum:'time-average of wavelet power; approximate relative PSD'},
         note:'To reproduce a run, use this HTML implementation, seed, model, coupling values, parameter change events and scheduled stimulus pulse events. Step counts are discrete and not calibrated as milliseconds.'
       };
       downloadBlob(new Blob([JSON.stringify(saved,null,2)],{type:'application/json'}),`neural-turing-seed-${$('seed').value}.json`);
