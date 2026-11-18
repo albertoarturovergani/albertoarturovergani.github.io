@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Neural Turing Patterns — an interactive spiking neural network art experiment." />
+  <title>Neural Turing Patterns — Interactive Lab</title>
+  <style>
+    :root{color-scheme:dark;--bg:#090d19;--panel:#11182b;--panel2:#151e34;--line:#2e3a55;--text:#f3f6ff;--muted:#9baac5;--accent:#c9dcff;--red:#f05f7e;--navy:#0d2047}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 17% 10%,#1a2441 0%,transparent 48%),radial-gradient(ellipse at 90% 90%,#19132b 0%,transparent 48%),var(--bg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text)}
+    button,input,select{font:inherit}
+    button:focus-visible,input:focus-visible{outline:2px solid #e4eefd;outline-offset:3px}
+    .shell{width:min(1240px,100%);padding:34px clamp(18px,4vw,52px) 42px;margin:0 auto}
+    .eyebrow{color:#c6d6f4;text-transform:uppercase;font-weight:700;letter-spacing:.22em;font-size:11px;margin:0 0 13px}
+    .back-link{display:inline-flex;align-items:center;color:#c3d7f9;margin:0 0 20px;font-size:12px;font-weight:700;text-decoration:none;border-bottom:1px solid transparent;padding-bottom:4px}
+    .back-link:hover{color:#fff;border-color:#c3d7f9}
+    .head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:27px}
+    h1{font-size:clamp(32px,4.2vw,58px);font-weight:650;line-height:1.05;letter-spacing:-.055em;margin:0 0 12px}
+    h1 em{color:#9cbde8;font-weight:400;font-style:normal}
+    .subtitle{color:var(--muted);max-width:670px;line-height:1.55;font-size:15px;margin:0}
+    .tag{white-space:nowrap;border:1px solid var(--line);color:#b9cbea;padding:9px 13px;border-radius:99px;font-size:12px;letter-spacing:.04em}
+    .layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(295px,.8fr);gap:22px;align-items:start}
+    .canvas-card,.side{border:1px solid var(--line);background:linear-gradient(160deg,rgba(22,33,57,.94),rgba(13,20,35,.96));border-radius:18px;box-shadow:0 15px 55px rgba(0,0,0,.15)}
+    .canvas-card{padding:16px}
+    .art-wrap{position:relative;overflow:hidden;border:1px solid rgba(232,240,255,.18);background:#08285f;aspect-ratio:1;border-radius:10px}
+    canvas{display:block;width:100%;height:100%;object-fit:contain}
+    .corner-label{position:absolute;top:13px;left:13px;background:rgba(8,15,28,.7);backdrop-filter:blur(7px);border:1px solid rgba(235,242,255,.16);padding:7px 10px;border-radius:7px;color:#fff;font-size:11px;letter-spacing:.08em;text-transform:uppercase;pointer-events:none}
+    .art-caption{margin:14px 1px 2px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;color:var(--muted);font-size:12px}
+    .live-dot{width:7px;height:7px;border-radius:100%;background:#95efc8;display:inline-block;margin-right:8px;box-shadow:0 0 9px #95efc8}
+    .live-dot.pause{background:#bac7de;box-shadow:none}
+    .side{padding:23px}
+    .side-title{font-size:17px;margin:0 0 7px;font-weight:650;letter-spacing:-.015em}
+    .side-desc{color:var(--muted);font-size:13px;line-height:1.55;margin:0 0 19px}
+    label{display:block;color:#e5ecfb;font-size:13px;font-weight:600;margin-bottom:9px}
+    .section-title{font-size:11px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);font-weight:800;margin:20px 0 12px}
+    .presets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:19px}
+    button{cursor:pointer;border:1px solid #465471;color:#dbe7ff;background:#19253d;border-radius:9px;padding:11px 10px;transition:background .16s,border-color .16s,transform .16s;font-size:13px}
+    button:hover{background:#293853;border-color:#8eaad0}
+    button:active{transform:translateY(1px)}
+    button.selected{border-color:#b7d7ff;background:#28415f;color:#f2f8ff}
+    .primary{background:#e2ecff;color:#101b34;border-color:#e2ecff;font-weight:700}
+    .primary:hover{background:#b9d3fa;color:#101b34}
+    .btnrow{display:grid;grid-template-columns:1.4fr 1fr;gap:9px;margin-top:20px}
+    .btnrow.secondary{grid-template-columns:1fr 1fr;margin-top:9px}
+    .control{margin-top:19px}
+    .labelrow{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:5px}
+    output{color:#bacfe9;font-size:13px;font-variant-numeric:tabular-nums}
+    input[type=range]{width:100%;accent-color:#b1c9ec;cursor:pointer;margin:1px 0}
+    .hint{font-size:11px;color:#8798b5;margin-top:5px;line-height:1.45}
+    input[type=number]{width:100%;background:#0f1829;border:1px solid #465471;border-radius:9px;padding:10px 12px;color:#e3edff;font-variant-numeric:tabular-nums}
+    .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:17px}
+    .stat{background:rgba(11,20,37,.85);border:1px solid #2b3a56;padding:12px 11px;border-radius:10px}
+    .stat-title{font-size:10px;color:#91a5c6;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+    .stat-value{font-size:17px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+    .about{border-top:1px solid var(--line);margin-top:25px;padding-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:30px}
+    .about h2{font-size:14px;margin:0 0 8px}
+    .about p{margin:0;color:#a9bad3;font-size:12px;line-height:1.7}
+    footer{margin-top:23px;color:#8194b1;font-size:11px;line-height:1.6}
+    footer a{color:#b6cffa;text-underline-offset:2px}
+    @media(max-width:850px){.layout{grid-template-columns:1fr}.side{padding:20px}.head{align-items:flex-start;flex-direction:column}.about{grid-template-columns:1fr;gap:15px}.shell{padding-top:22px}}
+    @media(prefers-reduced-motion:reduce){button{transition:none}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <a class="back-link" href="index.html#brain-art">← Back to Brain Art</a>
+    <header class="head">
+      <div>
+        <p class="eyebrow">ART / GENERATIVE EXPERIMENT</p>
+        <h1>Neural Turing <em>Patterns</em></h1>
+        <p class="subtitle">An interactive experiment at the intersection of neuroscience and generative art. Spatial structures emerge from the evolving spikes of a recurrent neural network.</p>
+      </div>
+      <div class="tag">IN-BROWSER SNN · NO SERVER</div>
+    </header>
+    <div class="layout">
+      <section class="canvas-card" aria-label="Live neural activity visualization">
+        <div class="art-wrap">
+          <canvas id="art" width="768" height="768" role="img" aria-label="Activity map of an evolving two-population spiking neural network. Blue areas have lower excitatory firing, red areas higher firing."></canvas>
+          <div class="corner-label">Neural activity / E population</div>
+        </div>
+        <div class="art-caption">
+          <span><span id="led" class="live-dot"></span><span id="status" role="status" aria-live="polite">Simulating</span></span>
+          <span>Blue = low activity · White = intermediate · Red = high activity</span>
+        </div>
+      </section>
+      <aside class="side" aria-label="Simulation controls">
+        <h2 class="side-title">Pattern generator</h2>
+        <p class="side-desc">Generate an independent neural world, then watch its activity self-organize. Each result is reproducible from its seed and parameters.</p>
+        <div class="section-title">Dynamics preset</div>
+        <div class="presets" role="group" aria-label="Select a dynamics preset">
+          <button class="selected" data-preset="spots" aria-pressed="true">Spots</button>
+          <button data-preset="maze" aria-pressed="false">Labyrinth</button>
+          <button data-preset="islands" aria-pressed="false">Islands</button>
+        </div>
+        <div class="control">
+          <div class="labelrow"><label for="exc">Local excitation (E → E)</label><output id="excValue">13.0</output></div>
+          <input type="range" id="exc" min="9" max="18" value="13" step="0.5" />
+          <div class="hint">Strength of local positive coupling between excitatory neurons</div>
+        </div>
+        <div class="control">
+          <div class="labelrow"><label for="inh">Surround inhibition (I → E)</label><output id="inhValue">10.0</output></div>
+          <input type="range" id="inh" min="5" max="18" value="10" step="0.5" />
+          <div class="hint">Strength of inhibition delivered by the inhibitory population</div>
+        </div>
+        <div class="control">
+          <div class="labelrow"><label for="radius">Inhibitory radius (cells)</label><output id="radiusValue">8</output></div>
+          <input type="range" id="radius" min="4" max="13" value="8" step="1" />
+          <div class="hint">Larger radii produce more spatially extended interactions</div>
+        </div>
+        <div class="control">
+          <div class="labelrow"><label for="seed">Random seed</label></div>
+          <input type="number" id="seed" min="1" max="2147483647" step="1" value="2026" inputmode="numeric" />
+        </div>
+        <div class="btnrow">
+          <button class="primary" id="generate">↻ &nbsp;New pattern</button>
+          <button id="toggle">Ⅱ &nbsp;Pause</button>
+        </div>
+        <div class="btnrow secondary">
+          <button id="png">↓ &nbsp;Save PNG</button>
+          <button id="config">↓ &nbsp;Save parameters</button>
+        </div>
+        <div class="stats" aria-label="Simulation data">
+          <div class="stat"><div class="stat-title">Neurons (E + I)</div><div class="stat-value" id="neurons">10,368</div></div>
+          <div class="stat"><div class="stat-title">Simulation step</div><div class="stat-value" id="step">0</div></div>
+          <div class="stat"><div class="stat-title">Mean E activity</div><div class="stat-value" id="activity">0.000</div></div>
+          <div class="stat"><div class="stat-title">Boundary</div><div class="stat-value">Periodic</div></div>
+        </div>
+      </aside>
+    </div>
+    <section class="about" aria-label="Scientific model and limitations">
+      <div>
+        <h2>What is simulated?</h2>
+        <p>Two spatially organized populations of leaky integrate-and-fire neurons, one excitatory (E) and one inhibitory (I), with distinct recurrent coupling. Neurons emit discrete spikes when their membrane potential crosses threshold, then reset and enter a brief refractory period. Local excitation competes with longer-range inhibition, allowing structured firing-rate maps to arise.</p>
+      </div>
+      <div>
+        <h2>How is the artwork made?</h2>
+        <p>The displayed colors represent an exponentially smoothed trace of excitatory spikes, with a small spatial smoothing used only for display. No pre-rendered pattern is inserted. This is a simplified exploratory SNN with a periodic 2D topology; pattern appearance is parameter- and seed-dependent and should not be interpreted as a validated biological or mathematical Turing instability.</p>
+      </div>
+    </section>
+    <footer>
+      An experimental companion to the <a href="https://github.com/albertoarturovergani/neural-turing-patterns" target="_blank" rel="noopener noreferrer">original <em>Neural Turing Patterns</em> artwork</a> by Alberto Arturo Vergani, developed in collaboration with Laurent Perrinet.
+      This prototype is distinct from the original simulation and artwork. Runs locally in your browser; no data is uploaded.
+    </footer>
+  </main>
+  <script>
+    'use strict';
+    // Experimental E/I lattice of discrete-time leaky integrate-and-fire neurons.
+    // 72 × 72 excitatory cells + 72 × 72 inhibitory cells; toroidal lattice.
+    // Synaptic fields are normalized periodic square-kernel convolutions of the
+    // exponential spike traces. This is a model-generating algorithm, not a GIF
+    // or a precomputed reaction-diffusion texture.
+    const N = 72, LEN = N * N, DT_ALPHA = 0.17, TRACE_DECAY = 0.90;
+    const canvas = document.getElementById('art');
+    const ctx = canvas.getContext('2d', { alpha: false });
+    const tiny = document.createElement('canvas'); tiny.width = N; tiny.height = N;
+    const tinyCtx = tiny.getContext('2d', { willReadFrequently: false, alpha: false });
+    const image = tinyCtx.createImageData(N, N);
+    const $ = id => document.getElementById(id);
+    const presets = {
+      spots:   {exc:13, inh:10, radius:8, iexc:13, driveE:1.03,driveI:.90,local:2},
+      maze:    {exc:13, inh:10, radius:8, iexc:5,  driveE:1.03,driveI:.90,local:2},
+      islands: {exc:13, inh:10, radius:12,iexc:13, driveE:1.03,driveI:.90,local:3}
+    };
+    const cfg = {...presets.spots};
+    const vE = new Float32Array(LEN), vI = new Float32Array(LEN);
+    const eTrace = new Float32Array(LEN), iTrace = new Float32Array(LEN);
+    const refE = new Uint8Array(LEN), refI = new Uint8Array(LEN);
+    const blurE = new Float32Array(LEN), blurI = new Float32Array(LEN);
+    const blurScratch = new Float32Array(LEN), imageSmooth = new Float32Array(LEN);
+    let randomState = 1, stepCount = 0, lastSpikesE = 0, running = true;
+    let frameId = null;
+    function reseed(seed) { randomState = (seed >>> 0) || 1; }
+    function rand() {
+      // Xorshift32: repeatable on all modern browsers.
+      randomState ^= randomState << 13;
+      randomState ^= randomState >>> 17;
+      randomState ^= randomState << 5;
+      return (randomState >>> 0) / 4294967296;
+    }
+    function blurWrap(src, dst, r) {
+      const w = 2*r+1, inv = 1/w;
+      for (let y=0; y<N; ++y) {
+        const base = y*N;
+        let sum = 0;
+        for (let k=-r; k<=r; ++k) sum += src[base+((k+N)%N)];
+        for (let x=0; x<N; ++x) {
+          blurScratch[base+x] = sum*inv;
+          const add=(x+r+1)%N, remove=(x-r+N)%N;
+          sum += src[base+add]-src[base+remove];
+        }
+      }
+      for (let x=0; x<N; ++x) {
+        let sum = 0;
+        for (let k=-r; k<=r; ++k) sum += blurScratch[((k+N)%N)*N+x];
+        for (let y=0; y<N; ++y) {
+          dst[y*N+x] = sum*inv;
+          const add=(y+r+1)%N, remove=(y-r+N)%N;
+          sum += blurScratch[add*N+x]-blurScratch[remove*N+x];
+        }
+      }
+    }
+    function runOneStep() {
+      blurWrap(eTrace, blurE, cfg.local);
+      blurWrap(iTrace, blurI, cfg.radius);
+      let spikesE = 0;
+      for (let j=0; j<LEN; ++j) {
+        // 3 uniforms centered at zero approximate Gaussian background drive.
+        const jitterE = (rand()+rand()+rand()-1.5)*0.24;
+        const jitterI = (rand()+rand()+rand()-1.5)*0.24;
+        let spikeE=0, spikeI=0;
+        if (refE[j] !== 0) { refE[j]--; vE[j]=0; }
+        else {
+          const target=cfg.driveE+cfg.exc*blurE[j]-cfg.inh*blurI[j]+jitterE;
+          vE[j] += DT_ALPHA*(target-vE[j]);
+          if (vE[j]>=1.0) {spikeE=1;vE[j]=0;refE[j]=2;spikesE++;}
+        }
+        if (refI[j] !== 0) { refI[j]--; vI[j]=0; }
+        else {
+          const target=cfg.driveI+cfg.iexc*blurE[j]-0.7*iTrace[j]+jitterI;
+          vI[j] += DT_ALPHA*(target-vI[j]);
+          if (vI[j]>=1.0) {spikeI=1;vI[j]=0;refI[j]=2;}
+        }
+        eTrace[j]=TRACE_DECAY*eTrace[j]+(1-TRACE_DECAY)*spikeE;
+        iTrace[j]=TRACE_DECAY*iTrace[j]+(1-TRACE_DECAY)*spikeI;
+      }
+      stepCount++;
+      lastSpikesE=spikesE;
+    }
+    function interpolateColor(x) {
+      // Original artwork's conceptual low / mid / high = blue / white / red.
+      const stops = [
+        [0,   7, 32, 82],
+        [.22, 8, 80,154],
+        [.42,130,191,222],
+        [.56,247,249,249],
+        [.75,239, 96,117],
+        [1,  131, 13, 54]
+      ];
+      for(let i=0;i<stops.length-1;i++) {
+        const a=stops[i],b=stops[i+1];
+        if(x<=b[0]) {const t=Math.max(0,(x-a[0])/(b[0]-a[0]));return [Math.round(a[1]+(b[1]-a[1])*t),Math.round(a[2]+(b[2]-a[2])*t),Math.round(a[3]+(b[3]-a[3])*t)];}
+      }
+      return [131,13,54];
+    }
+    const LUT=Array.from({length:256},(_,i)=>interpolateColor(i/255));
+    function render() {
+      blurWrap(eTrace, imageSmooth, 1); // Display smoothing only.
+      let mean=0;
+      for(let i=0;i<LEN;i++) {
+        mean+=eTrace[i];
+        const normalized = Math.max(0,Math.min(1,(imageSmooth[i]-.008)/.185));
+        const c = LUT[Math.round(normalized*255)];
+        const k=i*4;
+        image.data[k]=c[0];image.data[k+1]=c[1];image.data[k+2]=c[2];image.data[k+3]=255;
+      }
+      tinyCtx.putImageData(image,0,0);
+      ctx.imageSmoothingEnabled=true;
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.drawImage(tiny,0,0,canvas.width,canvas.height);
+      $('step').textContent=stepCount.toLocaleString('en-US');
+      $('activity').textContent=(mean/LEN).toFixed(3);
+      $('status').textContent=running?'Simulating (live)':'Paused';
+      $('led').classList.toggle('pause',!running);
+      $('toggle').textContent=running?'Ⅱ  Pause':'▶  Resume';
+    }
+    function loop() {
+      frameId=null;
+      if (!running) return;
+      // Simulation is deliberately bounded per animation frame to keep UI responsive.
+      for(let i=0;i<7;i++) runOneStep();
+      render();
+      frameId=requestAnimationFrame(loop);
+    }
+    function start() {
+      if(frameId!==null) cancelAnimationFrame(frameId);
+      frameId=null;running=true;
+      render();frameId=requestAnimationFrame(loop);
+    }
+    function reset() {
+      let seed=Number.parseInt($('seed').value,10);
+      if (!Number.isInteger(seed) || seed<1 || seed>2147483647) {
+        seed=2026;$('seed').value=String(seed);
+      }
+      reseed(seed);stepCount=0;lastSpikesE=0;
+      eTrace.fill(0);iTrace.fill(0);refE.fill(0);refI.fill(0);
+      for(let i=0;i<LEN;i++) {vE[i]=rand()*.95;vI[i]=rand()*.95;}
+      start();
+    }
+    function markCustom() {
+      document.querySelectorAll('[data-preset]').forEach(button=>{
+        button.classList.remove('selected');button.setAttribute('aria-pressed','false');
+      });
+    }
+    function updateSliderLabels() {
+      $('excValue').textContent=Number(cfg.exc).toFixed(1);
+      $('inhValue').textContent=Number(cfg.inh).toFixed(1);
+      $('radiusValue').textContent=String(cfg.radius);
+    }
+    for (const button of document.querySelectorAll('[data-preset]')) {
+      button.addEventListener('click',()=>{
+        Object.assign(cfg,presets[button.dataset.preset]);
+        $('exc').value=cfg.exc;$('inh').value=cfg.inh;$('radius').value=cfg.radius;
+        updateSliderLabels();
+        markCustom();button.classList.add('selected');button.setAttribute('aria-pressed','true');
+        reset();
+      });
+    }
+    for (const name of ['exc','inh','radius']) {
+      $(name).addEventListener('input',()=>{
+        cfg[name]=Number($(name).value);updateSliderLabels();markCustom();
+      });
+    }
+    $('generate').addEventListener('click',()=>{
+      // A new independent world at every click, with the new seed visible.
+      // Changing the value back reproduces the same initial world and parameters.
+      const current=Number.parseInt($('seed').value,10)||2026;
+      $('seed').value=String(current>=2147483647?1:current+1);
+      reset();
+    });
+    $('seed').addEventListener('change',()=>reset());
+    $('toggle').addEventListener('click',()=>{
+      if (running) {running=false;if(frameId!==null) cancelAnimationFrame(frameId);frameId=null;render();}
+      else start();
+    });
+    function downloadBlob(blob,filename){
+      const url=URL.createObjectURL(blob),anchor=document.createElement('a');
+      anchor.href=url;anchor.download=filename;document.body.append(anchor);anchor.click();anchor.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),1200);
+    }
+    $('png').addEventListener('click',()=>{
+      const filename=`neural-turing-seed-${$('seed').value}-step-${stepCount}.png`;
+      canvas.toBlob(blob=>{if(blob)downloadBlob(blob,filename);},'image/png');
+    });
+    $('config').addEventListener('click',()=>{
+      const saved={
+        title:'Neural Turing Patterns — Interactive Lab',
+        seed:Number($('seed').value),step:stepCount,grid:[N,N],neurons:LEN*2,
+        model:'two-population discrete-time LIF spatial SNN',
+        coupling:{...cfg},
+        dynamics:{alpha:DT_ALPHA,trace_decay:TRACE_DECAY,threshold:1,refractory_steps:2,jitter_factor:.24},
+        note:'This records the parameters and step for reproducibility with this exact HTML implementation.'
+      };
+      downloadBlob(new Blob([JSON.stringify(saved,null,2)],{type:'application/json'}),`neural-turing-seed-${$('seed').value}.json`);
+    });
+    reset();
+  </script>
+</body>
+</html>
