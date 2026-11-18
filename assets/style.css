@@ -181,3 +181,18 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{line-height:1.16}h1,h2{letter-spacing:-.04em}h2
 /* Research lines — distinguish the label without changing the blue palette */
 .strip-inner>.strip-label{font-size:10px;font-weight:850;letter-spacing:.10em;text-transform:uppercase;color:#287f76;white-space:nowrap}
 @media(max-width:980px){.strip-inner{flex-wrap:wrap;justify-content:center;padding-block:15px;row-gap:10px}}
+
+/* Clickable research-line links keep the original compact typography. */
+.strip-inner>.research-line-link{
+  display:inline-flex;align-items:center;min-height:36px;
+  color:#32635e;font-size:12px;font-weight:750;letter-spacing:.045em;
+  text-decoration:none;text-underline-offset:4px;
+  transition:color .15s ease, text-decoration-color .15s ease;
+}
+.strip-inner>.research-line-link:hover,
+.strip-inner>.research-line-link:focus-visible{
+  color:#0c5b76;text-decoration:underline;text-decoration-thickness:1.5px;
+}
+@media(max-width:580px){
+ .strip-inner>.research-line-link{font-size:10px;white-space:normal;min-height:30px;text-align:center}
+}
