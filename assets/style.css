@@ -435,4 +435,14 @@ body{color-scheme:dark}
   .site-nav .nav-contact{background:#194148;color:#fff}
   .cv-aside{border-bottom-color:#354652}
 }
+.hero-affiliation{max-width:860px;margin-top:32px;padding:20px 24px;background:rgba(13,21,28,.94);border:1px solid #35535b;border-radius:12px;box-shadow:inset 3px 0 0 #80dbd0;color:#bfced8;font-size:14px;line-height:1.6;overflow-wrap:anywhere}
+.affiliation-row{display:grid;grid-template-columns:132px minmax(0,1fr);gap:18px;align-items:start}
+.affiliation-row+.affiliation-row{margin-top:14px;padding-top:14px;border-top:1px solid #2a404b}
+.affiliation-role{margin-top:3px;color:#a0dcd5;font-size:10px;font-weight:750;letter-spacing:.08em;line-height:1.8;text-transform:uppercase}
+.affiliation-content{min-width:0}
+.affiliation-name{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:10px;margin:0;font-size:14px;font-weight:650}
+.affiliation-meta{margin:0;color:#9ab0bd;font-size:12px;font-weight:450}
+.affiliation-links{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin-top:4px;font-size:12px;font-weight:500}
+.hero-affiliation a:focus-visible{outline:2px solid #83dfd5;outline-offset:3px;border-radius:2px}
+@media(max-width:580px){.hero-affiliation{padding:17px 18px;margin-top:28px;border-radius:10px;font-size:13px}.affiliation-row{grid-template-columns:1fr;gap:6px}.affiliation-role{margin-top:0}.affiliation-name{font-size:13px}}
 
