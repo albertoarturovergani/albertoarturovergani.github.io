@@ -399,8 +399,12 @@
     "spiking-networks"
   ],
   "vergani2020resting": [
-    "neuroscience",
     "computer-science",
+    "computational-intelligence",
+    "soft-computing",
+    "machine-learning",
+    "medical-informatics",
+    "neuroscience",
     "neuroimaging"
   ],
   "vergani2020critical": [
@@ -422,33 +426,52 @@
   ],
   "gonella2019cloud": [
     "computer-science",
-    "machine-learning"
+    "computational-intelligence",
+    "soft-computing",
+    "machine-learning",
+    "medical-informatics"
   ],
   "martinelli2019comparison": [
-    "neuroscience",
     "computer-science",
+    "computational-intelligence",
+    "soft-computing",
     "machine-learning",
+    "medical-informatics",
+    "neuroscience",
     "neuroimaging"
   ],
   "binaghi2018computation": [
-    "neuroscience",
     "computer-science",
+    "computational-intelligence",
+    "soft-computing",
+    "machine-learning",
+    "medical-informatics",
+    "neuroscience",
     "neuroimaging"
   ],
   "vergani2018soft": [
     "computer-science",
-    "machine-learning"
+    "computational-intelligence",
+    "soft-computing",
+    "machine-learning",
+    "medical-informatics"
   ],
   "vergani2018clustering": [
-    "neuroscience",
     "computer-science",
+    "computational-intelligence",
+    "soft-computing",
     "machine-learning",
+    "medical-informatics",
+    "neuroscience",
     "neuroimaging"
   ],
   "vergani2018resting": [
-    "neuroscience",
     "computer-science",
+    "computational-intelligence",
+    "soft-computing",
     "machine-learning",
+    "medical-informatics",
+    "neuroscience",
     "neuroimaging"
   ],
   "vergani2018contributions": [
@@ -458,22 +481,36 @@
   ],
   "binaghi2017accuracy": [
     "computer-science",
-    "machine-learning"
+    "computational-intelligence",
+    "soft-computing",
+    "machine-learning",
+    "medical-informatics"
   ],
   "vergani2017cluster": [
-    "neuroscience",
     "computer-science",
+    "computational-intelligence",
+    "soft-computing",
     "machine-learning",
+    "medical-informatics",
+    "neuroscience",
     "neuroimaging"
   ],
   "vergani2017quantitative": [
-    "neuroscience",
     "computer-science",
+    "computational-intelligence",
+    "soft-computing",
+    "machine-learning",
+    "medical-informatics",
+    "neuroscience",
     "neuroimaging"
   ],
   "vergani2016fsl": [
-    "neuroscience",
     "computer-science",
+    "computational-intelligence",
+    "soft-computing",
+    "machine-learning",
+    "medical-informatics",
+    "neuroscience",
     "neuroimaging"
   ],
   "vergani2014mscthesis": [

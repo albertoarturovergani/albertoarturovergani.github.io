@@ -2029,8 +2029,12 @@
       "abstract": "",
       "bibtex": "@article{vergani2020resting,\n  abstract = {},\n  title={Resting state fMRI analysis using unsupervised learning algorithms},\n  author={\\textbf{Vergani, Alberto Arturo} and Martinelli, Samuele and Binaghi, Elisabetta},\n  journal={Computer Methods in Biomechanics and Biomedical Engineering: Imaging \\& Visualization},\n  volume={8},\n  number={3},\n  pages={252--265},\n  year={2020},\n  doi={10.1080/21681163.2019.1636413},\n  publisher={Taylor \\& Francis}\n}",
       "topics": [
-        "neuroscience",
         "computer-science",
+        "computational-intelligence",
+        "soft-computing",
+        "machine-learning",
+        "medical-informatics",
+        "neuroscience",
         "neuroimaging"
       ],
       "abstract_source": "",
@@ -2145,7 +2149,10 @@
       "bibtex": "@inproceedings{gonella2019cloud,\n  abstract = {},\n  title={A Cloud Fuzzy Logic Framework for Oral Disease Risk Assessment},\n  author={Gonella, Gloria and Binaghi, Elisabetta and \\textbf{Vergani, Alberto Arturo} and Biotti, Irene and Levrini, Luca},\n  booktitle={Lecture Notes in Computer Science},\n  volume={11291},\n  pages={85--96},\n  year={2019},\n  doi={10.1007/978-3-030-12544-8_7},\n  publisher={Springer, Cham}\n}",
       "topics": [
         "computer-science",
-        "machine-learning"
+        "computational-intelligence",
+        "soft-computing",
+        "machine-learning",
+        "medical-informatics"
       ],
       "abstract_source": "",
       "abstract_license": "",
@@ -2171,9 +2178,12 @@
       "abstract": "",
       "bibtex": "@inproceedings{martinelli2019comparison,\n  abstract = {},\n  title={Comparison of Validity Indexes for Fuzzy Clusters of fMRI Data},\n  author={Martinelli, Samuele and \\textbf{Vergani, Alberto Arturo} and Binaghi, Elisabetta},\n  booktitle={Lecture Notes in Computational Vision and Biomechanics},\n  volume={34},\n  pages={169--178},\n  year={2019},\n  doi={10.1007/978-3-030-32040-9_18},\n  publisher={Springer, Cham}\n}",
       "topics": [
-        "neuroscience",
         "computer-science",
+        "computational-intelligence",
+        "soft-computing",
         "machine-learning",
+        "medical-informatics",
+        "neuroscience",
         "neuroimaging"
       ],
       "abstract_source": "",
@@ -2203,8 +2213,12 @@
       "abstract": "",
       "bibtex": "@article{binaghi2018computation,\n  abstract = {},\n  title={Computation and management of weighted activation vectors in support to fMRI analysis of clinical subjects},\n  author={Binaghi, Elisabetta and \\textbf{Vergani, Alberto A} and Montalbetti, Andrea and Minotto, Renzo and Pedoia, Valentina and Strocchi, Sabina and Balbi, Sergio},\n  journal={Computer Methods in Biomechanics and Biomedical Engineering: Imaging \\& Visualization},\n  volume={7},\n  number={5-6},\n  pages={563--582},\n  doi={10.1080/21681163.2018.1501767},\n  year={2018},\n  publisher={Taylor \\& Francis}\n}",
       "topics": [
-        "neuroscience",
         "computer-science",
+        "computational-intelligence",
+        "soft-computing",
+        "machine-learning",
+        "medical-informatics",
+        "neuroscience",
         "neuroimaging"
       ],
       "abstract_source": "",
@@ -2213,6 +2227,7 @@
       "repositories": [],
       "keywords": [
         "visual-attention",
+        "machine-learning",
         "neuroimaging",
         "fmri",
         "mri"
@@ -2233,7 +2248,10 @@
       "bibtex": "@inproceedings{vergani2018soft,\n  abstract = {},\n  title={A Soft Davies-Bouldin Separation Measure},\n  author={\\textbf{Vergani, Alberto A} and Binaghi, Elisabetta},\n  booktitle={2018 IEEE International Conference on Fuzzy Systems (FUZZ-IEEE)},\n  pages={1--8},\n  doi={10.1109/FUZZ-IEEE.2018.8491581},\n  year={2018},\n  organization={IEEE}\n}",
       "topics": [
         "computer-science",
-        "machine-learning"
+        "computational-intelligence",
+        "soft-computing",
+        "machine-learning",
+        "medical-informatics"
       ],
       "abstract_source": "",
       "abstract_license": "",
@@ -2264,9 +2282,12 @@
       "abstract": "",
       "bibtex": "@inproceedings{vergani2018clustering,\n  abstract = {},\n  title={Clustering functional MRI Patterns with Fuzzy and Competitive Algorithms},\n  author={\\textbf{Vergani, Alberto Arturo} and Martinelli, Samuele and Binaghi, Elisabetta},\n  booktitle={Lecture Notes in Computer Science},\n  volume={10986},\n  pages={129--144},\n  doi={10.1007/978-3-030-20805-9_12},\n  year={2018},\n  publisher={Springer, Cham}\n}",
       "topics": [
-        "neuroscience",
         "computer-science",
+        "computational-intelligence",
+        "soft-computing",
         "machine-learning",
+        "medical-informatics",
+        "neuroscience",
         "neuroimaging"
       ],
       "abstract_source": "",
@@ -2296,9 +2317,12 @@
       "abstract": "",
       "bibtex": "@inproceedings{vergani2018resting,\n  abstract = {},\n  title={Resting State fMRI Functional Connectivity Analysis Using Soft Competitive Learning Algorithms},\n  author={\\textbf{Vergani, Alberto A} and Binaghi, Elisabetta and Martinelli, Samuele and Strocchi, Sabina},\n  booktitle={15th International Symposium on Computer Methods in Biomechanics and Biomedical Engineering  and  3rd Conference on Imaging and Visualization},\n  pages={1--12},\n  year={2018},\n  organization={Springer}\n}",
       "topics": [
-        "neuroscience",
         "computer-science",
+        "computational-intelligence",
+        "soft-computing",
         "machine-learning",
+        "medical-informatics",
+        "neuroscience",
         "neuroimaging"
       ],
       "abstract_source": "",
@@ -2364,7 +2388,10 @@
       "bibtex": "@inproceedings{binaghi2017accuracy,\n  abstract = {},\n  title={Accuracy evaluation of soft classifiers using interval type-2 fuzzy sets framework},\n  author={Binaghi, Elisabetta and \\textbf{Vergani, Alberto A} and Pedoia, Valentina},\n  booktitle={2017 IEEE International Conference on Fuzzy Systems (FUZZ-IEEE)},\n  pages={1--6},\n  doi={10.1109/FUZZ-IEEE.2017.8015427},\n  year={2017},\n  organization={IEEE}\n}",
       "topics": [
         "computer-science",
-        "machine-learning"
+        "computational-intelligence",
+        "soft-computing",
+        "machine-learning",
+        "medical-informatics"
       ],
       "abstract_source": "",
       "abstract_license": "",
@@ -2390,9 +2417,12 @@
       "abstract": "",
       "bibtex": "@inproceedings{vergani2017cluster,\n  abstract = {},\n  title={Cluster analysis of functional neuroimages using data reduction and competitive learning algorithms},\n  author={\\textbf{Vergani, Alberto A} and Martinelli, Samuele and Binaghi, Elisabetta},\n  booktitle={Lecture Notes in Computational Vision and Biomechanics},\n  volume={27},\n  pages={62--71},\n  doi={10.1007/978-3-319-68195-5_7},\n  year={2017},\n  publisher={Springer, Cham}\n}",
       "topics": [
-        "neuroscience",
         "computer-science",
+        "computational-intelligence",
+        "soft-computing",
         "machine-learning",
+        "medical-informatics",
+        "neuroscience",
         "neuroimaging"
       ],
       "abstract_source": "",
@@ -2421,8 +2451,12 @@
       "abstract": "",
       "bibtex": "@inproceedings{vergani2017quantitative,\n  abstract = {},\n  title={Quantitative Relations between CRAIIM Human Brain Atlases},\n  author={\\textbf{Vergani, Alberto Arturo} and Minotto, Renzo and Strocchi, Sabina and Binaghi, Elisabetta},\n  booktitle= {Proceedings of the 1th Human Brain Project Student Conference},\n  year={2017},\n  doi = {10.13140/RG.2.2.19458.49600},\n  address = {Vienna, Austria},\n  organization = {The Human Brain Project},\n}",
       "topics": [
-        "neuroscience",
         "computer-science",
+        "computational-intelligence",
+        "soft-computing",
+        "machine-learning",
+        "medical-informatics",
+        "neuroscience",
         "neuroimaging"
       ],
       "abstract_source": "",
@@ -2435,6 +2469,7 @@
         }
       ],
       "keywords": [
+        "machine-learning",
         "neuroimaging"
       ]
     },
@@ -2452,8 +2487,12 @@
       "abstract": "Introduction and Motivations. Functional magnetic resonance methods detect in vivo brain hemodynamic responses related to specific task. After defined statistical processes pipeline, relevant information contained in the fMRI Blood-Oxygen-Level-Dependent signals are transformed in a 3D Statistical Parametric Maps. In our previous works, we investigated how to conveniently summarize these original 3D distributions by a more compact description composed of a set of indexes calculated for each functional area. These values, properly named Activation Weighted Indexes (AWIs), vary between 0 and 1 and regard all brain regions contained into specific template used for co-registration (e.g. using Juelich standard there will be 121 indexes). The proposed AWI based feature extraction procedure reduces the three-dimensions SPM distribution to the one-dimension AWI distribution The resulting quantized data structure of task-related brain activations, that we named Activation Weighted Vector (AWV), is a histogram, where each bin represents the level of the functionality of each brain structure. The expressiveness of AWV depends by the normalization procedure for fMRI scans: the more regions standard atlas has, the more AWIs are computable. Proceeding from these considerations, we addressed the problem of generating an inclusive template for AWI analysis satisfying the right trade-off between exhaustion power and visual usability.\n\nDescription of CRAIIM Hybrid Atlas. The hybrid atlas is the outcome of the joint operation between different brain templates found into the FMRIB Software Library. They are Juelich histological atlas and Harvard-Oxford cortical and subcortical structural atlases. Both are probabilistic labelled and registered in MNI152 space. Juelich model was created by averaging multi-subject post-mortem cyto and myelo-architectonic segmentations, which has detected 52 grey matter structures and 10 white matters ones. Harvard-Oxford models cover 48 cortical and 21 subcortical structural regions, computed by segmentation of T1-weighted images of healthy male and female. The joint process was possible choosing a reference atlas and then adding lacking anatomical structures. In our case, Juelich atlas was the template from which regions dearth were easily included choosing them from Harvard-Oxford atlases. This procedure, shaped with complete or partial union operations, gives rise to an hybrid atlas that covers 161 regions, in which 121 are the 100% of Juelich, and other 40 are a variable percentage of Harvard-Oxford original brain volumes. The benefits of this hybrid atlas are the integration of fundamental neuroanatomy models useful for co-registration that in the standard template were absent, e.g. many frontal and temporal cortexes, subcallosal portions, cingulate gyrus and thalamus halves. The limitation is that these last regions are in some cases a minor proportion of the Harvard-Oxford template. The hybridized atlas is in NIFTI format and its FSL-like name is CRAIIM-thr0-1mm.nii.gz (where thr0 is a voxel probability threshold, i.e. Prob. ≥ 0 to belong a certain anatomical label; and 1mm means the voxels resolution).\n\nClinical Applications. As above described, CRAIIM hybrid atlas has 161 regions. With this registration template, the AWV procedure generates vectors of 161 indexes from each SPMs yielding important advantages both in the analysis of collection of data and in the individual data interpretation. The data represented in a “well dimensioned” vector space are used to perform efficiently quantitative measures of dissimilarity among brains functional activations basing on a given selected metrics. Unsupervised learning methods are naturally applied to learn the structure of the data and then to discover and recognize salient neurological patterns that unearth hidden features, also permitting their interpretation like individual brain signatures. With AWV analysis, the Radiologists investigate activation about macro categories alike white/grey matters contribution or left/right hemispheres functional balancement. In addition, AWVs allow physician to examine geographically defined zones such as frontal or temporal cortexes, motor or visual systems, limbic core, callosum commissure, or more detailed contribution akin Broca’s areas, Wernicke’s areas, &c. AWVs also facilitate severe assessment modalities for patients monitoring. For example, within homogenous group, clinicians could discover interesting level differences; or between heterogeneous ones, they could observe interesting likeness. In addition, including time factor for each subject, longitudinal studies based on AWV could highlight brain plasticity processes more suitable than classical SPM qualitative visual inspection. These kind of clinical evaluations have claim among pre/post neurosurgical operation controls or during long-term ordinary patients’ checks. Obviously, AWV analysis is a math tool well applicable with active paradigm as well as passive ones, e.g. for resting state fMRI acquisition, keeping in mind the greater role that could have distributed functional connectivity instead locally defined expected activation.\n\nPresent and Future Works. Hybrid atlas has enhanced activated weighted vector analysis thanks to its peculiarities. It has clinical utility for AWV methodology, but some kind of incompleteness for all brain region representation: it is missing of special structure like cerebellum and, in general, has some portion that is a percentage of its original atlases. Other own quality regards the resolution about only 1mm. Future work is planned to generalize the atlas building procedure with which to easily generate solutions for diversified functional neuroradiological applications honouring the salience of existing specialized template.",
       "bibtex": "@inproceedings{vergani2016fsl,\n  abstract = {\n    Introduction and Motivations. Functional magnetic resonance methods detect in vivo brain\n    hemodynamic responses related to specific task. After defined statistical processes pipeline,\n    relevant information contained in the fMRI Blood-Oxygen-Level-Dependent signals are transformed\n    in a 3D Statistical Parametric Maps. In our previous works, we investigated how to conveniently\n    summarize these original 3D distributions by a more compact description composed of a set of\n    indexes calculated for each functional area. These values, properly named Activation Weighted\n    Indexes (AWIs), vary between 0 and 1 and regard all brain regions contained into specific\n    template used for co-registration (e.g. using Juelich standard there will be 121 indexes). The\n    proposed AWI based feature extraction procedure reduces the three-dimensions SPM distribution to\n    the one-dimension AWI distribution The resulting quantized data structure of task-related brain\n    activations, that we named Activation Weighted Vector (AWV), is a histogram, where each bin\n    represents the level of the functionality of each brain structure. The expressiveness of AWV\n    depends by the normalization procedure for fMRI scans: the more regions standard atlas has, the\n    more AWIs are computable. Proceeding from these considerations, we addressed the problem of\n    generating an inclusive template for AWI analysis satisfying the right trade-off between\n    exhaustion power and visual usability.\n\n    Description of CRAIIM Hybrid Atlas. The hybrid atlas is the outcome of the joint operation\n    between different brain templates found into the FMRIB Software Library. They are Juelich\n    histological atlas and Harvard-Oxford cortical and subcortical structural atlases. Both are\n    probabilistic labelled and registered in MNI152 space. Juelich model was created by averaging\n    multi-subject post-mortem cyto and myelo-architectonic segmentations, which has detected 52 grey\n    matter structures and 10 white matters ones. Harvard-Oxford models cover 48 cortical and 21\n    subcortical structural regions, computed by segmentation of T1-weighted images of healthy male\n    and female. The joint process was possible choosing a reference atlas and then adding lacking\n    anatomical structures. In our case, Juelich atlas was the template from which regions dearth\n    were easily included choosing them from Harvard-Oxford atlases. This procedure, shaped with\n    complete or partial union operations, gives rise to an hybrid atlas that covers 161 regions, in\n    which 121 are the 100\\% of Juelich, and other 40 are a variable percentage of Harvard-Oxford\n    original brain volumes. The benefits of this hybrid atlas are the integration of fundamental\n    neuroanatomy models useful for co-registration that in the standard template were absent, e.g.\n    many frontal and temporal cortexes, subcallosal portions, cingulate gyrus and thalamus halves.\n    The limitation is that these last regions are in some cases a minor proportion of the\n    Harvard-Oxford template. The hybridized atlas is in NIFTI format and its FSL-like name is\n    CRAIIM-thr0-1mm.nii.gz (where thr0 is a voxel probability threshold, i.e. Prob. ≥ 0 to belong a\n    certain anatomical label; and 1mm means the voxels resolution).\n\n    Clinical Applications. As above described, CRAIIM hybrid atlas has 161 regions. With this\n    registration template, the AWV procedure generates vectors of 161 indexes from each SPMs\n    yielding important advantages both in the analysis of collection of data and in the individual\n    data interpretation. The data represented in a “well dimensioned” vector space are used to\n    perform efficiently quantitative measures of dissimilarity among brains functional activations\n    basing on a given selected metrics. Unsupervised learning methods are naturally applied to learn\n    the structure of the data and then to discover and recognize salient neurological patterns that\n    unearth hidden features, also permitting their interpretation like individual brain signatures.\n    With AWV analysis, the Radiologists investigate activation about macro categories alike\n    white/grey matters contribution or left/right hemispheres functional balancement. In addition,\n    AWVs allow physician to examine geographically defined zones such as frontal or temporal\n    cortexes, motor or visual systems, limbic core, callosum commissure, or more detailed\n    contribution akin Broca’s areas, Wernicke’s areas, \\&c. AWVs also facilitate severe assessment\n    modalities for patients monitoring. For example, within homogenous group, clinicians could\n    discover interesting level differences; or between heterogeneous ones, they could observe\n    interesting likeness. In addition, including time factor for each subject, longitudinal studies\n    based on AWV could highlight brain plasticity processes more suitable than classical SPM\n    qualitative visual inspection. These kind of clinical evaluations have claim among pre/post\n    neurosurgical operation controls or during long-term ordinary patients’ checks. Obviously, AWV\n    analysis is a math tool well applicable with active paradigm as well as passive ones, e.g. for\n    resting state fMRI acquisition, keeping in mind the greater role that could have distributed\n    functional connectivity instead locally defined expected activation.\n\n    Present and Future Works. Hybrid atlas has enhanced activated weighted vector analysis thanks to\n    its peculiarities. It has clinical utility for AWV methodology, but some kind of incompleteness\n    for all brain region representation: it is missing of special structure like cerebellum and, in\n    general, has some portion that is a percentage of its original atlases. Other own quality\n    regards the resolution about only 1mm. Future work is planned to generalize the atlas building\n    procedure with which to easily generate solutions for diversified functional neuroradiological\n    applications honouring the salience of existing specialized template.\n  },\n  title={FSL-Based Hybrid Atlas Promotes Activation Weighted Vector Analysis in Functional Neuroradiology},\n  author={\\textbf{Vergani, Alberto Arturo} and Minotto, Renzo and Strocchi, Sabina and Binaghi, Elisabetta},\n  %journal={Frontiers in Neuroinformatics},\n  volume={77},\n  year={2016},\n  booktitle={INCF Neuroinformatics Conference 2016, Reading, United Kingdom, 3 Sep - 4 Sep, 2016},\n  doi={doi: 10.3389/conf.fninf.2016.20.00077},\n  publisher={Frontiers Media (SA)}\n}",
       "topics": [
-        "neuroscience",
         "computer-science",
+        "computational-intelligence",
+        "soft-computing",
+        "machine-learning",
+        "medical-informatics",
+        "neuroscience",
         "neuroimaging"
       ],
       "abstract_source": "https://www.frontiersin.org/10.3389/conf.fninf.2016.20.00077/event_abstract",
@@ -2466,6 +2505,7 @@
         }
       ],
       "keywords": [
+        "machine-learning",
         "neuroimaging"
       ]
     },

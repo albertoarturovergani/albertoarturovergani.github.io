@@ -27,7 +27,9 @@ WORDCLOUD_OUTPUT = ROOT / 'data' / 'wordcloud.json'
 ABSTRACT_SOURCES_FILE = ROOT / 'content' / 'abstract_sources.json'
 REPOSITORIES_FILE = ROOT / 'content' / 'repositories.json'
 
-TOPICS = {'neuroscience', 'computer-science', 'history', 'neuroengineering', 'education', 'brain-modelling', 'machine-learning', 'eeg', 'neuroimaging', 'cerebellum', 'cognitive-decline', 'schizophrenia', 'brain-stimulation', 'spiking-networks', 'dopamine', 'neurodevelopment', 'parkinson', 'autism', 'other'}
+TOPICS = {'neuroscience', 'computer-science', 'computational-intelligence', 'soft-computing', 'medical-informatics', 'history', 'neuroengineering', 'education', 'brain-modelling', 'machine-learning', 'eeg', 'neuroimaging', 'cerebellum', 'cognitive-decline', 'schizophrenia', 'brain-stimulation', 'spiking-networks', 'dopamine', 'neurodevelopment', 'parkinson', 'autism', 'other'}
+
+BINAGHI_TOPICS = ('computer-science', 'computational-intelligence', 'soft-computing', 'machine-learning', 'medical-informatics')
 
 KIND = {
     'article': 'journal',
@@ -244,6 +246,8 @@ def assigned_topics(entry: dict[str, str], topic_overrides: dict) -> list[str]:
     tags = list(tags)
     if 'mazzoni' in entry.get('author', '').lower():
         tags.append('neuroengineering')
+    if 'binaghi' in entry.get('author', '').casefold():
+        tags.extend(BINAGHI_TOPICS)
     return list(dict.fromkeys(tags))
 
 
@@ -416,4 +420,3 @@ def main() -> int:
 
 if __name__ == '__main__':
     raise SystemExit(main())
-

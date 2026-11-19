@@ -75,6 +75,9 @@ function renderFeatured(items) {
 const TOPIC_NAMES = Object.freeze({
   "neuroscience": "Neuroscience",
   "computer-science": "Computer science & AI",
+  "computational-intelligence": "Computational intelligence",
+  "soft-computing": "Soft computing",
+  "medical-informatics": "Medical informatics",
   "history": "History of science",
   "brain-modelling": "Brain modelling & digital twins",
   "neuroengineering": "Neuroengineering",
@@ -443,4 +446,3 @@ async function initializePublications() {
 document.getElementById('current-year')?.replaceChildren(String(new Date().getFullYear()));
 initializeNavigation();
 initializePublications();
-
