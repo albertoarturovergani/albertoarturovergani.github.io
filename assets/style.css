@@ -318,6 +318,9 @@ body{color-scheme:dark}
 .career-education span:not(.mini-label),.timeline-item small{color:#a6b8c5}
 .timeline{border-color:#43606a}
 .timeline-item:before{background:#06090d;border-color:#82ded1}
+.timeline-item h3 a{color:inherit;text-decoration:underline;text-decoration-color:var(--accent);text-decoration-thickness:1px;text-underline-offset:4px}
+.timeline-item h3 a:hover{color:var(--accent)}
+.timeline-item h3 a:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:2px}
 .education-card p strong{color:#f0f4f9}
 .education-card .education-institution,.education-year,.education-degree{color:#9ce4db}
 .education-more{color:#aebec9}
@@ -326,6 +329,10 @@ body{color-scheme:dark}
 .recognition-section,.art-section{background:#000}
 .recognition-group h3,.recognition-entry h4{color:#e8f6f8;border-color:#33404b}
 .recognition-entry a{color:#a8e7e0}
+.recognition-entry-actions{display:flex;align-items:center;flex-wrap:wrap;gap:12px 18px;margin-top:16px;font-size:12px}
+.recognition-entry-actions .event-details-link{display:inline-flex;align-items:center;min-height:38px;padding:7px 14px;border:1px solid #557a7e;border-radius:5px;background:#132128;color:#d8faf6;text-decoration:none}
+.recognition-entry-actions .event-details-link:hover{background:#1c3f45;border-color:#76b6ad;color:#fff}
+@media(max-width:580px){.recognition-entry-actions a{min-height:44px;display:inline-flex;align-items:center}}
 .art-image,.art-card:first-child .art-image{background:#080c13}
 .art-info h3{color:#f0f4fa}
 .art-info>a{border-color:#50616b;color:#ade6e1}

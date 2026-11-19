@@ -1,0 +1,269 @@
+{
+  "events": [
+    {
+      "id": "sipf-2025",
+      "title": "Tracing Brain Evolution Through Fossils and Digital Models",
+      "subtitle": "",
+      "series": "SIPF 2025",
+      "kind": "Symposium II",
+      "date": "2025-09-17",
+      "start_time": "08:45",
+      "end_time": "10:00",
+      "timezone": "Europe/Rome",
+      "city": "Verona, Italy",
+      "venue": "Polo Zanotto, University of Verona",
+      "room": "Aula T.1",
+      "roles": [
+        {
+          "label": "Chair",
+          "names": [
+            "Alberto Arturo Vergani"
+          ]
+        }
+      ],
+      "overview": "A symposium on large-scale brain adaptation through palaeoneurology and computational modelling.",
+      "programme_url": "https://www.sipf.it/resources/CONGRESSO%20SIPF%202025/PROGRAMMA%20CONGRESSO%20SIPF%20VERONA%202025_DEFINITIVO.pdf#page=7",
+      "official_url": "https://www.sipf.it/page-18196",
+      "affiliation_note": "Talk titles and speaker order follow the final SIPF 2025 programme. Affiliations follow the symposium proposal entry in the academic CV.",
+      "speakers": [
+        {
+          "name": "Carmela Serio",
+          "talk_title": "The shape of our mind: unravelling primate brain evolution with RRmorph",
+          "affiliation": "University of Naples Federico II",
+          "affiliation_note": "Affiliation listed in the academic CV’s symposium proposal entry.",
+          "affiliation_source_url": "https://albertoarturovergani.github.io/cv.html#winning-proposals",
+          "abstract": null,
+          "abstract_source_url": null
+        },
+        {
+          "name": "Marina Melchionna",
+          "talk_title": "Shaping minds, shaping stones. How tool use and brain lateralization shaped human cognition",
+          "affiliation": "University of Naples Federico II",
+          "affiliation_note": "Affiliation listed in the academic CV’s symposium proposal entry.",
+          "affiliation_source_url": "https://albertoarturovergani.github.io/cv.html#winning-proposals",
+          "abstract": null,
+          "abstract_source_url": null
+        },
+        {
+          "name": "Gabriele Sansalone",
+          "talk_title": "Some like it hot, and smart. The evolutionary byproducts of the human brain shape",
+          "affiliation": "University of Modena and Reggio Emilia; University of New England",
+          "affiliation_note": "Affiliation listed in the academic CV’s symposium proposal entry.",
+          "affiliation_source_url": "https://albertoarturovergani.github.io/cv.html#winning-proposals",
+          "abstract": null,
+          "abstract_source_url": null
+        }
+      ],
+      "sources": [
+        {
+          "title": "SIPF 2025 final programme · page 7",
+          "url": "https://www.sipf.it/resources/CONGRESSO%20SIPF%202025/PROGRAMMA%20CONGRESSO%20SIPF%20VERONA%202025_DEFINITIVO.pdf#page=7"
+        },
+        {
+          "title": "SIPF 2025 programme page",
+          "url": "https://www.sipf.it/page-18196"
+        },
+        {
+          "title": "Academic CV · symposium proposal entry and affiliations",
+          "url": "https://albertoarturovergani.github.io/cv.html#winning-proposals"
+        }
+      ],
+      "verified_on": "2026-11-19",
+      "provenance": {
+        "programme_sha256": "6dd9f0bb35b617e1da962bbe07ea8db4b9670cc9cb8c272aa4d91f4fa8e93839",
+        "affiliations_basis": "Existing user-maintained academic CV at repository commit 4c400fd366a56474c8de936c1731fd1af0e9701a; retained proposal affiliations, not inferred from programme cities.",
+        "abstracts": "No original session or individual talk abstracts recovered."
+      }
+    },
+    {
+      "id": "cns-2025",
+      "title": "Multiscale Modeling of Electromagnetic Field Perturbations on Neural Activity",
+      "subtitle": "",
+      "series": "CNS*2025",
+      "kind": "Workshop",
+      "date": "2025-07-08",
+      "start_time": "09:00",
+      "end_time": "12:30",
+      "timezone": "Europe/Rome",
+      "city": "Florence, Italy",
+      "venue": "",
+      "room": "Hall 3B",
+      "roles": [
+        {
+          "label": "Organizers",
+          "names": [
+            "Alberto Arturo Vergani",
+            "Claudia Casellato"
+          ]
+        }
+      ],
+      "overview": "A workshop on electromagnetic perturbations of neural activity across multiscale brain models, with contributions spanning dosimetry, stimulation and simulation.",
+      "programme_url": "https://www.cnsorg.org/assets/CNS_Meetings/CNS2025/OCNS_2025_workshops.pdf#page=8",
+      "official_url": "https://www.cnsorg.org/cns-2025-meeting-program",
+      "session_abstract_url": "https://www.cnsorg.org/assets/CNS_Meetings/CNS2025/OCNS_2025_workshops.pdf#page=8",
+      "affiliation_note": "Talk titles, speaker affiliations and individual times are taken from the final CNS*2025 workshop programme.",
+      "speakers": [
+        {
+          "name": "Davide Momi",
+          "talk_title": "Whole-Brain Connectome-Based Modeling of Brain Stimulation and Network Dynamics",
+          "affiliation": "Stanford University",
+          "start_time": "09:05",
+          "end_time": "09:30",
+          "abstract": null,
+          "abstract_source_url": null
+        },
+        {
+          "name": "Gianluca Gaglioti",
+          "talk_title": "Quantifying Neural Complexity of Evoked Activities in Brain Recordings and Computational Models",
+          "affiliation": "University of Milan",
+          "start_time": "09:30",
+          "end_time": "09:55",
+          "abstract": null,
+          "abstract_source_url": null
+        },
+        {
+          "name": "Esra Neufeld",
+          "talk_title": "Modeling EM-neuromodulation Across Scales: Mechanisms, Precision Medicine, and Model-Predictive Control",
+          "affiliation": "Foundation for Research on Information Technologies in Society (IT’IS), Zurich, CH",
+          "start_time": "09:55",
+          "end_time": "10:20",
+          "abstract": null,
+          "abstract_source_url": null
+        },
+        {
+          "name": "Marius Pille",
+          "talk_title": "Whole-Brain Simulations of TMS-evoked Potentials in Major Depression",
+          "affiliation": "Universitätsmedizin Berlin",
+          "start_time": "10:20",
+          "end_time": "10:45",
+          "abstract": null,
+          "abstract_source_url": null
+        },
+        {
+          "name": "Micol Colella",
+          "talk_title": "Numerical Modeling of EM Fields and Dosimetric Assessment on Virtual Models",
+          "affiliation": "Sapienza University",
+          "start_time": "11:10",
+          "end_time": "11:35",
+          "abstract": null,
+          "abstract_source_url": null
+        },
+        {
+          "name": "Marialaura De Grazia",
+          "talk_title": "EM Field Coupling on Virtual Mouse Brain",
+          "affiliation": "University of Pavia",
+          "start_time": "11:35",
+          "end_time": "12:00",
+          "abstract": null,
+          "abstract_source_url": null
+        },
+        {
+          "name": "Daniele Linaro",
+          "talk_title": "EM Field Coupling on Multicompartmental Neuronal Models",
+          "affiliation": "Polytechnic of Milan",
+          "start_time": "12:00",
+          "end_time": "12:25",
+          "abstract": null,
+          "abstract_source_url": null
+        }
+      ],
+      "sources": [
+        {
+          "title": "CNS*2025 official workshop programme · page 8",
+          "url": "https://www.cnsorg.org/assets/CNS_Meetings/CNS2025/OCNS_2025_workshops.pdf#page=8"
+        },
+        {
+          "title": "CNS*2025 meeting programme",
+          "url": "https://www.cnsorg.org/cns-2025-meeting-program"
+        }
+      ],
+      "verified_on": "2026-11-19",
+      "provenance": {
+        "proposal_title": "Computational Modeling of Electromagnetic Field Perturbations on Neural Activity throughout Multiscale Brain Models",
+        "programme": "Final programme includes Esra Neufeld; earlier proposal names Niels Kuster and Antonino Cassarà are not used as final speakers.",
+        "abstracts": "The session rationale is linked to its original source. Individual talk abstracts were not recovered. No synthesized abstracts."
+      }
+    },
+    {
+      "id": "sipf-2024",
+      "title": "Decoding Sports Performance",
+      "subtitle": "Investigating the neural correlates of anticipatory functions prior to action",
+      "series": "SIPF 2024",
+      "kind": "Symposium X",
+      "date": "2024-09-05",
+      "start_time": "11:30",
+      "end_time": "12:45",
+      "timezone": "Europe/Rome",
+      "city": "Cesena, Italy",
+      "venue": "University of Bologna, Cesena Campus",
+      "room": "Aula 3.7",
+      "roles": [
+        {
+          "label": "Chair",
+          "names": [
+            "Alberto Arturo Vergani"
+          ]
+        }
+      ],
+      "overview": "A symposium on the neural correlates of anticipation and preparation before action in sport.",
+      "programme_url": "https://www.sipf.it/resources/CONGRESSO%20NAZIONALE%20SIPF%202024/DEFINITIVO_Programma%20Congresso%20Nazionale%20SIPF.pdf#page=12",
+      "official_url": "https://www.sipf.it/programma2024",
+      "affiliation_note": "Speaker order and talk titles follow the final SIPF 2024 programme. Gallicchio’s affiliation is documented by the record of this talk; Bianco’s and Di Russo’s affiliations are documented in contemporary 2024 publications.",
+      "speakers": [
+        {
+          "name": "Germano Gallicchio",
+          "talk_title": "Electrophysiological signal processing as a tool to study preparatory processes in sports",
+          "affiliation": "School of Psychology, Bangor University",
+          "abstract": null,
+          "abstract_source_url": "https://research.bangor.ac.uk/en/publications/electrophysiological-signal-processing-as-a-tool-to-study-prepara/"
+        },
+        {
+          "name": "Valentina Bianco",
+          "talk_title": "Electrophysiological signs of sport-related effects during action preparation: evidence from cognitive-motor and action prediction tasks",
+          "affiliation": "Department of Brain and Behavioral Sciences, University of Pavia",
+          "abstract": null,
+          "abstract_source_url": null,
+          "affiliation_note": "Affiliation documented in an August 2024 publication.",
+          "affiliation_source_url": "https://www.mdpi.com/2076-3425/14/8/812"
+        },
+        {
+          "name": "Francesco Di Russo",
+          "talk_title": "Guiding the mind during exercises to boost cognitive and physical performance",
+          "affiliation": "Department of Movement, Human and Health Sciences, University of Rome “Foro Italico”; Santa Lucia Foundation IRCCS, Rome",
+          "abstract": null,
+          "abstract_source_url": null,
+          "affiliation_note": "Affiliations documented in a June 2024 publication.",
+          "affiliation_source_url": "https://www.mdpi.com/2076-3425/14/7/663"
+        }
+      ],
+      "sources": [
+        {
+          "title": "SIPF 2024 final programme · page 12",
+          "url": "https://www.sipf.it/resources/CONGRESSO%20NAZIONALE%20SIPF%202024/DEFINITIVO_Programma%20Congresso%20Nazionale%20SIPF.pdf#page=12"
+        },
+        {
+          "title": "SIPF 2024 programme page",
+          "url": "https://www.sipf.it/programma2024"
+        },
+        {
+          "title": "Gallicchio · original conference abstract",
+          "url": "https://research.bangor.ac.uk/en/publications/electrophysiological-signal-processing-as-a-tool-to-study-prepara/"
+        },
+        {
+          "title": "Bianco · affiliation in August 2024",
+          "url": "https://www.mdpi.com/2076-3425/14/8/812"
+        },
+        {
+          "title": "Di Russo · affiliations in June 2024",
+          "url": "https://www.mdpi.com/2076-3425/14/7/663"
+        }
+      ],
+      "verified_on": "2026-11-19",
+      "provenance": {
+        "title_as_printed": "DECODING SPORTS PERFORMANCE INVESTIGATING THE NEURAL CORRELATES OF ANTICIPATORY FUNCTIONS PRIOR THE ACTION",
+        "abstracts": "Gallicchio’s original abstract is linked rather than reproduced; no specific reuse licence identified. No original abstracts recovered for the other two talks. Related paper abstracts were not substituted.",
+        "affiliations": "Event-specific source for Gallicchio; contemporary 2024 primary publications for Bianco and Di Russo, as disclosed on the page."
+      }
+    }
+  ]
+}

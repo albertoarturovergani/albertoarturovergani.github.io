@@ -32,11 +32,14 @@ jobs:
       - name: Generate publication data from BibTeX
         run: python scripts/build_data.py
 
+      - name: Generate event detail pages
+        run: python scripts/build_events.py
+
       - name: Assemble static site
         run: |
           mkdir -p dist
           cp index.html cv.html publications.html neural-turing-lab.html .nojekyll vergani_scholar.bib dist/
-          cp -R assets data dist/
+          cp -R assets data events dist/
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
@@ -49,3 +52,4 @@ jobs:
       - name: Publish website
         id: deployment
         uses: actions/deploy-pages@v4
+

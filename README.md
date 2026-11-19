@@ -39,6 +39,14 @@ See [ABSTRACTS.md](ABSTRACTS.md) for the editing guide in Italian and a direct G
 
 The build validates citation keys and GitHub repository URLs, then includes the links in `data/publications.json`. Cards display these links independently of abstract availability. An absent mapping produces no repository button. Add new abstracts to the `.bib` and new verified repository associations to this mapping; the existing GitHub Pages build refreshes both.
 
+## Symposium and workshop details
+
+The three linked event pages in `events/` show the final programme, dates, speakers, talk titles and documented affiliations for SIPF 2025, CNS*2025 and SIPF 2024. Homepage proposal cards and their full-CV entries link to these pages and to the official programmes.
+
+Maintain event data in `content/events.json` and run `python scripts/build_events.py` to regenerate the pages. The existing Pages workflow runs this build and deploys the `events/` folder. The generator reuses the homepage navigation and renders only supplied content. `assets/events.css` controls the responsive event-page layout.
+
+Original talk abstracts can be linked through `abstract_source_url`. Add an `abstract` body only when the exact original text and permission to reproduce it are verified; include its source and license. Missing text creates no empty abstract panel. Event-programme affiliations, contemporaneous publications and proposal affiliations are distinguished in the accompanying notes and sources.
+
 ## Update the CV or homepage
 
 - `cv.html` is the detailed HTML curriculum. When the CV changes, edit this file in GitHub or supply a revised source for conversion. The full original ZIP, personal photograph, signature and private drafting files **are not committed**.
