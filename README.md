@@ -27,6 +27,12 @@ Subjects use multiple overlapping labels (Neuroscience, Computer Science & AI, H
 
 New works are **not automatically harvested** from journals, Google Scholar or ORCID: add a BibTeX entry to trigger the automated publication refresh. Verify DOI, category and acceptance status. Some references in the supplied CV are labelled as submitted or planned for 2027; they are not represented as peer-reviewed publications.
 
+### Store the abstract with each reference
+
+Each existing record in `vergani_scholar.bib` has an empty `abstract = {}` field ready for its full abstract. Paste the text inside the braces, keeping the trailing comma and the existing citation key. For new references, add the same field; leave it empty while the text is unavailable. The `.bib` is the single maintained source for references and abstracts.
+
+See [ABSTRACTS.md](ABSTRACTS.md) for the editing guide in Italian and a direct GitHub editing link. After a commit, the existing build preserves the complete record, including the abstract, in the downloadable bibliography and **Copy BibTeX**. Expanding abstracts within publication cards is a separate interface feature.
+
 ## Update the CV or homepage
 
 - `cv.html` is the detailed HTML curriculum. When the CV changes, edit this file in GitHub or supply a revised source for conversion. The full original ZIP, personal photograph, signature and private drafting files **are not committed**.
@@ -95,7 +101,7 @@ The parser in `scripts/build_data.py` retains the exact BibTeX block for each in
 - `Recognition` now lists all seven prizes and five winning proposals from the Full CV, with available links. Fellowships remain in the detailed CV.
 - Publications are searchable by **partial or full title**, with word suggestions derived from real publication titles. The title search sits under the topic filters.
 - `content/topics.json` assigns all BibTeX records coauthored with Alberto Mazzoni to Neuroengineering; the build also enforces this for new references. It includes Parkinson's disease and Autism subject tags, including the Ortone and Fabbrizzi publications.
-- There is intentionally **no fabricated or automatically extracted abstract** and **no abstract-expansion control**: the supplied BibTeX contains no abstract fields. Bibliographic DOI, source links and Copy BibTeX remain available.
+- Abstracts are manually maintained in each record's `abstract` field in `vergani_scholar.bib`; empty fields indicate that the text is still to be supplied. Bibliographic DOI, source links and Copy BibTeX remain available. The publication cards currently show citation metadata without an abstract-expansion control.
 - The research word cloud now includes explicitly curated semantic families and related-term neighborhoods in `content/wordcloud.json`. Hovering or keyboard-focusing an SVG word smoothly brings related concepts near it, while clicking the word continues to filter the bibliography. Reduced-motion preferences are honored, and mobile visitors keep clickable keywords.
 - The Contact details section links academic profiles and a direct mailto email link.
 
@@ -119,3 +125,4 @@ The Neural Turing Patterns interactive lab supports four options:
 - **Soft winner-take-all:** Competitive suppression of excitatory drive outside the most active top-`K` regions, with tunable winner count and competition strength; it is a dynamical motif, **not** a graph topology.
 
 **Scale and interpretation:** There are still 51,200 neurons (25,600 E and 25,600 I) represented on the 160×160 E/I spatial lattice. Each of the 256 graph nodes aggregates 100 E and 100 I neurons within a 10×10 patch. Random and small-world inter-region connections combine region-average delayed E/I traces with local spatial fields, without enumerating individual synapses. Local toroidal wraparound persists in every mode. Therefore these modes are neither a 51,200-neuron Erdős–Rényi connectome nor a faithful Brunel 2000 random graph. The torus 3D view illustrates only local PBC, not long-range region graph edges. All graph parameters and realized edge statistics are recorded in the downloadable JSON.
+
