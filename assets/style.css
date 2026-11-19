@@ -321,15 +321,6 @@ body{color-scheme:dark}
 .timeline-item h3 a{color:inherit;text-decoration:underline;text-decoration-color:var(--accent);text-decoration-thickness:1px;text-underline-offset:4px}
 .timeline-item h3 a:hover{color:var(--accent)}
 .timeline-item h3 a:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:2px}
-.timeline-item h3{margin-bottom:12px}
-.timeline-date{padding-top:22px}
-.timeline-item:before{top:27px}
-.timeline-item h3 .institution-link{display:flex;align-items:center;gap:14px;text-decoration:none}
-.institution-logo{display:flex;align-items:center;justify-content:center;flex:0 0 64px;width:64px;height:64px;padding:7px;background:#fff;border:1px solid #dce3de;border-radius:10px}
-.institution-logo img{width:100%;height:100%;max-width:48px;max-height:48px;object-fit:contain}
-.institution-name{min-width:0;text-decoration:underline;text-decoration-color:var(--accent);text-decoration-thickness:1px;text-underline-offset:4px}
-@media(max-width:580px){.timeline-item{grid-template-columns:1fr;gap:9px;padding-left:22px}.timeline-item:before{top:4px}.timeline-item h3 .institution-link{gap:12px}.institution-logo{flex-basis:56px;width:56px;height:56px;padding:5px}.timeline-date{font-size:11px;padding-top:0}}
-
 .education-card p strong{color:#f0f4f9}
 .education-card .education-institution,.education-year,.education-degree{color:#9ce4db}
 .education-more{color:#aebec9}
