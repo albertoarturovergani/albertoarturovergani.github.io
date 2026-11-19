@@ -85,6 +85,17 @@
     .model-presets{grid-template-columns:repeat(2,minmax(0,1fr))}
     .model-presets button{padding:11px 5px;font-size:12px;line-height:1.2}
     .hh-detail{padding:10px 12px;background:#15283a;border:1px solid #315067;border-radius:8px;margin:-7px 0 20px}
+
+    .topology-presets{grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:12px}
+    .topology-presets button{padding:11px 7px;min-height:46px;font-size:11.5px;line-height:1.3;font-weight:650}
+    .topology-description,.topology-footnote{color:#aebfd9;font-size:11px;line-height:1.65;margin:0 0 13px}
+    .topology-footnote{margin:9px 0 19px;color:#9bb0ce}
+    .topology-panel{background:#13263e;border:1px solid #395571;border-radius:10px;padding:13px 14px 15px;margin-bottom:14px}
+    .topology-panel .control{margin:8px 0 14px}
+    .topology-panel .control:last-of-type{margin-bottom:4px}
+    .topology-panel label{font-size:11.5px}
+    .topology-readout{border-top:1px solid #3c5874;margin:11px 0 0;padding-top:10px;font-size:11px;color:#c6e3f4;line-height:1.55;font-variant-numeric:tabular-nums}
+
     .wave-presets button{min-height:43px;font-size:11.5px}
     .wave-controls[hidden]{display:none}
     .wave-controls{padding:13px 15px 16px;background:#142541;border:1px solid #3d5679;border-radius:9px;margin:-6px 0 19px}
@@ -117,6 +128,7 @@
     .stat{background:rgba(11,20,37,.85);border:1px solid #2b3a56;padding:12px 11px;border-radius:10px}
     .stat-title{font-size:10px;color:#91a5c6;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
     .stat-value{font-size:17px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+    .stat-small{font-size:13px;line-height:1.45}
     .about{border-top:1px solid var(--line);margin-top:25px;padding-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:30px}
     .about h2{font-size:14px;margin:0 0 8px}
     .about p{margin:0;color:#a9bad3;font-size:12px;line-height:1.7}
@@ -266,6 +278,51 @@
         </div>
         <p class="model-description" id="modelDescription">Leaky integrate-and-fire: membrane leakage, threshold, reset and refractory period.</p>
         <p class="model-description hh-detail" id="hhModelNote" hidden>Single-compartment HH membrane: Na⁺, K⁺ and leak currents, with m/h/n gates. Two 0.05-ms integration substeps per network step (0.10 model ms). Spikes are upward 0-mV crossings. The E/I couplings are mapped heuristically into membrane current density; presets are not biophysically calibrated.</p>
+        <div class="section-title">Connectivity architecture</div>
+        <div class="presets topology-presets" role="group" aria-label="Network connectivity architecture">
+          <button type="button" class="selected" data-topology="spatial" aria-pressed="true">Local / toroidal</button>
+          <button type="button" data-topology="smallworld" aria-pressed="false">Small-world</button>
+          <button type="button" data-topology="random" aria-pressed="false">Random graph · p</button>
+          <button type="button" data-topology="wta" aria-pressed="false">Winner-take-all</button>
+        </div>
+        <p class="topology-description" id="topologyDescription">Periodic local E/I coupling; no additional long-range graph.</p>
+        <div class="topology-panel" id="graphControls" hidden>
+          <div id="smallworldControls" hidden>
+            <div class="control">
+              <div class="labelrow"><label for="wsDegree">Initial ring degree K</label><output id="wsDegreeValue">8</output></div>
+              <input id="wsDegree" type="range" min="2" max="24" step="2" value="8"/>
+            </div>
+            <div class="control">
+              <div class="labelrow"><label for="wsBeta">Rewiring probability β</label><output id="wsBetaValue">0.12</output></div>
+              <input id="wsBeta" type="range" min="0" max="1" step="0.01" value="0.12"/>
+            </div>
+          </div>
+          <div id="randomControls" hidden>
+            <div class="control">
+              <div class="labelrow"><label for="erProbability">Connection probability p</label><output id="erProbabilityValue">0.080</output></div>
+              <input id="erProbability" type="range" min="0" max="1" step="0.001" value="0.08"/>
+              <p class="hint">Erdős–Rényi G(256,p): independent undirected edges between region pairs. At p = 0 there are no inter-region edges; at p = 1 every pair is connected.</p>
+            </div>
+          </div>
+          <div class="control">
+            <div class="labelrow"><label for="graphMix">Inter-region coupling mix</label><output id="graphMixValue">0.60</output></div>
+            <input id="graphMix" type="range" min="0" max="1" step="0.05" value="0.60"/>
+            <p class="hint">0 = local only · 1 = region-graph input only. Excitatory and inhibitory population traces both contribute.</p>
+          </div>
+          <p id="graphSummary" class="topology-readout" aria-live="polite">Graph not built.</p>
+        </div>
+        <div class="topology-panel" id="wtaControls" hidden>
+          <div class="control">
+            <div class="labelrow"><label for="wtaWinners">Winning regions (top K)</label><output id="wtaWinnersValue">4</output></div>
+            <input id="wtaWinners" type="range" min="1" max="24" step="1" value="4"/>
+          </div>
+          <div class="control">
+            <div class="labelrow"><label for="wtaStrength">Competition strength</label><output id="wtaStrengthValue">1.40</output></div>
+            <input id="wtaStrength" type="range" min="0" max="3" step="0.1" value="1.4"/>
+          </div>
+          <p class="hint">Soft top-K winner-take-all: non-winning regions receive extra suppressive E input once activity develops. WTA is a competitive motif, not a standalone graph topology.</p>
+        </div>
+        <p class="topology-footnote">Graph modes operate on 256 aggregate E/I regions (16×16, 100 E + 100 I neurons per region), not individual-neuron random synapses. Local wraparound boundaries remain active in all modes. Rebuilding a graph uses the displayed random seed.</p>
         <div class="section-title">Neural coupling</div>
         <div class="control">
           <div class="labelrow"><label for="exc">Local excitation (E → E)</label><output id="excValue">13.0</output></div>
@@ -346,17 +403,19 @@
           <div class="stat"><div class="stat-title">Simulation step</div><div class="stat-value" id="step">0</div></div>
           <div class="stat"><div class="stat-title">Mean E activity</div><div class="stat-value" id="activity">0.000</div></div>
           <div class="stat"><div class="stat-title">Neuron model</div><div class="stat-value" id="modelStat">LIF</div></div>
+          <div class="stat"><div class="stat-title">Connectivity mode</div><div class="stat-value stat-small" id="topologyStat">Local periodic</div></div>
+          <div class="stat"><div class="stat-title">Inter-region edges</div><div class="stat-value" id="edgeStat">—</div></div>
         </div>
       </aside>
     </div>
     <section class="about" aria-label="Scientific model and limitations">
       <div>
         <h2>What is simulated?</h2>
-        <p>A single spatially periodic (toroidal) two-population E/I lattice is simulated; the left/right edges and top/bottom edges are identified through wraparound, while synaptic interactions remain spatially local, not all-to-all. The Torus view depicts the periodic topology. The Sphere view is an artistic texture mapping with different geometry. A recurrent two-population E/I lattice is simulated with your choice of LIF, adaptive LIF (with spike-triggered recovery), or Izhikevich neurons (regular-spiking E and fast-spiking I). All three produce discrete spikes and drive spatial E→E, E→I, I→E and I→I interactions. Recurrent synaptic fields can be delayed using a characteristic-distance conduction approximation. The central perturbation is an added Gaussian external input to excitatory neurons, with adjustable intensity, spread and pulse duration. The Hodgkin–Huxley option has classical one-compartment Na⁺, K⁺ and leak conductances and m/h/n gating in both E and I populations. The HH simulation integrates 0.10 model ms per network step; normalized recurrent fields are heuristically mapped to injected current density instead of conductance synapses. The Brunel-balanced preset is a <strong>Brunel-inspired inhibition-dominated heuristic</strong> with stochastic external drive inside this equal-sized spatial E/I lattice, not a faithful Brunel sparse random network or proof of a balanced asynchronous irregular state.</p>
+        <p>The 160×160 E and 160×160 I periodic lattice supports four interaction modes: local spatial fields; a 256-region Watts–Strogatz-type rewired small-world graph; a 256-region Erdős–Rényi G(n,p) random graph; and a soft top-K winner-take-all competition across regions. Graph edges link region-average spiking traces rather than individual neurons, preserving local field interactions and periodic boundaries. WTA is a competitive mechanism, not a graph class. These topology options do not reproduce an explicit-neuron Brunel (2000) graph. A single spatially periodic (toroidal) two-population E/I lattice is simulated; the left/right edges and top/bottom edges are identified through wraparound, while synaptic interactions remain spatially local, not all-to-all. The Torus view depicts the periodic topology. The Sphere view is an artistic texture mapping with different geometry. A recurrent two-population E/I lattice is simulated with your choice of LIF, adaptive LIF (with spike-triggered recovery), or Izhikevich neurons (regular-spiking E and fast-spiking I). All three produce discrete spikes and drive spatial E→E, E→I, I→E and I→I interactions. Recurrent synaptic fields can be delayed using a characteristic-distance conduction approximation. The central perturbation is an added Gaussian external input to excitatory neurons, with adjustable intensity, spread and pulse duration. The Hodgkin–Huxley option has classical one-compartment Na⁺, K⁺ and leak conductances and m/h/n gating in both E and I populations. The HH simulation integrates 0.10 model ms per network step; normalized recurrent fields are heuristically mapped to injected current density instead of conductance synapses. The Brunel-balanced preset is a <strong>Brunel-inspired inhibition-dominated heuristic</strong> with stochastic external drive inside this equal-sized spatial E/I lattice, not a faithful Brunel sparse random network or proof of a balanced asynchronous irregular state.</p>
       </div>
       <div>
         <h2>How is the artwork made?</h2>
-        <p>Colors encode exponentially smoothed excitatory spike traces. Palette, hue, contrast and 3D projection alter the rendering only. The 3D surface, rolled sheet, sphere and torus visualize the same 2D numerical field; none is a neuronal anatomical reconstruction. Only the torus depicts both periodic identifications topologically. The pulse marker is an overlay, while stimulation directly enters neuronal dynamics. Results depend on the model, coupling, stimulus history and random seed. This is an exploratory periodic-lattice SNN, not a validated biological model or proof of a mathematical Turing instability.</p>
+        <p>The torus view illustrates the periodic local lattice but does not draw optional nonlocal region-to-region graph edges. Colors encode exponentially smoothed excitatory spike traces. Palette, hue, contrast and 3D projection alter the rendering only. The 3D surface, rolled sheet, sphere and torus visualize the same 2D numerical field; none is a neuronal anatomical reconstruction. Only the torus depicts both periodic identifications topologically. The pulse marker is an overlay, while stimulation directly enters neuronal dynamics. Results depend on the model, coupling, stimulus history and random seed. This is an exploratory periodic-lattice SNN, not a validated biological model or proof of a mathematical Turing instability.</p>
       </div>
     </section>
     <footer>
@@ -368,8 +427,9 @@
     'use strict';
     // Experimental E/I spatial SNN with interchangeable LIF, adaptive LIF, Izhikevich and single-compartment Hodgkin–Huxley equations.
     // 160 × 160 excitatory + 160 × 160 inhibitory cells = 51,200; toroidal lattice.
-    // Synaptic fields are normalized periodic square-kernel convolutions of the
-    // exponential spike traces. This is a model-generating algorithm, not a GIF
+    // Local synaptic fields are periodic square-kernel convolutions of spike
+    // traces. Optional region-level random/small-world graph coupling and
+    // soft WTA add mesoscale connectivity. Not a GIF
     // or a precomputed reaction-diffusion texture.
     const N = 160, LEN = N * N, DT_ALPHA = 0.17, TRACE_DECAY = 0.90;
     const canvas = document.getElementById('art');
@@ -395,6 +455,150 @@
       brunel:'Brunel-inspired balanced: stronger inhibition and stochastic external input encourage irregular E/I activity. Lattice approximation, not a Brunel random sparse graph.'
     });
     const cfg = {...presets.spots};
+    // Optional 256-node mesoscopic topology over the 51,200-neuron local E/I lattice.
+    // Exactly 100 E and 100 I neuron sites contribute to each 10x10 region.
+    const PATCH_SIDE=16,PATCH_WIDTH=N/PATCH_SIDE,PATCH_COUNT=PATCH_SIDE*PATCH_SIDE;
+    const PATCH_AREA=PATCH_WIDTH*PATCH_WIDTH;
+    const patchOfNeuron=new Uint16Array(LEN);
+    for(let y=0;y<N;y++)for(let x=0;x<N;x++){
+      patchOfNeuron[y*N+x]=Math.floor(y/PATCH_WIDTH)*PATCH_SIDE+Math.floor(x/PATCH_WIDTH);
+    }
+    const patchE=new Float32Array(PATCH_COUNT),patchI=new Float32Array(PATCH_COUNT);
+    const graphE=new Float32Array(PATCH_COUNT),graphI=new Float32Array(PATCH_COUNT);
+    const patchPenalty=new Float32Array(PATCH_COUNT);
+    const patchWinner=new Uint8Array(PATCH_COUNT);
+    const rankedPatches=Array.from({length:PATCH_COUNT},(_,i)=>i);
+    let topology='spatial',erProbability=.08,wsDegree=8,wsBeta=.12,graphMix=.60;
+    let wtaWinners=4,wtaStrength=1.4,initialConnectivity=null;
+    let graphOffsets=new Uint32Array(PATCH_COUNT+1),graphSources=new Uint16Array(0);
+    let graphEdges=0,graphSeed=1,graphDegreeMin=0,graphDegreeMax=0;
+    const topologyLabels={spatial:'Local periodic',smallworld:'Small-world',random:'Random ER',wta:'Soft WTA'};
+    const topologyDescriptions={
+      spatial:'Local toroidal lattice: periodically wrapped E/I interaction fields. No extra graph connections.',
+      smallworld:'Small-world graph: start from a ring of K neighbors per region and rewire edges with probability β, preserving undirected edge count and excluding self-links.',
+      random:'Generic random graph: undirected Erdős–Rényi G(256,p) with independently sampled edges, no self-connections. p is variable from 0 to 1.',
+      wta:'Soft top-K winner-take-all: local E/I coupling plus competitive suppression of E drive in regions outside the most active K. This changes network dynamics, not graph edges.'
+    };
+    function topologyRng(seed){
+      let state=((seed>>>0)^0x9e3779b9)>>>0||1;
+      return ()=>{state^=state<<13;state^=state>>>17;state^=state<<5;return (state>>>0)/4294967296;};
+    }
+    function rebuildConnectivity(seed){
+      graphSeed=seed>>>0;
+      graphEdges=0;
+      graphDegreeMin=0;graphDegreeMax=0;
+      graphOffsets=new Uint32Array(PATCH_COUNT+1);
+      graphSources=new Uint16Array(0);
+      if(topology!=='random'&&topology!=='smallworld'){
+        refreshTopologySummary();return;
+      }
+      const rng=topologyRng(graphSeed);
+      const neighbors=Array.from({length:PATCH_COUNT},()=>new Set());
+      const link=(a,b)=>{neighbors[a].add(b);neighbors[b].add(a);};
+      if(topology==='random'){
+        // Undirected G(n,p) sample on region pairs, no self-loops.
+        for(let a=0;a<PATCH_COUNT;a++)for(let b=a+1;b<PATCH_COUNT;b++){
+          if(rng()<erProbability)link(a,b);
+        }
+      }else{
+        // Undirected Watts–Strogatz ring lattice with K neighbors.
+        const originalEdges=[];
+        for(let a=0;a<PATCH_COUNT;a++)for(let d=1;d<=wsDegree/2;d++){
+          const b=(a+d)%PATCH_COUNT;
+          link(a,b);originalEdges.push([a,b]);
+        }
+        for(const [a,b] of originalEdges){
+          if(rng()>=wsBeta)continue;
+          for(let attempt=0;attempt<1000;attempt++){
+            const newB=Math.floor(rng()*PATCH_COUNT);
+            if(newB===a||neighbors[a].has(newB))continue;
+            neighbors[a].delete(b);neighbors[b].delete(a);
+            link(a,newB);break;
+          }
+        }
+      }
+      const packed=[];
+      let min=Infinity,max=0;
+      for(let a=0;a<PATCH_COUNT;a++){
+        graphOffsets[a]=packed.length;
+        const row=[...neighbors[a]].sort((u,v)=>u-v);
+        min=Math.min(min,row.length);max=Math.max(max,row.length);
+        packed.push(...row);
+      }
+      graphOffsets[PATCH_COUNT]=packed.length;
+      graphSources=Uint16Array.from(packed);
+      graphEdges=packed.length/2;
+      graphDegreeMin=min===Infinity?0:min;
+      graphDegreeMax=max;
+      refreshTopologySummary();
+    }
+    function refreshTopologySummary(){
+      $('topologyStat').textContent=topologyLabels[topology];
+      $('edgeStat').textContent=topology==='spatial'||topology==='wta'?'—':graphEdges.toLocaleString('en-US');
+      if(topology==='random'||topology==='smallworld'){
+        const actual=2*graphEdges/(PATCH_COUNT*(PATCH_COUNT-1));
+        $('graphSummary').textContent=PATCH_COUNT+' regions · '+graphEdges.toLocaleString('en-US')+
+          ' undirected edges · actual density '+actual.toFixed(3)+
+          ' · degree '+graphDegreeMin+'–'+graphDegreeMax+
+          ' · seeded graph · local PBC retained';
+      }else{
+        $('graphSummary').textContent='No additional region-to-region graph in this mode.';
+      }
+    }
+    function setTopologyControls(){
+      $('graphControls').hidden=topology!=='random'&&topology!=='smallworld';
+      $('randomControls').hidden=topology!=='random';
+      $('smallworldControls').hidden=topology!=='smallworld';
+      $('wtaControls').hidden=topology!=='wta';
+      $('topologyDescription').textContent=topologyDescriptions[topology];
+      $('erProbabilityValue').textContent=erProbability.toFixed(3);
+      $('wsDegreeValue').textContent=String(wsDegree);
+      $('wsBetaValue').textContent=wsBeta.toFixed(2);
+      $('graphMixValue').textContent=graphMix.toFixed(2);
+      $('wtaWinnersValue').textContent=String(wtaWinners);
+      $('wtaStrengthValue').textContent=wtaStrength.toFixed(2);
+      document.querySelectorAll('[data-topology]').forEach(b=>{
+        const selected=b.dataset.topology===topology;
+        b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected));
+      });
+      refreshTopologySummary();
+    }
+    function computeRegionInput(delayedE,delayedI){
+      patchE.fill(0);patchI.fill(0);
+      for(let j=0;j<LEN;j++){
+        const p=patchOfNeuron[j];
+        patchE[p]+=delayedE[j];patchI[p]+=delayedI[j];
+      }
+      for(let p=0;p<PATCH_COUNT;p++){
+        patchE[p]/=PATCH_AREA;patchI[p]/=PATCH_AREA;
+      }
+      if(topology==='wta'){
+        // Explicit soft top-K competition based on recent local E activity.
+        patchPenalty.fill(0);
+        const maxActivity=Math.max(...patchE);
+        if(stepCount>=15&&maxActivity>.0005&&wtaStrength>0){
+          rankedPatches.sort((a,b)=>patchE[b]-patchE[a]||a-b);
+          patchWinner.fill(0);
+          for(let k=0;k<wtaWinners;k++)patchWinner[rankedPatches[k]]=1;
+          for(let p=0;p<PATCH_COUNT;p++)if(!patchWinner[p]){
+            patchPenalty[p]=wtaStrength*(.20+.80*(1-patchE[p]/maxActivity));
+          }
+        }
+        return;
+      }
+      if(topology!=='random'&&topology!=='smallworld')return;
+      for(let dest=0;dest<PATCH_COUNT;dest++){
+        const start=graphOffsets[dest],end=graphOffsets[dest+1];
+        let sumE=0,sumI=0;
+        for(let idx=start;idx<end;idx++){
+          const source=graphSources[idx];
+          sumE+=patchE[source];sumI+=patchI[source];
+        }
+        const inverse=end===start?0:1/(end-start);
+        graphE[dest]=sumE*inverse;
+        graphI[dest]=sumI*inverse;
+      }
+    }
     const waveCos=new Float32Array(LEN),waveSin=new Float32Array(LEN),waveMask=new Float32Array(LEN);
     let waveMode='none',wavePeriod=150,waveAmplitude=1.4;
     function configureWaveMode(next){
@@ -578,6 +782,12 @@
       blurWrap(historyField(eDelayRing,effectiveDelay(cfg.local)),blurE,cfg.local);
       blurWrap(historyField(iDelayRing,effectiveDelay(cfg.radius)),blurI,cfg.radius);
       blurWrap(historyField(iDelayRing,effectiveDelay(cfg.local)),blurILocal,cfg.local);
+      const graphActive=topology==='random'||topology==='smallworld';
+      const competitive=topology==='wta';
+      if(graphActive||competitive){
+        computeRegionInput(historyField(eDelayRing,effectiveDelay(cfg.local)),
+          historyField(iDelayRing,effectiveDelay(cfg.radius)));
+      }
       const stimulate = stimRemaining > 0;
       const drivingWave = waveMode!=='none';
       const waveTheta=drivingWave?2*Math.PI*stepCount/wavePeriod:0;
@@ -596,8 +806,13 @@
         // Unlike Brunel (2000), recurrent connectivity here remains a local spatial field.
         const extE=cfg.poissonRate>0&&rand()<cfg.poissonRate?cfg.poissonKick:0;
         const extI=cfg.poissonRate>0&&rand()<cfg.poissonRate?cfg.poissonKick*.65:0;
-        const netE = cfg.driveE+cfg.exc*blurE[j]-cfg.inh*blurI[j]+jitterE+pulse+waveCurrent+extE;
-        const netI = cfg.driveI+cfg.iexc*blurE[j]-cfg.iinh*blurILocal[j]+jitterI+extI;
+        const region=(graphActive||competitive)?patchOfNeuron[j]:0;
+        const eField=graphActive?(1-graphMix)*blurE[j]+graphMix*graphE[region]:blurE[j];
+        const iField=graphActive?(1-graphMix)*blurI[j]+graphMix*graphI[region]:blurI[j];
+        const iLocalField=graphActive?(1-graphMix)*blurILocal[j]+graphMix*graphI[region]:blurILocal[j];
+        const netE=cfg.driveE+cfg.exc*eField-cfg.inh*iField+jitterE+pulse+waveCurrent+extE-
+          (competitive?patchPenalty[region]:0);
+        const netI=cfg.driveI+cfg.iexc*eField-cfg.iinh*iLocalField+jitterI+extI;
         let spikeE=0, spikeI=0;
         if(model==='hh') {
           const currentE=hhInjectedCurrent(netE,true),currentI=hhInjectedCurrent(netI,false);
@@ -871,7 +1086,7 @@
         surface:'Illustrative 3D height map of the 2D E activity. Relief does not represent neuronal anatomy. Drag or use arrow keys to rotate.',
         rolled:'Illustrative rolled-sheet projection; an open cylindrical arc does not represent both periodic boundary identifications.',
         sphere:'Illustrative 2D activity texture projected onto a sphere. Pole compression changes neighborhood geometry; this is NOT the topology of the simulated network.',
-        torus:'Topologically faithful illustration of both periodic axes (left/right and top/bottom). Neurons interact locally on the periodic E/I lattice; surface rendering is illustrative, not anatomical.'
+        torus:'Topologically faithful illustration of both local periodic axes (left/right and top/bottom). Optional small-world/random region graph edges are not drawn in this view; rendering is illustrative, not anatomical.'
       }[activeView];
       last3DStep=-Infinity;
       render();
@@ -1315,6 +1530,13 @@
         seed=2026;$('seed').value=String(seed);
       }
       reseed(seed);stepCount=0;lastSpikesE=0;
+      rebuildConnectivity(seed);
+      initialConnectivity={
+        mode:topology,er_probability:erProbability,ws_degree_K:wsDegree,
+        ws_rewiring_beta:wsBeta,graph_mix:graphMix,
+        wta_topK:wtaWinners,wta_strength:wtaStrength,
+        realized_edges:graphEdges,seed:graphSeed
+      };
       stimRemaining=0;stimHistory=[];parameterHistory=[];initialCoupling={...cfg};initialPropagation={baselineDelay:synDelay,conductionSpeed};lastPulseEnd=-1;
       waveCount=0;waveLastStep=-1e9;waveCache=null;waveWhole.fill(0);waveCenter.fill(0);
       clearWelch();
@@ -1375,6 +1597,31 @@
         $('modelDescription').textContent=modelDescriptions[model];
         $('hhModelNote').hidden=model!=='hh';
         reset();
+      });
+    }
+    for(const button of document.querySelectorAll('[data-topology]')){
+      button.addEventListener('click',()=>{
+        const next=button.dataset.topology;
+        if(!topologyLabels[next]||topology===next)return;
+        topology=next;setTopologyControls();reset();
+      });
+    }
+    for(const name of ['erProbability','wsBeta','wsDegree','graphMix','wtaWinners','wtaStrength']){
+      $(name).addEventListener('input',()=>{
+        erProbability=Number($('erProbability').value);
+        wsBeta=Number($('wsBeta').value);
+        wsDegree=Number($('wsDegree').value);
+        graphMix=Number($('graphMix').value);
+        wtaWinners=Number($('wtaWinners').value);
+        wtaStrength=Number($('wtaStrength').value);
+        if(['erProbability','wsBeta','wsDegree'].includes(name)){
+          // Graph rewiring is seeded separately from neuronal initial states.
+          const validSeed=Number.parseInt($('seed').value,10)||2026;
+          rebuildConnectivity(validSeed);
+        }
+        setTopologyControls();
+        parameterHistory.push({atStep:stepCount,field:'connectivity.'+name,value:Number($(name).value),
+          realized_edges:graphEdges,graph_seed:graphSeed});
       });
     }
     for (const button of document.querySelectorAll('[data-preset]')) {
@@ -1519,6 +1766,25 @@
           relief_exaggeration:Number($('viewDepth').value),roll_percent:Number($('rollAmount').value),
           rotation_yaw_radians:viewYaw,rotation_pitch_radians:viewPitch,
           interpretation:'Display-only 3D projection of the simulated 2D activity map; the torus has the same periodic topology, sphere/rolled sheet/height map are artistic projections, none is anatomical.',boundary_conditions:'periodic in X and Y (2-torus topology); local E/I convolution uses wraparound.'},
+        connectivity_architecture:{
+          mode:topology,mode_label:topologyLabels[topology],
+          initial_state:initialConnectivity,
+          local_grid:[N,N],local_boundary_conditions:'periodic in both spatial axes (toroidal)',
+          graph_level:'256 mesoscale regions, not a graph of 51,200 individual neurons',
+          regional_grid:[PATCH_SIDE,PATCH_SIDE],regions:PATCH_COUNT,
+          neuron_sites_per_region:{E:PATCH_AREA,I:PATCH_AREA},
+          graph_model:topology==='random'?'Erdos-Renyi G(256,p) undirected':
+            topology==='smallworld'?'Watts-Strogatz ring rewiring (undirected)':
+            topology==='wta'?'soft top-K competitive inhibition, not a graph':'local lattice only',
+          erdos_renyi_probability:erProbability,small_world_ring_degree_K:wsDegree,
+          small_world_rewiring_beta:wsBeta,interregion_mixing:graphMix,
+          wta_topK:wtaWinners,wta_competition_strength:wtaStrength,
+          graph_seed:graphSeed,realized_undirected_interregion_edges:graphEdges,
+          realized_edge_density:2*graphEdges/(PATCH_COUNT*(PATCH_COUNT-1)),
+          min_degree:graphDegreeMin,max_degree:graphDegreeMax,
+          semantics:'Both E and I regional mean delayed synaptic traces are mixed with local convolution fields; no explicit single-neuron long-range edges or per-edge delays.',
+          winner_take_all_note:'Competition acts as suppressive input to losing E regions after 15 steps when region activity is nonzero.'
+        },
         coupling:{...cfg},initial_coupling:initialCoupling,
         spatial_sampling:{excitatory_grid:[N,N],inhibitory_grid:[N,N],total_neurons:LEN*2,
           visual_mode:$('renderDetail').value,display_blur_radius_cells:$('renderDetail').value==='sharp'?0:1},
@@ -1559,6 +1825,7 @@
     updateStimulusLabels();
     updateSliderLabels();
     rebuildLUT();
+    setTopologyControls();
     reset();
   </script>
 </body>

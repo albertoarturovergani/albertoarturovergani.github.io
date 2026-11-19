@@ -108,3 +108,14 @@ The neural field has periodic boundary conditions on both X and Y of its E/I lat
 ## Single-compartment Hodgkin–Huxley
 
 The interactive SNN has a fourth membrane option, classical HH with per-cell V, m, h and n and Na⁺/K⁺/leak conductances (C_m=1 µF/cm², gNa=120, gK=36, gL=0.3 mS/cm², ENa=50 mV, EK=-77 mV, EL=-54.387 mV). Two 0.05-ms membrane substeps are integrated for each network step (0.10 ms). Voltage is integrated by forward Euler and gates by exponential Euler using a precomputed 0.25-mV rate table; action potentials are detected at upward 0-mV crossing with no artificial reset. HH event-triggered traces are filtered with 6-ms decay. The original E/I coupling sliders are converted heuristically to membrane current, so different model presets and rates are not fitted or directly calibrated across neuron models. The PSD's selectable nominal Δt remains separate from HH integration time.
+
+## Network connectivity modes
+
+The Neural Turing Patterns interactive lab supports four options:
+
+- **Local / toroidal:** Original 160×160 excitatory and inhibitory spatial lattice with periodic boundary conditions and local E/I field convolutions.
+- **Small-world:** 256 mesoscale regions as nodes of an undirected Watts–Strogatz ring network. Tunable initial ring degree `K` (even, 2–24), independent edge rewiring probability `β` (0–1), and regional coupling mix.
+- **Random (Erdős–Rényi):** Independent undirected G(256,p) edges between distinct regions, with `p` from 0 to 1 and adjustable regional coupling mix. The realized edge count and empirical density are displayed and exported; random graph construction is seed-reproducible.
+- **Soft winner-take-all:** Competitive suppression of excitatory drive outside the most active top-`K` regions, with tunable winner count and competition strength; it is a dynamical motif, **not** a graph topology.
+
+**Scale and interpretation:** There are still 51,200 neurons (25,600 E and 25,600 I) represented on the 160×160 E/I spatial lattice. Each of the 256 graph nodes aggregates 100 E and 100 I neurons within a 10×10 patch. Random and small-world inter-region connections combine region-average delayed E/I traces with local spatial fields, without enumerating individual synapses. Local toroidal wraparound persists in every mode. Therefore these modes are neither a 51,200-neuron Erdős–Rényi connectome nor a faithful Brunel 2000 random graph. The torus 3D view illustrates only local PBC, not long-range region graph edges. All graph parameters and realized edge statistics are recorded in the downloadable JSON.
