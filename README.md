@@ -39,6 +39,10 @@ See [ABSTRACTS.md](ABSTRACTS.md) for the editing guide in Italian and a direct G
 
 The build validates citation keys and GitHub repository URLs, then includes the links in `data/publications.json`. Cards display these links independently of abstract availability. An absent mapping produces no repository button. Add new abstracts to the `.bib` and new verified repository associations to this mapping; the existing GitHub Pages build refreshes both.
 
+## University logos
+
+The linked university names in the homepage Positions timeline include compact official logos. The original files are stored in `assets/institutions/`; their institutional source pages, download URLs and checksums are recorded in `content/institution_logos.json`. CSS preserves the complete artwork, original colors and proportions on a light background. Small screens place the appointment date above the university heading to retain room for the logo and name.
+
 ## Symposium and workshop details
 
 The three linked event pages in `events/` show the final programme, dates, speakers, talk titles and documented affiliations for SIPF 2025, CNS*2025 and SIPF 2024. Homepage proposal cards and their full-CV entries link to these pages and to the official programmes.
