@@ -69,7 +69,21 @@
 
 
 @article{fabbrizzi2026digitaltwin,
-  abstract = {},
+  abstract = {
+    Brain structure plays a pivotal role in shaping neural dynamics. Current models lack the
+    anatomical and functional resolution needed to integrate whole-brain structure and dynamics
+    within a unified computational framework. Here, we introduce the FEDE (high FidElity Digital
+    brain modEl) pipeline, generating anatomically accurate brain digital twins from imaging data.
+    Combining advanced techniques of finite-element analysis and biophysical modeling, FEDE
+    reconstructs multi-scale brain structure with high spatial resolution, while also replicating
+    whole-brain neural activity. We demonstrated FEDE’s application by creating the first brain
+    digital twin of a toddler with autism spectrum disorder (ASD). Through parameter optimization,
+    FEDE replicated experimental neural activity while reconstructing multi-scale structural
+    features ranging from whole-brain connectivity to synaptic timescales. FEDE estimated possible
+    patient-specific anomalies in synaptic transmission, consistent with ASD pathophysiology. Our
+    pipeline represents a significant leap forward in brain modeling, paving the way for effective
+    applications of digital twins in experimental and clinical settings.
+  },
     title={A Digital Twin Approach for Simultaneous Reconstruction of Brain Anatomy and Dynamics from Neural Data},
     author={Fabbrizzi, Michelangelo and Amato, Lorenzo Gaetano and Martinelli, Leonardo and Carpaneto, Jacopo and Bartolini, Emanuele and Calderoni, Sara and Retico, Alessandra and \textbf{Vergani, Alberto Arturo} and Mazzoni, Alberto},
     journal={PLOS Digital Health},
@@ -105,7 +119,37 @@
 }
 
 @article{Vrizzietal2026,
-  abstract = {},
+  abstract = {
+    A lasting challenge for the next generation of AI researchers and professionals will be to shape
+    a global AI infrastructure capable of accommodating stakeholder heterogeneity, while addressing
+    technical constraints. It becomes crucial to provide early-career researchers and professionals
+    in AI with the tools and the knowledge to understand the complexity of this challenge, and with
+    the technical skills to partake in it.
+
+    Here, we present core design features and results from a novel training initiative combining AI
+    and ethics. This initiative is called “Ethos+Tekhne” because it centers on the discussion of two
+    main questions: what kind of AI we want ( ethos), and how to achieve it concretely ( tekhne).
+    Its programme was designed around three key principles: pluralism, narrative, and balance.
+
+    In terms of pluralism, the training combined several types of theoretical and practical learning
+    activities, as well as speakers from a variety of fields, including non-academic sectors and
+    citizens. With regard to narrative, the training followed a programme-wide thread of thematic
+    days.
+
+    Finally, with respect to balance, on-site participant group size was limited to 30–40
+    individuals, in order to offer each participant the space and time to actively engage in
+    discussions, while supporting online attendance to promote open access. Moreover, the programme
+    schedule aimed to balance activity and break time to encourage participants to exchange their
+    thoughts in informal settings.
+
+    The hallmark of success of this initiative has been its regenerative nature: some first-edition
+    participants led the organisation of the second edition, and some second-edition participants
+    are currently organising the third edition. Content-wise, three axes of action in ethical AI
+    development emerged from participants’ discussion: AI for Good, Good for AI, and Good AI.
+
+    We report our rationale, programme design, and results, in the hope that these could provide
+    material for future training programmes in AI, and potentially other technologies.
+  },
   author    = {Vrizzi, Stefano and \textbf{Vergani, Alberto Arturo} and State, Laura and Galli, Filippo and Trudel, Amric and Mazzucato, Sara},
   title     = {How to train the upcoming generation of AI researchers? Design principles and results from the Ethos+Tekhne initiative as a case study},
   journal   = {Open Research Europe},
@@ -133,7 +177,33 @@
 
 
 @article{vergani2026effective,
-  abstract = {},
+  abstract = {
+    Objective. transcranial magnetic stimulation (TMS) combined with electroencephalography enables
+    non-invasive assessment of cortical excitability and connectivity through TMS-evoked potentials
+    (TEPs), but it is highly susceptible to artifacts that can obscure genuine neural activity.
+    Among these, capacitive artifacts at the electrode-scalp interface are particularly challenging
+    as they can dominate the post-stimulus signal with sharp voltage deflections and long-lasting
+    drifts. This study evaluated the effectiveness of windowed detrending methods for correcting
+    capacitive artifacts, especially when online hardware mitigation is insufficient.
+
+    Approach. we systematically compared non-windowed detrending models against windowed approaches
+    that separately model the rise (charging) and decay (discharging) phases of the artifact. We
+    applied these methods to multiple datasets acquired across two centers using different hardware
+    configurations. Performance was benchmarked against a cleaning strategy based on independent
+    component analysis (ICA), spanning mild to extreme capacitive artifact conditions.
+
+    Main results. ICA effectively corrected mild artifacts but was inadequate in moderate-to-severe
+    cases, often suppressing physiological components or leaving substantial residual contamination.
+    In contrast, model-based detrending, particularly windowed methods, robustly corrected extreme
+    artifacts. Temporal segmentation improved parameter estimation and removal of nonlinear trends.
+    Among the tested methods, windowed polynomial detrending showed a slight advantage, likely due
+    to its greater flexibility in capturing complex artifact shapes.
+
+    Significance. although optimal TMS-compatible hardware and rigorous online prevention remain
+    essential, windowed detrending provides a robust offline correction strategy when severe
+    capacitive artifacts persist. This approach improves data quality and supports more reliable
+    interpretation of TEPs in studies where ideal acquisition conditions cannot be fully achieved.
+  },
   title={Effective correction of extreme capacitive artifacts in TMS-EEG via windowed detrending},
   author={\textbf{Vergani, Alberto Arturo} and Peroni, Giulio and Bruscagli, Camilla and Lionti, Alessia and Brandizzi, Flavia and Lenge, Matteo and Salvestrini, Giovanni and Jim{\'e}nez-Jim{\'e}nez, Diego and Casarotto, Silvia and Rosanova, Mario and others},
   journal={Journal of Neural Engineering},
@@ -218,7 +288,41 @@
 }
 
 @article{amato2026gender,
-  abstract = {},
+  abstract = {
+    INTRODUCTION: Pathological cognitive decline affects roughly 15\% of older adults, presenting
+    relevant sex differences, being a stronger predictor of Alzheimer's disease in females. Yet,
+    sex-specific neural markers that support a balanced early diagnosis remain limited.
+    Event-related potentials (ERPs) derived from task-based electroencephalograph (EEG) offer a
+    non-invasive window into cognitive processing, but their sex-specific diagnostic value in
+    subjective cognitive decline (SCD) has not been explored.
+
+    METHODS: We recorded EEG during a visuo-attentive task in elders with SCD (n = 119) and
+    age-matched healthy controls (n = 19) to extract ERP components reflecting stimulus encoding and
+    decision processes. We investigated sex-specific associations between ERP features and task
+    performance and trained separate machine learning models for SCD diagnosis in males and females.
+
+    Diagnostic models were constructed using either clinical features alone or a combination of
+    clinical and ERP features to quantify the added value of ERPs over standard assessments.
+
+    RESULTS: ERP analyses revealed distinct sex-specific associations between neural responses and
+    behavioral performance, suggesting partially divergent neurocognitive mechanisms underlying
+    attentional processing in aging males and females. Diagnostic models based solely on clinical
+    data produced significantly unbalanced performance between sexes (area under the curve [AUC]:
+    0.75 males, AUC: 0.63 females; p < 0.00001).
+
+    When ERP features were incorporated, classification accuracy improved in both groups and the sex
+    imbalance was eliminated (AUC: 0.77 males, AUC: 0.75 females; p = 0.31). ERP features
+    consistently demonstrated higher sensitivity to subtle cognitive alterations, particularly in
+    females.
+
+    DISCUSSION: Task-related ERPs provide complementary, sex-specific neural information that
+    mitigates diagnostic disparity arising from clinical assessments alone. Incorporating ERP
+    features supports a more equitable early identification of cognitive decline and may improve
+    screening strategies for populations usually under-recognized in preclinical Alzheimer's disease
+    pathways.
+
+    TRIAL REGISTRATION: ClinicalTrials.gov identifier: NCT05569083
+  },
   title={EEG recordings during visuo-attentive task reduce sex bias in Alzheimer's disease diagnosis},
   author={Amato, Lorenzo Gaetano and Lassi, Michael and Grippo, Antonello and Moschini, Valentina and Giacomucci, Giulia and Padiglioni, Sonia and Morinelli, Carmen and Nacmias, Benedetta and Mazzoni, Alberto and Bessi, Valentina and \textbf{Vergani, Alberto Arturo}},
   journal={Alzheimer's \& Dementia: Translational Research \& Clinical Interventions},
@@ -361,7 +465,41 @@ Microscopic Evidence from Human and Rodent Studies},
 }
 
 @article{amato2025digital,
-  abstract = {},
+  abstract = {
+    Background: The diagnosis of Alzheimer’s disease (AD) in its preclinical stages, such as
+    subjective cognitive decline (SCD), is crucial for a timely management of the condition.
+    However, current early diagnostic methods are unsuitable for preclinical screenings due to
+    limited availability and diagnostic reliability. Additionally, reliance on invasive and scarcely
+    available methods exacerbates the underdiagnosis of AD in its preclinical forms.
+
+    Methods: We introduce an early diagnostic pipeline based on the Digital Alzheimer’s Disease
+    Diagnosis (DADD) digital twin model, which derives personalized AD biomarkers from non-invasive
+    electroencephalographic (EEG) recordings. These biomarkers reconstruct patient-specific
+    neurodegeneration, capturing synaptic and connectivity degeneration mechanisms.
+
+    Digital biomarkers were used to predict cerebrospinal fluid (CSF) biomarker positivity for AD
+    and clinical conversions at follow-up in 124 participants with varying degrees of cognitive
+    decline, including a control group of 19 healthy subjects.
+
+    Results: Digital biomarkers derived from the DADD model: i) Robustly distinguished SCD from
+    healthy participants, improving classification accuracy by 7\% compared to standard EEG
+    biomarkers; ii) Identified patients positive for CSF biomarkers of AD with 88\% accuracy
+    (significantly outperforming standard EEG biomarkers, which achieved 58\% accuracy); iii)
+    Predicted follow-up conversions to clinical cognitive decline with 87\% accuracy (compared to
+    54\% accuracy for standard EEG biomarkers).
+
+    Conclusions: The DADD model provided robust digital AD biomarkers with strong diagnostic and
+    prognostic value for preclinical AD, enabling the prediction of CSF biomarkers and clinical
+    conversions using only non-invasive EEG recordings. This is particularly important as
+    preclinical patients, such as those with SCD, are often excluded from diagnostic procedures like
+    lumbar puncture.
+
+    Predicting CSF biomarkers by combining digital twins with non-invasive recordings could
+    revolutionize AD diagnosis in its early stages, paving the way for the clinical application of
+    digital twins in AD diagnostics.
+
+    Trial registration: Clinical Trial identifier: NCT05569083 (submitted 2022–08-24).
+  },
   title={Digital twins and non-invasive recordings enable early diagnosis of Alzheimer’s disease},
   author={Amato, Lorenzo Gaetano and Lassi, Michael and \textbf{Vergani, Alberto Arturo} and Carpaneto, Jacopo and Mazzeo, Salvatore and Moschini, Valentina and Burali, Rachele and Salvestrini, Giovanni and Fabbiani, Carlo and Giacomucci, Giulia and others},
   journal={Alzheimer's Research \& Therapy},
@@ -436,7 +574,40 @@ Microscopic Evidence from Human and Rodent Studies},
 }
 
 @article{amato2025personalized,
-  abstract = {},
+  abstract = {
+    Cognitive decline is a condition affecting almost one sixth of the elder population and is
+    widely regarded as one of the first manifestations of Alzheimer’s disease. Despite the extensive
+    body of knowledge on the condition, there is no clear consensus on the structural defects and
+    neurodegeneration processes determining cognitive decline evolution. Here, we introduce a Brain
+    Network Model (BNM) simulating the effects of neurodegeneration on neural activity during
+    cognitive processing.
+
+    The model incorporates two key parameters accounting for distinct pathological mechanisms:
+    synaptic degeneration, primarily leading to hyperexcitation, and brain disconnection. Through
+    parameter optimization, we successfully replicated individual electroencephalography (EEG)
+    responses recorded during task execution from 145 participants spanning different stages of
+    cognitive decline.
+
+    The cohort included healthy controls, patients with subjective cognitive decline (SCD), and
+    those with mild cognitive impairment (MCI) of the Alzheimer type. Through model inversion, we
+    generated personalized BNMs for each participant based on individual EEG recordings. These
+    models revealed distinct network configurations corresponding to the patient’s cognitive
+    condition, with virtual neurodegeneration levels directly proportional to the severity of
+    cognitive decline.
+
+    Strikingly, the model uncovered a neurodegeneration-driven phase transition leading to two
+    distinct regimes of neural activity underlying task execution. On either side of this phase
+    transition, increasing synaptic degeneration induced changes in neural activity that closely
+    mirrored experimental observations across cognitive decline stages. This enabled the model to
+    directly link synaptic degeneration and hyperexcitation to cognitive decline severity.
+
+    Furthermore, the model pinpointed posterior cingulum fiber degeneration as the structural driver
+    of this phase transition. Our findings highlight the potential of BNMs to account for the
+    evolution of neural activity across stages of cognitive decline while elucidating the underlying
+    neurodegenerative mechanisms. This approach provides a novel framework for understanding how
+    structural and functional brain alterations contribute to cognitive deterioration along the
+    Alzheimer’s continuum.
+  },
   title={Personalized brain models link cognitive decline progression to underlying synaptic and connectivity degeneration},
   author={Amato, Lorenzo Gaetano and \textbf{Vergani, Alberto Arturo} and Lassi, Michael and Carpaneto, Jacopo and Mazzeo, Salvatore and Moschini, Valentina and Burali, Rachele and Salvestrini, Giovanni and Fabbiani, Carlo and Giacomucci, Giulia and others},
   journal={Alzheimer's Research \& Therapy},
@@ -473,7 +644,25 @@ publisher={Elsevier}
 }
 
 @article{taddeini2025extended,
-  abstract = {},
+  abstract = {
+    Extended performance of cognitively demanding tasks induces cognitive fatigue manifested with an
+    overall deterioration of behavioral performance. In particular, long practice with tasks
+    requiring impulse control is typically followed by a decrease in self-control efficiency,
+    leading to performance instability. Here, we show that this is due to changes in activation
+    modalities of key task-related areas occurring if these areas previously underwent intensive
+    use. We investigated in 25 healthy adults the effects of extended practice with high cognitive
+    demand (HCD) tasks on a Go-No Go task and the underlying electroencephalographic (EEG) activity.
+    We compared these effects with those induced by practice with similar, but low cognitive demand
+    (LCD) tasks. HCD tasks were followed by an increase in response inhibition failures. These were
+    correlated with the appearance of a distinct neural signature on fast response trials,
+    characterized by lower levels of beta ([13-30] Hz) EEG activity in the prestimulus period, and
+    by a lack of EEG markers of preresponse processing in frontal areas. Moreover, HCD tasks were
+    followed by a decrease in N200 during correct withholds while LCD tasks were followed instead by
+    a lesser fraction of hits and a decrease in P300, suggesting a decrease in engagement. Overall,
+    these results show that exertion of cognitive control determines the appearance of two distinct
+    modalities of response with different processing speeds, associated with distinct underlying
+    neural activity.
+  },
   title={Extended cognitive load induces fast neural responses leading to commission errors},
   author={Taddeini, Fabio and Avvenuti, Giulia and \textbf{Vergani, Alberto Arturo} and Carpaneto, Jacopo and Setti, Francesca and Bergamo, Damiana and Fiorini, Linda and Pietrini, Pietro and Ricciardi, Emiliano and Bernardi, Giulio and others},
   journal={eNeuro},
@@ -482,7 +671,15 @@ publisher={Elsevier}
 }
 
 @article{taddeini2024dopaminergic,
-  abstract = {},
+  abstract = {
+    Impulsive‐compulsive behaviors (ICB) are common non‐motor symptoms of Parkinson's disease (PD)
+    often associated with dopaminergic drugs (DD) therapy. We investigated the acute effects of DD
+    on decision‐making in PD patients with ICB (ICB+) and without it (ICB−), and in healthy controls
+    (HC). Participants performed a risk‐based decision‐making task twice, with PD patients tested
+    before (DD OFF) and after (DD ON) DD intake. In DD OFF, all groups developed a risk‐averting
+    strategy. In DD ON, ICB+ patients (but not ICB− nor HC) reverted to riskier choices. We conclude
+    that DD has a specific strong acute effect on ICB+ patients' decision‐making.
+  },
   title={Dopaminergic therapy disrupts decision-making in impulsive-compulsive Parkinsonian patients},
   author={Taddeini, Fabio and Ordali, Erica and Govoni, Alessandra and Piattellini, Francesca and Valente, Simone and Caremani, Luca and \textbf{Vergani, Alberto A} and Kaymak, Ahmet and Rustichini, Aldo and Russo, Eleonora and others},
   journal={Annals of Clinical and Translational Neurology},
@@ -572,7 +769,26 @@ publisher={Elsevier}
 
 
 @article{amato2024personalized,
-  abstract = {},
+  abstract = {
+    INTRODUCTION: Early identification of Alzheimer's disease (AD) is necessary for a timely onset
+    of therapeutic care. However, cortical structural alterations associated with AD are difficult
+    to discern.
+
+    METHODS: We developed a cortical model of AD‐related neurodegeneration accounting for slowing of
+    local dynamics and global connectivity degradation. In a monocentric study we collected
+    electroencephalography (EEG) recordings at rest from participants in healthy (HC, n = 17),
+    subjective cognitive decline (SCD, n = 58), and mild cognitive impairment (MCI, n = 44)
+    conditions. For each patient, we estimated neurodegeneration model parameters based on
+    individual EEG recordings.
+
+    RESULTS: Our model outperformed standard EEG analysis not only in discriminating between HC and
+    MCI conditions (F1 score 0.95 vs 0.75) but also in identifying SCD patients with biological
+    hallmarks of AD in the cerebrospinal fluid (recall 0.87 vs 0.50).
+
+    DISCUSSION: Personalized models could (1) support classification of MCI, (2) assess the presence
+    of AD pathology, and (3) estimate the risk of cognitive decline progression, based only on
+    economical and non‐invasive EEG recordings.
+  },
   title={Personalized modeling of Alzheimer's disease progression estimates neurodegeneration severity from EEG recordings},
   author={Amato, Lorenzo Gaetano and \textbf{Vergani, Alberto Arturo}  and Lassi, Michael and Fabbiani, Carlo and Mazzeo, Salvatore and Burali, Rachele and Nacmias, Benedetta and Sorbi, Sandro and Mannella, Riccardo and Grippo, Antonello and others},
   journal={Alzheimer's \& Dementia: Diagnosis, Assessment \& Disease Monitoring},
@@ -585,7 +801,43 @@ publisher={Elsevier}
 }
 
 @article{Mazzeo2023,
-  abstract = {},
+  abstract = {
+    Background
+
+    As disease-modifying therapies (DMTs) for Alzheimer's disease (AD) are becoming a reality, there
+    is an urgent need to select cost-effective tools that can accurately identify patients in the
+    earliest stages of the disease. Subjective Cognitive Decline (SCD) is a condition in which
+    individuals complain of cognitive decline with normal performances on neuropsychological
+    evaluation. Many studies demonstrated a higher prevalence of Alzheimer’s pathology in patients
+    diagnosed with SCD as compared to the general population. Consequently, SCD was suggested as an
+    early symptomatic phase of AD. We will describe the study protocol of a prospective cohort study
+    (PREVIEW) that aim to identify features derived from easily accessible, cost-effective and
+    non-invasive assessment to accurately detect SCD patients who will progress to AD dementia.
+
+    Methods
+
+    We will include patients who self-referred to our memory clinic and are diagnosed with SCD.
+    Participants will undergo: clinical, neurologic and neuropsychological examination, estimation
+    of cognitive reserve and depression, evaluation of personality traits, APOE and BDNF genotyping,
+    electroencephalography and event-related potential recording, lumbar puncture for measurement of
+    Aβ42, t-tau, and p-tau concentration and Aβ42/Aβ40 ratio. Recruited patients will have follow-up
+    neuropsychological examinations every two years. Collected data will be used to train a machine
+    learning algorithm to define the risk of being carriers of AD and progress to dementia in
+    patients with SCD.
+
+    Discussion
+
+    This is the first study to investigate the application of machine learning to predict AD in
+    patients with SCD. Since all the features we will consider can be derived from non-invasive and
+    easily accessible assessments, our expected results may provide evidence for defining
+    cost-effective and globally scalable tools to estimate the risk of AD and address the needs of
+    patients with memory complaints. In the era of DMTs, this will have crucial implications for the
+    early identification of patients suitable for treatment in the initial stages of AD.
+
+    Trial registration number (TRN)
+
+    NCT05569083.
+  },
   title = {PRedicting the EVolution of SubjectIvE Cognitive Decline to Alzheimer’s Disease With machine learning: the PREVIEW study protocol},
   volume = {23},
   ISSN = {1471-2377},
@@ -611,7 +863,75 @@ publisher={Elsevier}
 }
 
 @inproceedings{vergani2016fsl,
-  abstract = {},
+  abstract = {
+    Introduction and Motivations. Functional magnetic resonance methods detect in vivo brain
+    hemodynamic responses related to specific task. After defined statistical processes pipeline,
+    relevant information contained in the fMRI Blood-Oxygen-Level-Dependent signals are transformed
+    in a 3D Statistical Parametric Maps. In our previous works, we investigated how to conveniently
+    summarize these original 3D distributions by a more compact description composed of a set of
+    indexes calculated for each functional area. These values, properly named Activation Weighted
+    Indexes (AWIs), vary between 0 and 1 and regard all brain regions contained into specific
+    template used for co-registration (e.g. using Juelich standard there will be 121 indexes). The
+    proposed AWI based feature extraction procedure reduces the three-dimensions SPM distribution to
+    the one-dimension AWI distribution The resulting quantized data structure of task-related brain
+    activations, that we named Activation Weighted Vector (AWV), is a histogram, where each bin
+    represents the level of the functionality of each brain structure. The expressiveness of AWV
+    depends by the normalization procedure for fMRI scans: the more regions standard atlas has, the
+    more AWIs are computable. Proceeding from these considerations, we addressed the problem of
+    generating an inclusive template for AWI analysis satisfying the right trade-off between
+    exhaustion power and visual usability.
+
+    Description of CRAIIM Hybrid Atlas. The hybrid atlas is the outcome of the joint operation
+    between different brain templates found into the FMRIB Software Library. They are Juelich
+    histological atlas and Harvard-Oxford cortical and subcortical structural atlases. Both are
+    probabilistic labelled and registered in MNI152 space. Juelich model was created by averaging
+    multi-subject post-mortem cyto and myelo-architectonic segmentations, which has detected 52 grey
+    matter structures and 10 white matters ones. Harvard-Oxford models cover 48 cortical and 21
+    subcortical structural regions, computed by segmentation of T1-weighted images of healthy male
+    and female. The joint process was possible choosing a reference atlas and then adding lacking
+    anatomical structures. In our case, Juelich atlas was the template from which regions dearth
+    were easily included choosing them from Harvard-Oxford atlases. This procedure, shaped with
+    complete or partial union operations, gives rise to an hybrid atlas that covers 161 regions, in
+    which 121 are the 100\% of Juelich, and other 40 are a variable percentage of Harvard-Oxford
+    original brain volumes. The benefits of this hybrid atlas are the integration of fundamental
+    neuroanatomy models useful for co-registration that in the standard template were absent, e.g.
+    many frontal and temporal cortexes, subcallosal portions, cingulate gyrus and thalamus halves.
+    The limitation is that these last regions are in some cases a minor proportion of the
+    Harvard-Oxford template. The hybridized atlas is in NIFTI format and its FSL-like name is
+    CRAIIM-thr0-1mm.nii.gz (where thr0 is a voxel probability threshold, i.e. Prob. ≥ 0 to belong a
+    certain anatomical label; and 1mm means the voxels resolution).
+
+    Clinical Applications. As above described, CRAIIM hybrid atlas has 161 regions. With this
+    registration template, the AWV procedure generates vectors of 161 indexes from each SPMs
+    yielding important advantages both in the analysis of collection of data and in the individual
+    data interpretation. The data represented in a “well dimensioned” vector space are used to
+    perform efficiently quantitative measures of dissimilarity among brains functional activations
+    basing on a given selected metrics. Unsupervised learning methods are naturally applied to learn
+    the structure of the data and then to discover and recognize salient neurological patterns that
+    unearth hidden features, also permitting their interpretation like individual brain signatures.
+    With AWV analysis, the Radiologists investigate activation about macro categories alike
+    white/grey matters contribution or left/right hemispheres functional balancement. In addition,
+    AWVs allow physician to examine geographically defined zones such as frontal or temporal
+    cortexes, motor or visual systems, limbic core, callosum commissure, or more detailed
+    contribution akin Broca’s areas, Wernicke’s areas, \&c. AWVs also facilitate severe assessment
+    modalities for patients monitoring. For example, within homogenous group, clinicians could
+    discover interesting level differences; or between heterogeneous ones, they could observe
+    interesting likeness. In addition, including time factor for each subject, longitudinal studies
+    based on AWV could highlight brain plasticity processes more suitable than classical SPM
+    qualitative visual inspection. These kind of clinical evaluations have claim among pre/post
+    neurosurgical operation controls or during long-term ordinary patients’ checks. Obviously, AWV
+    analysis is a math tool well applicable with active paradigm as well as passive ones, e.g. for
+    resting state fMRI acquisition, keeping in mind the greater role that could have distributed
+    functional connectivity instead locally defined expected activation.
+
+    Present and Future Works. Hybrid atlas has enhanced activated weighted vector analysis thanks to
+    its peculiarities. It has clinical utility for AWV methodology, but some kind of incompleteness
+    for all brain region representation: it is missing of special structure like cerebellum and, in
+    general, has some portion that is a percentage of its original atlases. Other own quality
+    regards the resolution about only 1mm. Future work is planned to generalize the atlas building
+    procedure with which to easily generate solutions for diversified functional neuroradiological
+    applications honouring the salience of existing specialized template.
+  },
   title={FSL-Based Hybrid Atlas Promotes Activation Weighted Vector Analysis in Functional Neuroradiology},
   author={\textbf{Vergani, Alberto Arturo} and Minotto, Renzo and Strocchi, Sabina and Binaghi, Elisabetta},
   %journal={Frontiers in Neuroinformatics},
@@ -786,7 +1106,23 @@ publisher={Elsevier}
 }
 
 @article{ortone2023dopamine,
-  abstract = {},
+  abstract = {
+    Motor symptoms of Parkinson’s Disease (PD) are associated with dopamine deficits and
+    pathological oscillation of basal ganglia (BG) neurons in the β range ([12-30] Hz). However, how
+    dopamine depletion affects the oscillation dynamics of BG nuclei is still unclear. With a
+    spiking neurons model, we here capture the features of BG nuclei interactions leading to
+    oscillations in dopamine-depleted condition. We highlight that both the loop between subthalamic
+    nucleus (STN) and Globus Pallidus pars externa (GPe) and the loop between striatal fast spiking
+    and medium spiny neurons and GPe display resonances in the β range, and synchronize to a common
+    β frequency through interaction. Crucially, the synchronization depends on dopamine depletion:
+    the two loops are largely independent for high levels of dopamine, but progressively synchronize
+    as dopamine is depleted due to the increased strength of the striatal loop. The model is
+    validated against recent experimental reports on the role of cortical inputs, STN and GPe
+    activity in the generation of β oscillations. Our results highlight the role of the interplay
+    between the GPe-STN and the GPe-striatum loop in generating sustained β oscillations in PD
+    subjects, and explain how this interplay depends on the level of dopamine. This paves the way to
+    the design of therapies specifically addressing the onset of pathological β oscillations.
+  },
   title={Dopamine depletion leads to pathological synchronization of distinct basal ganglia loops in the beta band},
   author={Ortone, Andrea and \textbf{Vergani, Alberto Arturo} and Ahmadipour, Mahboubeh and Mannella, Riccardo and Mazzoni, Alberto},
   journal={PLOS Computational Biology},
@@ -799,7 +1135,20 @@ publisher={Elsevier}
 }
 
 @misc{vergani2022solving,
-  abstract = {},
+  abstract = {
+    In this contribution, the clustering procedure based on K-Means algorithm is studied as an
+    inverse problem, which is a special case of the illposed problems. The attempts to improve the
+    quality of the clustering inverse problem drive to reduce the input data via Principal Component
+    Analysis (PCA). Since there exists a theorem by Ding and He that links the cardinality of the
+    optimal clusters found with K-Means and the cardinality of the selected informative PCA
+    components, the computational experiments tested the theorem between two quantitative features
+    selection methods: Kaiser criteria (based on imperative decision) versus Wishart criteria (based
+    on random matrix theory). The results suggested that PCA reduction with features selection by
+    Wishart criteria leads to a low matrix condition number and satisfies the relation between
+    clusters and components predicts by the theorem. The data used for the computations are from a
+    neuroscientific repository: it regards healthy and young subjects that performed a task-oriented
+    functional Magnetic Resonance Imaging (fMRI) paradigm.
+  },
   title={Solving clustering as ill-posed problem: experiments with K-Means algorithm},
   author={\textbf{Vergani, Alberto Arturo}},
   journal={arXiv preprint arXiv:2211.08302},
@@ -868,7 +1217,34 @@ doi = {10.13140/RG.2.2.28011.72483}
 }
 
 @article{lassi2023degradation,
-  abstract = {},
+  abstract = {
+    Alzheimer’s disease (AD) pathological changes may begin up to decades earlier than the
+    appearance of the first symptoms of cognitive decline. Subjective cognitive decline (SCD) could
+    be the first pre-clinical sign of possible AD, which might be followed by mild cognitive
+    impairment (MCI), the initial stage of clinical cognitive decline. However, the neural
+    correlates of these prodromic stages are not completely clear yet.
+
+    Recent studies suggest that EEG analysis tools characterizing the cortical activity as a whole,
+    such as microstates and cortical regions connectivity, might support a characterization of SCD
+    and MCI conditions. Here we test this approach by performing a broad set of analyses to identify
+    the prominent EEG markers differentiating SCD (n = 57), MCI (n = 46) and healthy control
+    subjects (HC, n = 19).
+
+    We found that the salient differences were in the temporal structure of the microstates
+    patterns, with MCI being associated with less complex sequences due to the altered transition
+    probability, frequency and duration of canonic microstate C. Spectral content of EEG, network
+    connectivity, and spatial arrangement of microstates were instead largely similar in the three
+    groups.
+
+    Interestingly, comparing properties of EEG microstates in different cerebrospinal fluid (CSF)
+    biomarkers profiles, we found that canonic microstate C displayed significant differences in
+    topography in AD-like profile. These results show that the progression of dementia might be
+    associated with a degradation of the cortical organization captured by microstates analysis, and
+    that this leads to altered transitions between cortical states.
+
+    Overall, our approach paves the way for the use of non-invasive EEG recordings in the
+    identification of possible biomarkers of progression to AD from its prodromal states.
+  },
   title={Degradation of EEG microstates patterns in subjective cognitive decline and mild cognitive impairment: Early biomarkers along the Alzheimer’s Disease continuum?},
   author={Lassi, Michael and Fabbiani, Carlo and Mazzeo, Salvatore and Burali, Rachele and \textbf{Vergani, Alberto Arturo} and Giacomucci, Giulia and Moschini, Valentina and Morinelli, Carmen and Emiliani, Filippo and Scarpino, Maenia and others},
   journal={NeuroImage: Clinical},

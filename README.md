@@ -29,7 +29,7 @@ New works are **not automatically harvested** from journals, Google Scholar or O
 
 ### Store the abstract with each reference
 
-Each existing record in `vergani_scholar.bib` has an empty `abstract = {}` field ready for its full abstract. Paste the text inside the braces, keeping the trailing comma and the existing citation key. For new references, add the same field; leave it empty while the text is unavailable. The `.bib` is the single maintained source for references and abstracts.
+Each record in `vergani_scholar.bib` has an `abstract` field. Verified original abstracts have been added where the exact source and version could be checked; remaining fields are empty. Paste the text inside the braces, keeping the trailing comma and the existing citation key. For new references, add the same field; leave it empty while the text is unavailable. The `.bib` is the single maintained source for references and abstracts. [ABSTRACT_SOURCES.md](ABSTRACT_SOURCES.md) records the sources, licenses and retrieval date; `content/abstract_sources.json` stores the same provenance with text checksums. No generated summaries substitute for missing abstracts.
 
 See [ABSTRACTS.md](ABSTRACTS.md) for the editing guide in Italian and a direct GitHub editing link. After a commit, the existing build preserves the complete record, including the abstract, in the downloadable bibliography and **Copy BibTeX**. Expanding abstracts within publication cards is a separate interface feature.
 

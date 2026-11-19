@@ -1,6 +1,6 @@
 # Abstract delle pubblicazioni
 
-Il documento da compilare è [vergani_scholar.bib](vergani_scholar.bib). Ogni referenza contiene un campo `abstract = {}` pronto per il testo: l'abstract rimane così associato alla stessa chiave BibTeX, agli autori, al titolo, all'anno e al DOI.
+Il documento da compilare è [vergani_scholar.bib](vergani_scholar.bib). Ogni referenza contiene un campo `abstract`: l'abstract rimane così associato alla stessa chiave BibTeX, agli autori, al titolo, all'anno e al DOI.
 
 **[Apri il file in modifica su GitHub](https://github.com/albertoarturovergani/albertoarturovergani.github.io/edit/main/vergani_scholar.bib)**
 
@@ -24,7 +24,11 @@ abstract = {
 },
 ```
 
-Il testo dell'esempio è un segnaposto dimostrativo. Nel file bibliografico i campi predisposti sono vuoti.
+Il testo dell'esempio è un segnaposto dimostrativo. Le voci per cui il testo originale non è stato recuperato mantengono il campo vuoto.
+
+## Abstract già recuperati
+
+Il 19 novembre 2026 sono stati inseriti 14 abstract originali verificati. Fonti, licenze ed eventuali problemi di corrispondenza sono documentati in [ABSTRACT_SOURCES.md](ABSTRACT_SOURCES.md). Le altre 70 voci restano da completare con testi originali verificabili.
 
 ## Regole pratiche
 
