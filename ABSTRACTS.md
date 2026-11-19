@@ -28,7 +28,7 @@ Il testo dell'esempio è un segnaposto dimostrativo. Le voci per cui il testo or
 
 ## Abstract già recuperati
 
-Il 19 novembre 2026 sono stati inseriti 14 abstract originali verificati. Fonti, licenze ed eventuali problemi di corrispondenza sono documentati in [ABSTRACT_SOURCES.md](ABSTRACT_SOURCES.md). Le altre 70 voci restano da completare con testi originali verificabili.
+Il 19 novembre 2026 sono stati inseriti 15 abstract originali verificati. Fonti, licenze ed eventuali problemi di corrispondenza sono documentati in [ABSTRACT_SOURCES.md](ABSTRACT_SOURCES.md). Le altre 69 voci restano da completare con testi originali verificabili.
 
 ## Regole pratiche
 
@@ -44,7 +44,7 @@ Il 19 novembre 2026 sono stati inseriti 14 abstract originali verificati. Fonti,
 
 ## Cosa viene mostrato sul sito
 
-Il file `.bib` mantiene insieme referenze e abstract. Il processo di pubblicazione conserva il record completo nella funzione **Copy BibTeX** e nel file scaricabile. La pagina Publications presenta attualmente la citazione e i suoi collegamenti; la visualizzazione espandibile dell'abstract richiede un aggiornamento dedicato dell'interfaccia.
+Il file `.bib` mantiene insieme referenze e abstract. Il processo di pubblicazione conserva il record completo nella funzione **Copy BibTeX** e nel file scaricabile. Nella pagina Publications, le referenze con testo disponibile hanno un pannello **Abstract** apribile. Il pannello mostra il testo completo e, quando registrati, i collegamenti alla fonte e alla licenza. Le voci prive di testo mantengono soltanto la citazione. I pulsanti **GitHub** collegano ai repository associati e verificati, configurati in `content/repositories.json`.
 
 Questa pagina è la guida di compilazione. Gli abstract si aggiornano direttamente nel `.bib`, quindi qui non esiste una seconda raccolta di testi da sincronizzare.
 

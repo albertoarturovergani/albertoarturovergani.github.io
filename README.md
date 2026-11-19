@@ -31,7 +31,13 @@ New works are **not automatically harvested** from journals, Google Scholar or O
 
 Each record in `vergani_scholar.bib` has an `abstract` field. Verified original abstracts have been added where the exact source and version could be checked; remaining fields are empty. Paste the text inside the braces, keeping the trailing comma and the existing citation key. For new references, add the same field; leave it empty while the text is unavailable. The `.bib` is the single maintained source for references and abstracts. [ABSTRACT_SOURCES.md](ABSTRACT_SOURCES.md) records the sources, licenses and retrieval date; `content/abstract_sources.json` stores the same provenance with text checksums. No generated summaries substitute for missing abstracts.
 
-See [ABSTRACTS.md](ABSTRACTS.md) for the editing guide in Italian and a direct GitHub editing link. After a commit, the existing build preserves the complete record, including the abstract, in the downloadable bibliography and **Copy BibTeX**. Expanding abstracts within publication cards is a separate interface feature.
+See [ABSTRACTS.md](ABSTRACTS.md) for the editing guide in Italian and a direct GitHub editing link. After a commit, the existing build preserves the complete record, including the abstract, in the downloadable bibliography and **Copy BibTeX**. Publication cards display a collapsed **Abstract** panel when text is available, with original-source and license links when recorded. Verified associated repositories appear as GitHub buttons alongside Copy BibTeX.
+
+## Associated GitHub repositories
+
+`content/repositories.json` maps BibTeX citation keys to verified repository links. Each key contains a list of objects with `url`, `label`, `evidence_url`, `evidence` and `verified_on`. Use the article's code/data availability section or a repository README that explicitly identifies the work. Repository labels can specify a resource, such as **Atlas on GitHub** or **GitHub DADD**, when the repository covers that resource rather than every analysis in the paper.
+
+The build validates citation keys and GitHub repository URLs, then includes the links in `data/publications.json`. Cards display these links independently of abstract availability. An absent mapping produces no repository button. Add new abstracts to the `.bib` and new verified repository associations to this mapping; the existing GitHub Pages build refreshes both.
 
 ## Update the CV or homepage
 
@@ -101,7 +107,7 @@ The parser in `scripts/build_data.py` retains the exact BibTeX block for each in
 - `Recognition` now lists all seven prizes and five winning proposals from the Full CV, with available links. Fellowships remain in the detailed CV.
 - Publications are searchable by **partial or full title**, with word suggestions derived from real publication titles. The title search sits under the topic filters.
 - `content/topics.json` assigns all BibTeX records coauthored with Alberto Mazzoni to Neuroengineering; the build also enforces this for new references. It includes Parkinson's disease and Autism subject tags, including the Ortone and Fabbrizzi publications.
-- Abstracts are manually maintained in each record's `abstract` field in `vergani_scholar.bib`; empty fields indicate that the text is still to be supplied. Bibliographic DOI, source links and Copy BibTeX remain available. The publication cards currently show citation metadata without an abstract-expansion control.
+- Abstracts are manually maintained in each record's `abstract` field in `vergani_scholar.bib`; empty fields indicate that the text is still to be supplied. Bibliographic DOI, source links and Copy BibTeX remain available. The publication cards show an expandable Abstract panel only for records with supplied text.
 - The research word cloud now includes explicitly curated semantic families and related-term neighborhoods in `content/wordcloud.json`. Hovering or keyboard-focusing an SVG word smoothly brings related concepts near it, while clicking the word continues to filter the bibliography. Reduced-motion preferences are honored, and mobile visitors keep clickable keywords.
 - The Contact details section links academic profiles and a direct mailto email link.
 

@@ -1,6 +1,6 @@
 # Fonti degli abstract recuperati
 
-Verifica del **19 novembre 2026**: **14 abstract originali inseriti** in `vergani_scholar.bib`, su 84 referenze. Le altre **70 voci mantengono il campo vuoto**. Questa prima ricerca non stabilisce che gli abstract delle voci ancora vuote non esistano.
+Verifica del **19 novembre 2026**: **15 abstract originali inseriti** in `vergani_scholar.bib`, su 84 referenze. Le altre **69 voci mantengono il campo vuoto**. Questa prima ricerca non stabilisce che gli abstract delle voci ancora vuote non esistano.
 
 Il testo di ogni abstract proviene dalla sezione Abstract della fonte indicata. Sono state normalizzate soltanto spaziatura, presentazione delle intestazioni HTML e codifica dei caratteri per BibTeX. Le parole originali, comprese le formulazioni presenti nella fonte, sono conservate. Titolo, autori e versione sono stati verificati.
 
@@ -22,12 +22,12 @@ Gli abstract sono attribuiti agli autori riportati nelle rispettive referenze e 
 | `ortone2023dopamine`: Dopamine depletion leads to pathological synchronization of distinct basal ganglia loops in the beta band | [Fonte](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1010645) · DOI `10.1371/journal.pcbi.1010645` | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 | `vergani2022solving`: Solving clustering as ill-posed problem: experiments with K-Means algorithm | [Fonte](https://arxiv.org/abs/2211.08302v1) · DOI `10.48550/arXiv.2211.08302` | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 | `lassi2023degradation`: Degradation of EEG microstates patterns in subjective cognitive decline and mild cognitive impairment: Early biomarkers along the Alzheimer’s Disease continuum? | [Fonte](https://pmc.ncbi.nlm.nih.gov/articles/PMC10149415/) · DOI `10.1016/j.nicl.2023.103407` | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) |
+| `vergani2025erp`: Event-related potential markers of subjective cognitive decline and mild cognitive impairment during a sustained visuo-attentive task | [Fonte](https://pmc.ncbi.nlm.nih.gov/articles/PMC11919406/) · DOI `10.1016/j.nicl.2025.103760` | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) |
 
 ## Voci controllate e lasciate vuote
 
 | Chiave | Esito del controllo |
 |---|---|
-| `vergani2025erp` | La voce indica NeuroImage: Clinical ma riporta il DOI bioRxiv `10.1101/2024.01.30.577910`. La versione editoriale ha DOI `10.1016/j.nicl.2025.103760`: [record PubMed](https://pubmed.ncbi.nlm.nih.gov/40023055/). Abstract lasciato vuoto in attesa di allineare la citazione alla versione desiderata. |
 | `huyck2020hot` | Abstract reperito nella [pagina editoriale](https://link.springer.com/article/10.1007/s10827-020-00758-1); licenza aperta per la riproduzione integrale non verificata in questa ricerca. |
 | `mazzeo2026towards` | Abstract reperito nella [versione editoriale Sage](https://journals.sagepub.com/doi/10.1177/13872877261416117), indicata come Restricted access. Licenza aperta per la riproduzione integrale non verificata. |
 | `vergani2024hans` | Abstract reperito nella [pagina editoriale APS](https://journals.physiology.org/doi/10.1152/advan.00119.2024); licenza aperta per la riproduzione integrale non verificata. |
@@ -36,6 +36,8 @@ Gli abstract sono attribuiti agli autori riportati nelle rispettive referenze e 
 | `vergani2020critical` | Testo individuato nell'indice di ricerca, ma pagina arXiv e licenza non verificati integralmente in questa passata; nessun abstract inserito. |
 
 ## Note sulla corrispondenza bibliografica
+
+• Per `vergani2025erp` è stata adottata la versione pubblicata su NeuroImage: Clinical: DOI `10.1016/j.nicl.2025.103760`, volume 45, articolo 103760, data 25 febbraio 2025. Il titolo usa la formulazione editoriale "subjective cognitive decline". La chiave e l'ordine degli autori sono conservati.
 
 • I DOI recuperati per voci che ne erano prive sono riportati soltanto in questo registro; i metadati bibliografici esistenti sono conservati.
 

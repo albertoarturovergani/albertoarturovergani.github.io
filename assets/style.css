@@ -405,9 +405,27 @@ body{color-scheme:dark}
 .button-outline-dark{background:#111c23;border-color:#53777c;color:#dff6f4}
 .button-outline-dark:hover{background:#21434a;border-color:#84cfc6;color:#fff}
 .cv-aside .cv-toc-top{border-color:#435965}
+.bib-item-content{min-width:0;flex:1}
+.bib-abstract{margin-top:16px;border:1px solid var(--line);border-radius:8px;background:var(--cream);overflow-wrap:anywhere}
+.bib-abstract>summary{padding:11px 15px;min-height:44px;cursor:pointer;color:var(--accent);font-size:12px;font-weight:750;line-height:1.7;list-style:revert;border-radius:7px}
+.bib-abstract>summary::marker{color:var(--accent)}
+.bib-abstract>summary:hover{background:var(--sand);color:var(--white)}
+.bib-abstract>summary:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.bib-abstract[open]>summary{border-bottom:1px solid var(--line);border-radius:7px 7px 0 0}
+.bib-abstract-body{padding:16px 18px 18px;color:var(--ink-2);font-size:14px;line-height:1.85}
+.bib-abstract-body>p{margin:0 0 14px;white-space:pre-line}
+.bib-abstract-body>p:last-child{margin-bottom:0}
+.bib-abstract-attribution{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:18px;padding-top:12px;border-top:1px solid var(--line);font-size:11px;line-height:1.8;color:var(--muted)}
+.bib-abstract-attribution a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+.bib-abstract-attribution a:hover{color:var(--white)}
+.bib-abstract-attribution a:focus-visible,.bib-repository-link:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
+.bib-repository-link{display:inline-flex;align-items:center;justify-content:center;min-height:35px;padding:7px 12px;border:1px solid var(--line);border-radius:5px;background:var(--sand);color:var(--accent);font-size:11px;font-weight:750;line-height:1.5;overflow-wrap:anywhere}
+.bib-repository-link:hover{border-color:var(--accent);color:var(--white)}
+@media(max-width:580px){.bib-abstract>summary{padding-inline:12px}.bib-abstract-body{padding:14px 12px 16px;font-size:14px}.bib-item-actions .bib-copy-button,.bib-repository-link{min-height:44px}}
 @media(max-width:800px){
   .site-nav{background:#05070a;border-color:#283943;box-shadow:0 20px 30px #000b}
   .site-nav a{border-bottom-color:#293943}
   .site-nav .nav-contact{background:#194148;color:#fff}
   .cv-aside{border-bottom-color:#354652}
 }
+

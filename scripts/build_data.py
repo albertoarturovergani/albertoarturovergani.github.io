@@ -24,6 +24,8 @@ OVERRIDES_FILE = ROOT / 'content' / 'status.json'
 TOPICS_FILE = ROOT / 'content' / 'topics.json'
 WORDCLOUD_FILE = ROOT / 'content' / 'wordcloud.json'
 WORDCLOUD_OUTPUT = ROOT / 'data' / 'wordcloud.json'
+ABSTRACT_SOURCES_FILE = ROOT / 'content' / 'abstract_sources.json'
+REPOSITORIES_FILE = ROOT / 'content' / 'repositories.json'
 
 TOPICS = {'neuroscience', 'computer-science', 'history', 'neuroengineering', 'education', 'brain-modelling', 'machine-learning', 'eeg', 'neuroimaging', 'cerebellum', 'cognitive-decline', 'schizophrenia', 'brain-stimulation', 'spiking-networks', 'dopamine', 'neurodevelopment', 'parkinson', 'autism', 'other'}
 
@@ -300,10 +302,37 @@ def normalize(entry: dict[str, str], overrides: dict, topic_overrides: dict) -> 
         'doi': doi if doi_link else '',
         'url': safe_link(ov.get('url', '')) or url,
         'note': note,
+        'abstract': '\n\n'.join(tex_to_text(p) for p in re.split(r'\n\s*\n', entry.get('abstract', '').strip()) if p.strip()),
         'bibtex': entry['__bibtex'],
         'topics': assigned_topics(entry, topic_overrides),
     }
     return item
+
+
+def add_publication_resources(items: list[dict], sources: dict, repositories: dict) -> None:
+    known = {item['id'] for item in items}
+    unknown = set(repositories) - known
+    if unknown:
+        raise ValueError('Repository links have unknown BibTeX keys: ' + ', '.join(sorted(unknown)))
+    for item in items:
+        source = sources.get(item['id'], {}) if item['abstract'] else {}
+        item['abstract_source'] = safe_link(source.get('source_url', ''))
+        item['abstract_license'] = source.get('license', '')
+        item['abstract_license_url'] = safe_link(source.get('license_url', ''))
+        item['repositories'] = []
+        links = repositories.get(item['id'], [])
+        if not isinstance(links, list):
+            raise ValueError('Repository links must be a list for: ' + item['id'])
+        seen = set()
+        for link in links:
+            if not isinstance(link, dict):
+                raise ValueError('Invalid repository link for: ' + item['id'])
+            url = str(link.get('url', '')).strip().rstrip('/')
+            if not re.fullmatch(r'https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+', url):
+                raise ValueError('Invalid GitHub repository URL for: ' + item['id'])
+            if url not in seen:
+                item['repositories'].append({'url': url, 'label': str(link.get('label') or 'GitHub')})
+                seen.add(url)
 
 
 
@@ -353,6 +382,8 @@ def main() -> int:
     entries = parse_bib(BIB.read_text(encoding='utf-8'))
     overrides = json.loads(OVERRIDES_FILE.read_text(encoding='utf-8')) if OVERRIDES_FILE.exists() else {}
     topic_overrides = json.loads(TOPICS_FILE.read_text(encoding='utf-8')) if TOPICS_FILE.exists() else {}
+    abstract_sources = json.loads(ABSTRACT_SOURCES_FILE.read_text(encoding='utf-8')).get('items', {}) if ABSTRACT_SOURCES_FILE.exists() else {}
+    repositories = json.loads(REPOSITORIES_FILE.read_text(encoding='utf-8')) if REPOSITORIES_FILE.exists() else {}
     # A CV may have accidental duplicate keys. Deduplicate equivalent entries,
     # but fail on conflicting records rather than silently publishing the wrong one.
     unique = {}
@@ -369,6 +400,7 @@ def main() -> int:
     if not normalized:
         raise ValueError('No publications were parsed from BibTeX')
     normalized.sort(key=lambda p: (-p['year'], {'journal': 0, 'preprint': 1, 'conference': 2, 'thesis': 3}[p['type']], p['title'].lower()))
+    add_publication_resources(normalized, abstract_sources, repositories)
     not_found = set(topic_overrides) - set(unique)
     if not_found:
         print('WARNING: topic metadata has unused keys: ' + ', '.join(sorted(not_found)), file=sys.stderr)
@@ -384,3 +416,4 @@ def main() -> int:
 
 if __name__ == '__main__':
     raise SystemExit(main())
+

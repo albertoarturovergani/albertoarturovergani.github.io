@@ -1,0 +1,92 @@
+{
+  "vergani2018soft": [
+    {
+      "url": "https://github.com/albertoarturovergani/Soft-Davies-Bouldin",
+      "label": "GitHub implementation",
+      "evidence_url": "https://github.com/albertoarturovergani/Soft-Davies-Bouldin/blob/main/README.md",
+      "evidence": "Author-owned README explicitly identifies this as a modern implementation of equations (5)–(8) of Vergani and Binaghi (2018), A Soft Davies-Bouldin Separation Measure, DOI 10.1109/FUZZ-IEEE.2018.8491581. The Citation section repeats the exact paper title and DOI. This is an associated modern implementation rather than a claim of original 2018 source recovery. README blob SHA verified: 5779a04c823612cfc6d2f80bb457b40c61dd55db.",
+      "verified_on": "2026-11-19"
+    }
+  ],
+  "vergani2016fsl": [
+    {
+      "url": "https://github.com/albertoarturovergani/CRAIIM-fmri-atlas",
+      "label": "Atlas on GitHub",
+      "evidence_url": "https://github.com/albertoarturovergani/CRAIIM-fmri-atlas/blob/main/README.md",
+      "evidence": "Author-owned README Cite CRAIIM section explicitly lists FSL-Based Hybrid Atlas Promotes Activation Weighted Vector Analysis in Functional Neuroradiology, Vergani AA, Minotto R, Strocchi S, Binaghi E (2016), DOI 10.3389/conf.fninf.2016.20.00077, as foundational work documented by this repository. README blob SHA verified: 84cfc062c8f5befe5e07c5a888bf3fe9afb36015.",
+      "verified_on": "2026-11-19"
+    }
+  ],
+  "vergani2017quantitative": [
+    {
+      "url": "https://github.com/albertoarturovergani/CRAIIM-fmri-atlas",
+      "label": "Atlas on GitHub",
+      "evidence_url": "https://github.com/albertoarturovergani/CRAIIM-fmri-atlas/blob/main/README.md",
+      "evidence": "Author-owned README Cite CRAIIM section explicitly lists Quantitative Relations between CRAIIM Human Brain Atlases by Vergani, Minotto, Strocchi and Binaghi, presented at the 1st HBP Student Conference in Vienna in 2017, proceedings 2018, ISBN 978-2-88945-421-1. Exact title, authors and conference match the BibTeX record. The repository provides the atlas resource associated with this contribution.",
+      "verified_on": "2026-11-19"
+    }
+  ],
+  "vergani2018contributions": [
+    {
+      "url": "https://github.com/albertoarturovergani/CRAIIM-fmri-atlas",
+      "label": "Atlas on GitHub",
+      "evidence_url": "https://github.com/albertoarturovergani/CRAIIM-fmri-atlas/blob/main/README.md",
+      "evidence": "Author-owned README Cite CRAIIM section explicitly cites Vergani (2018), Contributions in Computational Intelligence with Results in Functional Neuroimaging, PhD thesis, University of Insubria, and links the institutional PDF. The README points to thesis section 4.1 and appendix 6.1 for atlas construction. Link is specifically to the thesis-associated atlas resource, not all thesis code.",
+      "verified_on": "2026-11-19"
+    }
+  ],
+  "vergani_2026_SZ1": [
+    {
+      "url": "https://github.com/albertoarturovergani/SZcerebellumModel",
+      "label": "GitHub",
+      "evidence_url": "https://github.com/albertoarturovergani/SZcerebellumModel/blob/main/README.md",
+      "evidence": "README identifies code and reproducibility inputs for the exact title Cerebellar Degeneration Induces Timeliness Disruption, Paradoxical Information Flow and Network Overdrive in a Digital Model of Schizophrenia. Source, data and citation section and BibTeX explicitly give the scientific preprint DOI 10.5281/zenodo.18813588, version 1.0, matching the reference. README blob SHA verified: 3acc2c5ca8c12c65d5161e6117647e0095305adf.",
+      "verified_on": "2026-11-19"
+    }
+  ],
+  "vergani2026effective": [
+    {
+      "url": "https://github.com/albertoarturovergani/windowedDetrend",
+      "label": "GitHub",
+      "evidence_url": "https://doi.org/10.1088/1741-2552/ae668e",
+      "evidence": "The paper data availability statement explicitly links https://github.com/albertoarturovergani/windowedDetrend as the available code. The repository README Citation and license > Paper section independently gives the exact title Effective correction of extreme capacitive artifacts in TMS-EEG via windowed detrending, Journal of Neural Engineering 23(3), 036009, DOI 10.1088/1741-2552/ae668e. README blob SHA verified: e6488972c2c8878dbedccd80594643446da597da.",
+      "verified_on": "2026-11-19"
+    }
+  ],
+  "amato2025personalized": [
+    {
+      "url": "https://github.com/LoreAma/Code_AD_simulations",
+      "label": "GitHub model",
+      "evidence_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11971895/",
+      "evidence": "The Data availability section of the article (DOI 10.1186/s13195-025-01718-6) explicitly identifies this repository for the model simulations. Exact matching article title and authors.",
+      "verified_on": "2026-11-19"
+    }
+  ],
+  "amato2025digital": [
+    {
+      "url": "https://github.com/LoreAma/Code_AD_simulations",
+      "label": "GitHub DADD",
+      "evidence_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12125947/",
+      "evidence": "The Data availability section explicitly links this repository as code for the DADD model. It separately states that model-inversion and machine-learning pipeline code is available upon request, so the GitHub link must not be described as containing all analysis code.",
+      "verified_on": "2026-11-19"
+    }
+  ],
+  "lassi2023degradation": [
+    {
+      "url": "https://github.com/mikelassi/PREVIEW",
+      "label": "GitHub",
+      "evidence_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10149415/",
+      "evidence": "The Data availability section explicitly identifies this repository as the code generating the results of this study. Matched article DOI 10.1016/j.nicl.2023.103407.",
+      "verified_on": "2026-11-19"
+    }
+  ],
+  "vergani2025erp": [
+    {
+      "url": "https://github.com/albertoarturovergani/PREVIEWTCVT",
+      "label": "GitHub",
+      "evidence_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11919406/",
+      "evidence": "Section 2.7 Statistical analysis of the published article, DOI 10.1016/j.nicl.2025.103760, explicitly links preprocessing and postprocessing scripts to this repository. The bibliography uses that published version.",
+      "verified_on": "2026-11-19"
+    }
+  ]
+}

@@ -21,6 +21,14 @@ function makeLink(href, text, className = '') {
   node.rel = 'noopener noreferrer';
   return node;
 }
+function safeExternalUrl(value) {
+  try {
+    const url = new URL(String(value || '').trim());
+    return ['https:', 'http:'].includes(url.protocol) ? url.href : '';
+  } catch {
+    return '';
+  }
+}
 function searchable(text) {
   return String(text || '').toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
@@ -336,16 +344,53 @@ function renderBibliography(items) {
           topicLine.append(tag);
         });
         if (topicLine.childNodes.length) content.append(topicLine);
+        const abstract = typeof p.abstract === 'string' ? p.abstract.trim() : '';
+        if (abstract) {
+          const details = makeEl('details', 'bib-abstract');
+          const summary = makeEl('summary', '', 'Abstract');
+          summary.setAttribute('aria-label', `Abstract for ${p.title}`);
+          const body = makeEl('div', 'bib-abstract-body');
+          abstract.split(/\r?\n\s*\r?\n/).forEach(paragraph => {
+            if (paragraph.trim()) body.append(makeEl('p', '', paragraph.trim()));
+          });
+          const attribution = makeEl('div', 'bib-abstract-attribution');
+          const sourceUrl = safeExternalUrl(p.abstract_source);
+          if (sourceUrl) {
+            const sourceLink = makeLink(sourceUrl, 'Original abstract');
+            sourceLink.setAttribute('aria-label', `Read the original abstract for ${p.title}`);
+            attribution.append(sourceLink);
+          }
+          const license = String(p.abstract_license || '').trim();
+          if (license) {
+            const licenseUrl = safeExternalUrl(p.abstract_license_url);
+            const licenseNode = licenseUrl ? makeLink(licenseUrl, license) : makeEl('span', '', license);
+            if (licenseUrl) licenseNode.setAttribute('aria-label', `${license} license for the abstract of ${p.title}`);
+            attribution.append(licenseNode);
+          }
+          if (attribution.childNodes.length) body.append(attribution);
+          details.append(summary, body);
+          content.append(details);
+        }
+        const actions = makeEl('div', 'bib-item-actions');
         if (p.bibtex) {
-          const actions = makeEl('div', 'bib-item-actions');
           const copyButton = makeEl('button', 'bib-copy-button', 'Copy BibTeX');
           copyButton.type = 'button';
           copyButton.setAttribute('aria-label', `Copy BibTeX for ${p.title}`);
           copyButton.setAttribute('aria-live', 'polite');
           copyButton.addEventListener('click', () => copyBibtex(p.bibtex, copyButton));
           actions.append(copyButton);
-          content.append(actions);
         }
+        const repositories = (Array.isArray(p.repositories) ? p.repositories : []).map(repository => ({
+          url: safeExternalUrl(repository?.url),
+          label: String(repository?.label || '').trim()
+        })).filter(repository => repository.url.startsWith('https://github.com/'));
+        repositories.forEach((repository, index) => {
+          const label = repository.label || (repositories.length === 1 ? 'GitHub' : `GitHub ${index + 1}`);
+          const link = makeLink(repository.url, label, 'bib-repository-link');
+          link.setAttribute('aria-label', `Open ${repository.label || 'GitHub repository'} for ${p.title}`);
+          actions.append(link);
+        });
+        if (actions.childNodes.length) content.append(actions);
         article.append(content);
         const external = makeLink(mainLink, '↗', 'bib-external');
         external.setAttribute('aria-label', doiUrl ? `Open DOI for ${p.title}` : `Open Google Scholar profile for ${p.title}`);
@@ -398,3 +443,4 @@ async function initializePublications() {
 document.getElementById('current-year')?.replaceChildren(String(new Date().getFullYear()));
 initializeNavigation();
 initializePublications();
+

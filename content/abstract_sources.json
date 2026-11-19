@@ -156,6 +156,17 @@
       "authors": "Michael Lassi, Carlo Fabbiani, Salvatore Mazzeo, Rachele Burali, Alberto Arturo Vergani, Giulia Giacomucci, Valentina Moschini, Carmen Morinelli, Filippo Emiliani, Maenia Scarpino, et al.",
       "normalized_abstract_sha256": "1bb713a32233a8aed613e12692b9fc1d0c6ad737a4315a2a90e87c6964f041fa",
       "notes": "Original abstract, without paraphrase. HTML formatting removed and paragraph/space layout normalized. Title, authors including Alberto Arturo Vergani, DOI and version of record verified. Preserved original wording for unchanged noncommercial reproduction; PMC lines 225–230; license at lines 203–205."
+    },
+    "vergani2025erp": {
+      "source_title": "Event-related potential markers of subjective cognitive decline and mild cognitive impairment during a sustained visuo-attentive task",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11919406/",
+      "license": "CC BY-NC-ND 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "source_doi": "10.1016/j.nicl.2025.103760",
+      "retrieved": "2026-11-19",
+      "authors": "A. A. Vergani, S. Mazzeo, V. Moschini, R. Burali, M. Lassi, L. G. Amato, J. Carpaneto, G. Salvestrini, C. Fabbiani, G. Giacomucci, C. Morinelli, F. Emiliani, M. Scarpino, S. Bagnoli, A. Ingannato, B. Nacmias, S. Padiglioni, S. Sorbi, V. Bessi, A. Grippo, A. Mazzoni",
+      "normalized_abstract_sha256": "bef0df6b7bd136ae4d0565cb170a0f36e1197d6d14340c3817deffab42c288b7",
+      "notes": "Original abstract of the published NeuroImage: Clinical article, volume 45, article 103760, published 25 February 2025. Source wording retained; only whitespace and BibTeX escaping normalized. Citation updated to this version at the author's request; preprint DOI replaced. Separate Highlights excluded."
     }
   }
 }
