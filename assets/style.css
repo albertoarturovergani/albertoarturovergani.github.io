@@ -443,6 +443,8 @@ body{color-scheme:dark}
 .affiliation-name{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:10px;margin:0;font-size:14px;font-weight:650}
 .affiliation-meta{margin:0;color:#9ab0bd;font-size:12px;font-weight:450}
 .affiliation-links{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin-top:4px;font-size:12px;font-weight:500}
+.affiliation-research-links{display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-width:0;font-size:13px;font-weight:550;line-height:1.55}
+.affiliation-research-links a{max-width:100%}
 .hero-affiliation a:focus-visible{outline:2px solid #83dfd5;outline-offset:3px;border-radius:2px}
 @media(max-width:580px){.hero-affiliation{padding:17px 18px;margin-top:28px;border-radius:10px;font-size:13px}.affiliation-row{grid-template-columns:1fr;gap:6px}.affiliation-role{margin-top:0}.affiliation-name{font-size:13px}}
 
