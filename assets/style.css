@@ -448,3 +448,12 @@ body{color-scheme:dark}
 .hero-affiliation a:focus-visible{outline:2px solid #83dfd5;outline-offset:3px;border-radius:2px}
 @media(max-width:580px){.hero-affiliation{padding:17px 18px;margin-top:28px;border-radius:10px;font-size:13px}.affiliation-row{grid-template-columns:1fr;gap:6px}.affiliation-role{margin-top:0}.affiliation-name{font-size:13px}}
 
+/* Project affiliations and verified funding references in the career timeline. */
+.timeline-item .career-projects{display:grid;gap:14px;margin-top:15px;min-width:0}
+.timeline-item .career-project{border-left:2px solid #35535b;padding-left:12px;min-width:0}
+.timeline-item .career-project p{margin:0;font-size:.875rem;line-height:1.65;overflow-wrap:anywhere}
+.timeline-item .career-project .career-project-funding{margin-top:4px;font-size:.8125rem;color:#a6b8c5}
+.career-project a{color:var(--accent);text-decoration:underline;text-decoration-color:#578f8c;text-underline-offset:3px}
+.career-project a:hover{color:#e6fffd}
+.career-project a:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:2px}
+@media(max-width:580px){.timeline-item .career-project{padding-left:10px}.timeline-item .career-projects{gap:12px}}
