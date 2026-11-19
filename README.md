@@ -41,7 +41,7 @@ The build validates citation keys and GitHub repository URLs, then includes the 
 
 ## Symposium and workshop details
 
-The three linked event pages in `events/` show the final programme, dates, speakers, talk titles and documented affiliations for SIPF 2025, CNS*2025 and SIPF 2024. Homepage proposal cards and their full-CV entries link to these pages and to the official programmes.
+The three linked event pages in `events/` show the final programme, dates, speakers, talk titles and documented affiliations for SIPF 2025, CNS*2025 and SIPF 2024. Homepage proposal cards and their full-CV entries link to these Details pages; links to the official programmes are provided within the event pages.
 
 Maintain event data in `content/events.json` and run `python scripts/build_events.py` to regenerate the pages. The existing Pages workflow runs this build and deploys the `events/` folder. The generator reuses the homepage navigation and renders only supplied content. `assets/events.css` controls the responsive event-page layout.
 
