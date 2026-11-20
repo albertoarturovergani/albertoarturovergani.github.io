@@ -378,7 +378,9 @@
         "computational-models",
         "cerebellum",
         "schizophrenia",
-        "atrophy"
+        "atrophy",
+        "spiking-networks",
+        "neural-networks"
       ]
     },
     {
@@ -1599,6 +1601,8 @@
         "computational-models",
         "neuroengineering",
         "dopamine",
+        "spiking-networks",
+        "neural-networks",
         "parkinson-disease"
       ]
     },

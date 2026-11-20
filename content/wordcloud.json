@@ -222,6 +222,10 @@
     {
       "id": "spiking-networks",
       "label": "Spiking Networks",
+      "references": [
+        "vergani_2026_SZ1",
+        "ortone2023dopamine"
+      ],
       "topics": [
         "spiking-networks"
       ],
@@ -245,6 +249,10 @@
     {
       "id": "neural-networks",
       "label": "Neural Networks",
+      "references": [
+        "vergani_2026_SZ1",
+        "ortone2023dopamine"
+      ],
       "topics": [],
       "pattern": "neural network|cell assemblies|network of spiking",
       "family": "modelling"

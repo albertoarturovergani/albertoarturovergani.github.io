@@ -171,6 +171,13 @@
       "related": []
     },
     {
+      "id": "spiking-networks",
+      "label": "Spiking Networks",
+      "count": 6,
+      "family": "modelling",
+      "related": []
+    },
+    {
       "id": "brain-resilience",
       "label": "Brain Resilience",
       "count": 5,
@@ -199,8 +206,8 @@
       "related": []
     },
     {
-      "id": "spiking-networks",
-      "label": "Spiking Networks",
+      "id": "neural-networks",
+      "label": "Neural Networks",
       "count": 4,
       "family": "modelling",
       "related": []
@@ -217,13 +224,6 @@
       "label": "TMS–EEG",
       "count": 3,
       "family": "methods",
-      "related": []
-    },
-    {
-      "id": "neural-networks",
-      "label": "Neural Networks",
-      "count": 2,
-      "family": "modelling",
       "related": []
     },
     {

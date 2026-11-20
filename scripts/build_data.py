@@ -353,6 +353,7 @@ def build_wordcloud(items: list[dict]) -> None:
     if not isinstance(concepts, list) or not concepts:
         raise ValueError('Word cloud must contain a nonempty concepts list')
     seen = set()
+    item_ids = {item['id'] for item in items}
     for item in items:
         item['keywords'] = []
     output = []
@@ -365,11 +366,18 @@ def build_wordcloud(items: list[dict]) -> None:
         topic_codes = set(concept.get('topics', []))
         if topic_codes - TOPICS:
             raise ValueError('Unknown topic codes for keyword: ' + key)
+        references = concept.get('references', [])
+        if not isinstance(references, list) or any(not isinstance(ref, str) or not ref.strip() for ref in references):
+            raise ValueError('Invalid references list for keyword: ' + key)
+        reference_ids = set(references)
+        unknown_references = reference_ids - item_ids
+        if unknown_references:
+            raise ValueError('Unknown references for keyword ' + key + ': ' + ', '.join(sorted(unknown_references)))
         pattern = re.compile(concept.get('pattern', r'(?!)'), flags=re.I)
         match_count = 0
         for item in items:
             searchable_content = ' '.join(str(item.get(k, '')) for k in ('title', 'venue'))
-            if topic_codes.intersection(item.get('topics', [])) or pattern.search(searchable_content):
+            if item['id'] in reference_ids or topic_codes.intersection(item.get('topics', [])) or pattern.search(searchable_content):
                 item['keywords'].append(key)
                 match_count += 1
         if match_count:
