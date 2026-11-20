@@ -337,7 +337,7 @@ function renderBibliography(items) {
       const yearKey = String(year || 'Other');
       const group = makeEl('details', 'bib-year-group');
       group.dataset.year = yearKey;
-      group.open = yearExpansion.has(yearKey) ? yearExpansion.get(yearKey) : expandMatches || yearKey === '2026';
+      group.open = yearExpansion.has(yearKey) ? yearExpansion.get(yearKey) : expandMatches || yearKey === '2027';
       group.setAttribute('aria-label', `Publications from ${year}`);
       group.addEventListener('toggle', event => {
         if (event.target === group && group.isConnected) yearExpansion.set(yearKey, group.open);

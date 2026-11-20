@@ -106,7 +106,7 @@ Clicking a word opens `publications.html?keyword=<slug>`, which displays the mat
 
 Publication titles link to the DOI first, then the available source URL, then a Google Scholar title search when neither is supplied. Separate DOI labels and duplicate external-link arrows are omitted. Google Scholar and Scopus links below every record search for that individual work; they do not indicate verified database coverage. Google Scholar uses the quoted title, while Scopus uses `DOI(...)` or `TITLE("...")`. The search conventions follow [Google Scholar help](https://scholar.google.com/intl/en-us/scholar/help.html), [Scopus advanced-search help](https://www.elsevier.support/scopus/answer/how-can-i-best-use-the-advanced-search) and the [Ex Libris search-link integration example](https://knowledge.exlibrisgroup.com/Primo/Community_Knowledge/How_to_-_Add_links_to_additional_search_platforms_in_Primo_Brief_Results).
 
-The archive groups records in native expandable year sections with per-year counts. The default view opens 2026 and closes all other years, including planned 2027 records. Active searches and filters open the matching years; returning to the default view restores its initial state. Direct `#pub-...` links open the relevant year before scrolling. Abstract panels and Copy BibTeX operate inside these year sections.
+The archive groups records in native expandable year sections with per-year counts. The default view opens 2027 and closes all other years, including 2026. Active searches and filters open the matching years; returning to the default view restores its initial state. Direct `#pub-...` links open the relevant year before scrolling. Abstract panels and Copy BibTeX operate inside these year sections.
 
 ## Copy BibTeX per publication
 
