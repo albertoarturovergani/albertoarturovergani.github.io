@@ -32,6 +32,28 @@ function safeExternalUrl(value) {
 function searchable(text) {
   return String(text || '').toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
+function publicationLinks(publication) {
+  const title = String(publication.title || '').replace(/["“”]/g, '').trim();
+  const doi = String(publication.doi || '').trim().replace(/^https?:\/\/(?:dx\.)?doi\.org\//i, '').replace(/^doi:\s*/i, '');
+  const validDoi = /^10\.\d{4,9}\/\S+$/i.test(doi);
+  const doiUrl = validDoi ? 'https://doi.org/' + doi.split('/').map(encodeURIComponent).join('/') : '';
+  const scholar = 'https://scholar.google.com/scholar?' + new URLSearchParams({ q: '"' + title + '"' });
+  const query = validDoi ? 'DOI(' + doi + ')' : 'TITLE("' + title + '")';
+  const scopus = 'https://www.scopus.com/results/results.uri?' + new URLSearchParams({
+    src: 's', sot: 'b', sdt: 'b', sl: String(query.length), s: query
+  });
+  return { main: doiUrl || safeExternalUrl(publication.url) || scholar, scholar, scopus };
+}
+function discoveryLinks(publication, links) {
+  const group = makeEl('div', 'bib-identifiers');
+  for (const [name, url] of [['Google Scholar', links.scholar], ['Scopus', links.scopus]]) {
+    const link = makeLink(url, name, 'bib-identifier-link');
+    link.setAttribute('aria-label', 'Search ' + name + ' for ' + publication.title);
+    link.title = 'Search this work in ' + name;
+    group.append(link);
+  }
+  return group;
+}
 
 function initializeNavigation() {
   const toggle = document.querySelector('.nav-toggle');
@@ -63,11 +85,12 @@ function renderFeatured(items) {
     meta.append(makeEl('span', '', 'JOURNAL ARTICLE'), makeEl('span', '', String(p.year)));
     card.append(meta);
     const title = makeEl('h3');
-    title.append(makeLink(p.url, p.title));
+    const links = publicationLinks(p);
+    title.append(makeLink(links.main, p.title));
     card.append(title, makeEl('p', '', p.authors));
     const footer = makeEl('div', 'featured-venue');
-    footer.append(makeEl('span', '', p.venue || 'Research article'), makeLink(p.url, '↗'));
-    card.append(footer);
+    footer.append(makeEl('span', '', p.venue || 'Research article'));
+    card.append(footer, discoveryLinks(p, links));
     target.append(card);
   });
 }
@@ -159,6 +182,8 @@ function renderBibliography(items) {
   let tagMatch = params.get('match') === 'all' ? 'all' : 'any';
   matchSelect.value = tagMatch;
   let refs = new Set((params.get('refs') || '').split(',').map(s => s.trim()).filter(Boolean));
+  const yearExpansion = new Map();
+  let expansionContext = '';
 
 
   // Suggestions are derived only from actual publication titles.
@@ -242,6 +267,8 @@ function renderBibliography(items) {
     selectedTopics.clear(); styleTopics(); updateUrl(); update();
   }
   function reset() {
+    yearExpansion.clear();
+    expansionContext = '';
     query = ''; keyword = ''; explicitTopicFilter = false;
     yearFilter = 'all'; refs = new Set();
     input.value = ''; yearSelect.value = 'all'; updateTitleSuggestions('');
@@ -255,6 +282,14 @@ function renderBibliography(items) {
     input.focus();
   }
   function update() {
+    const nextExpansionContext = JSON.stringify([query, keyword, filter, yearFilter, tagMatch,
+      [...selectedTopics].sort(), [...refs].sort()]);
+    if (nextExpansionContext !== expansionContext) {
+      yearExpansion.clear();
+      expansionContext = nextExpansionContext;
+    }
+    const expandMatches = Boolean(query || keyword || refs.size || filter !== 'all' ||
+      yearFilter !== 'all' || !isDefaultTopicSelection() || tagMatch === 'all');
     const matching = items.filter(item => {
       if (refs.size && !refs.has(item.id)) return false;
       if (keyword && !(item.keywords || []).includes(keyword)) return false;
@@ -271,7 +306,7 @@ function renderBibliography(items) {
       return searchable(item.title).includes(query);
     });
     target.replaceChildren();
-    resultCount.textContent = `${matching.length} ${matching.length === 1 ? 'record' : 'records'} shown`;
+    resultCount.textContent = `${matching.length} matching ${matching.length === 1 ? 'record' : 'records'}`;
     if (context) {
       context.replaceChildren();
       if (refs.size || keyword) {
@@ -299,9 +334,18 @@ function renderBibliography(items) {
       byYear.get(item.year).push(item);
     });
     for (const [year, publications] of byYear) {
-      const group = makeEl('section', 'bib-year-group');
+      const yearKey = String(year || 'Other');
+      const group = makeEl('details', 'bib-year-group');
+      group.dataset.year = yearKey;
+      group.open = yearExpansion.has(yearKey) ? yearExpansion.get(yearKey) : expandMatches || yearKey === '2026';
       group.setAttribute('aria-label', `Publications from ${year}`);
-      group.append(makeEl('div', 'bib-year-number', String(year || 'Other')));
+      group.addEventListener('toggle', event => {
+        if (event.target === group && group.isConnected) yearExpansion.set(yearKey, group.open);
+      });
+      const summary = makeEl('summary', 'bib-year-summary');
+      summary.append(makeEl('span', 'bib-year-number', yearKey),
+        makeEl('span', 'bib-year-count', publications.length + (publications.length === 1 ? ' record' : ' records')));
+      group.append(summary);
       const list = makeEl('div', 'bib-year-items');
       publications.forEach(p => {
         const article = makeEl('article', 'bib-item');
@@ -314,30 +358,13 @@ function renderBibliography(items) {
           meta.append(makeEl('span', 'bib-status', p.status));
         }
         content.append(meta);
-        const doi = String(p.doi || '').trim();
-        const doiUrl = doi.startsWith('10.') && doi.includes('/') ? 'https://doi.org/' + encodeURI(doi) : '';
-        const scholarUrl = 'https://scholar.google.com/citations?user=BqEQTtQAAAAJ';
-        const mainLink = doiUrl || scholarUrl;
+        const links = publicationLinks(p);
         const heading = makeEl('h3');
-        heading.append(makeLink(mainLink, p.title));
+        heading.append(makeLink(links.main, p.title));
         content.append(heading);
         if (p.authors) content.append(makeEl('p', 'bib-authors', p.authors));
         if (p.venue) content.append(makeEl('p', 'bib-venue', p.venue));
-        const identifiers = makeEl('div', 'bib-identifiers');
-        if (doiUrl) {
-          const doiLink = makeLink(doiUrl, 'DOI: ' + doi, 'bib-identifier-link');
-          doiLink.setAttribute('aria-label', 'Open DOI ' + doi);
-          identifiers.append(doiLink);
-        } else {
-          const scholar = makeLink(scholarUrl, 'Google Scholar profile', 'bib-identifier-link');
-          scholar.setAttribute('aria-label', 'Open Alberto Arturo Vergani Google Scholar profile');
-          identifiers.append(scholar);
-        }
-        if (p.url && (p.url.startsWith('https://') || p.url.startsWith('http://')) &&
-            p.url !== doiUrl && p.url !== scholarUrl) {
-          identifiers.append(makeLink(p.url, 'Original source', 'bib-identifier-link bib-source-link'));
-        }
-        content.append(identifiers);
+        content.append(discoveryLinks(p, links));
         const topicLine = makeEl('div', 'bib-topic-tags');
         (p.topics || []).forEach(code => {
           const tag = makeEl('button', 'bib-topic-tag', TOPIC_NAMES[code] || code);
@@ -395,9 +422,6 @@ function renderBibliography(items) {
         });
         if (actions.childNodes.length) content.append(actions);
         article.append(content);
-        const external = makeLink(mainLink, '↗', 'bib-external');
-        external.setAttribute('aria-label', doiUrl ? `Open DOI for ${p.title}` : `Open Google Scholar profile for ${p.title}`);
-        article.append(external);
         list.append(article);
       });
       group.append(list); target.append(group);
@@ -415,9 +439,19 @@ function renderBibliography(items) {
   styleButtons(typeButtons, 'filter', filter);
   styleTopics();
   update();
-  if (window.location.hash.startsWith('#pub-')) {
-    requestAnimationFrame(() => document.getElementById(decodeURIComponent(window.location.hash.slice(1)))?.scrollIntoView());
+  function revealLinkedPublication() {
+    if (!window.location.hash.startsWith('#pub-')) return;
+    let id;
+    try { id = decodeURIComponent(window.location.hash.slice(1)); } catch { return; }
+    const article = document.getElementById(id);
+    const group = article?.closest('details.bib-year-group');
+    if (!group) return;
+    group.open = true;
+    yearExpansion.set(group.dataset.year, true);
+    requestAnimationFrame(() => article.scrollIntoView({ block: 'start' }));
   }
+  revealLinkedPublication();
+  window.addEventListener('hashchange', revealLinkedPublication);
 }
 
 async function initializePublications() {

@@ -41,7 +41,7 @@ The build validates citation keys and GitHub repository URLs, then includes the 
 
 ## Symposium and workshop details
 
-The three linked event pages in `events/` show the final programme, dates, speakers, talk titles and documented affiliations for SIPF 2025, CNS*2025 and SIPF 2024. Homepage proposal cards and their full-CV entries link to these Details pages; links to the official programmes are provided within the event pages.
+The three linked event pages in `events/` show the final programme, dates, speakers, talk titles and documented affiliations for SIPF 2025, CNS*2025 and SIPF 2024. The event titles on the homepage and in the full CV link to these detail pages; links to the official programmes are provided within the event pages.
 
 Maintain event data in `content/events.json` and run `python scripts/build_events.py` to regenerate the pages. The existing Pages workflow runs this build and deploys the `events/` folder. The generator reuses the homepage navigation and renders only supplied content. `assets/events.css` controls the responsive event-page layout.
 
@@ -102,6 +102,12 @@ The homepage replaces the three research-area cards with a free-floating, random
 
 Clicking a word opens `publications.html?keyword=<slug>`, which displays the matching records even when they belong to History of Science (ordinarily excluded by the default topic preset). Visitors can then clear the research focus and return to the normal publication list. On narrow devices the same keywords are presented as accessible clickable chips instead of shrinking the SVG text.
 
+## Publication links and expandable years
+
+Publication titles link to the DOI first, then the available source URL, then a Google Scholar title search when neither is supplied. Separate DOI labels and duplicate external-link arrows are omitted. Google Scholar and Scopus links below every record search for that individual work; they do not indicate verified database coverage. Google Scholar uses the quoted title, while Scopus uses `DOI(...)` or `TITLE("...")`. The search conventions follow [Google Scholar help](https://scholar.google.com/intl/en-us/scholar/help.html), [Scopus advanced-search help](https://www.elsevier.support/scopus/answer/how-can-i-best-use-the-advanced-search) and the [Ex Libris search-link integration example](https://knowledge.exlibrisgroup.com/Primo/Community_Knowledge/How_to_-_Add_links_to_additional_search_platforms_in_Primo_Brief_Results).
+
+The archive groups records in native expandable year sections with per-year counts. The default view opens 2026 and closes all other years, including planned 2027 records. Active searches and filters open the matching years; returning to the default view restores its initial state. Direct `#pub-...` links open the relevant year before scrolling. Abstract panels and Copy BibTeX operate inside these year sections.
+
 ## Copy BibTeX per publication
 
 Each record in the Publications page has a **Copy BibTeX** button. The action copies that record's complete original BibTeX entry from the maintained `vergani_scholar.bib` file, including its citation key and full available metadata. No manual selection or external site is needed. A short “Copied” confirmation appears after a successful copy. The existing download link still provides the complete bibliography.
@@ -116,7 +122,7 @@ The parser in `scripts/build_data.py` retains the exact BibTeX block for each in
 - Publications are searchable by **partial or full title**, with word suggestions derived from real publication titles. The title search sits under the topic filters.
 - `content/topics.json` assigns all BibTeX records coauthored with Alberto Mazzoni to Neuroengineering; the build also enforces this for new references. It includes Parkinson's disease and Autism subject tags, including the Ortone and Fabbrizzi publications.
 - All 11 records coauthored with Elisabetta Binaghi carry Computer science, Computational intelligence, Soft computing, Machine learning and Medical informatics tags. The build also applies these five tags to new coauthored records. Neuroscience and MRI/fMRI tags remain specific to the neuroimaging works; the oral disease risk assessment paper and the two general methods papers do not carry Neuroscience.
-- Abstracts are manually maintained in each record's `abstract` field in `vergani_scholar.bib`; empty fields indicate that the text is still to be supplied. Bibliographic DOI, source links and Copy BibTeX remain available. The publication cards show an expandable Abstract panel only for records with supplied text.
+- Abstracts are manually maintained in each record's `abstract` field in `vergani_scholar.bib`; empty fields indicate that the text is still to be supplied. Publication titles link to the DOI or available source, with Google Scholar and Scopus discovery links below; Copy BibTeX remains available. The publication cards show an expandable Abstract panel only for records with supplied text.
 - The research word cloud now includes explicitly curated semantic families and related-term neighborhoods in `content/wordcloud.json`. Hovering or keyboard-focusing an SVG word smoothly brings related concepts near it, while clicking the word continues to filter the bibliography. Reduced-motion preferences are honored, and mobile visitors keep clickable keywords.
 - The Contact details section links academic profiles and a direct mailto email link.
 
