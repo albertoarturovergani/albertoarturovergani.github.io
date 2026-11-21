@@ -103,3 +103,16 @@
 .news-brand-fallback{display:block;font-size:clamp(65px,9vw,112px);line-height:1;letter-spacing:-.07em;font-weight:760;color:#258267;text-align:center}
 @media(max-width:900px){.news-thumbnail--institutional{min-height:250px;aspect-ratio:auto}}
 @media(max-width:540px){.news-thumbnail--institutional{min-height:225px;padding:26px 19px;gap:14px}.news-thumbnail--institutional .news-institutional-logo{max-height:170px}}
+
+/* Portrait poster preview for European Researchers' Night, corrected by the event organizers. */
+.news-card--poster{grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);min-height:465px}
+.news-card--poster .news-thumbnail--poster{display:grid;place-items:center;min-height:465px;height:465px;aspect-ratio:auto;padding:9px;background:#f8faf8;border-right:1px solid #b8d5c6}
+.news-card--poster .news-poster-image{height:100%;width:auto;max-width:100%;max-height:100%;object-fit:contain;object-position:center;transition:none}
+.news-card--poster .news-thumbnail:hover img{transform:none}
+@media(max-width:900px){
+  .news-card--poster{grid-template-columns:minmax(0,1fr)}
+  .news-card--poster .news-thumbnail--poster{height:350px;min-height:0;aspect-ratio:auto}
+}
+@media(max-width:540px){
+  .news-card--poster .news-thumbnail--poster{height:305px;padding:7px}
+}
