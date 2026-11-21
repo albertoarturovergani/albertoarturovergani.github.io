@@ -401,6 +401,50 @@ function renderBibliography(items) {
           details.append(summary, body);
           content.append(details);
         }
+        // Preserve the distinction between the recording of this contribution and related research talks.
+        const videos = (Array.isArray(p.videos) ? p.videos : []).filter(video => {
+          const id = String(video?.youtube_id || '');
+          return /^[A-Za-z0-9_-]{11}$/.test(id) &&
+            safeExternalUrl(video?.url) === 'https://www.youtube.com/watch?v=' + id;
+        });
+        if (videos.length) {
+          const panel = makeEl('details', 'bib-videos');
+          const summaryLabel = videos.some(v => v.relation === 'presentation')
+            ? (videos.length === 1 ? 'Video of this presentation' : 'Videos of this research')
+            : (videos.length === 1 ? 'Related research video' : 'Related research videos');
+          const summary = makeEl('summary', 'bib-videos-heading', summaryLabel);
+          summary.setAttribute('aria-label', summaryLabel + ' for ' + p.title);
+          panel.append(summary);
+          const videoList = makeEl('div', 'bib-video-list');
+          videos.forEach(video => {
+            const block = makeEl('div', 'bib-video-item');
+            const preview = makeLink(video.url, '', 'bib-video-thumb');
+            preview.setAttribute('aria-label', 'Watch ' + video.title + ' on YouTube');
+            const image = makeEl('img');
+            image.src = 'https://i.ytimg.com/vi/' + video.youtube_id + '/mqdefault.jpg';
+            image.alt = 'YouTube video preview: ' + video.title;
+            image.loading = 'lazy';
+            image.decoding = 'async';
+            image.width = 320;
+            image.height = 180;
+            const play = makeEl('span', 'bib-video-play', '▶');
+            play.setAttribute('aria-hidden', 'true');
+            preview.append(image, play);
+            const information = makeEl('div', 'bib-video-information');
+            information.append(makeEl('span', 'bib-video-type',
+              video.relation === 'presentation' ? 'Recorded conference talk' : 'Related research presentation'));
+            const heading = makeEl('h4', 'bib-video-title');
+            heading.append(makeLink(video.url, video.title));
+            information.append(heading);
+            if (video.context) information.append(makeEl('p', 'bib-video-context', video.context));
+            if (video.note) information.append(makeEl('p', 'bib-video-note', video.note));
+            information.append(makeLink(video.url, 'Watch on YouTube ↗', 'bib-video-watch'));
+            block.append(preview, information);
+            videoList.append(block);
+          });
+          panel.append(videoList);
+          content.append(panel);
+        }
         const actions = makeEl('div', 'bib-item-actions');
         if (p.bibtex) {
           const copyButton = makeEl('button', 'bib-copy-button', 'Copy BibTeX');
