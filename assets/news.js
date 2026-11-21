@@ -59,7 +59,7 @@
     const hasYouTube = !!videoID && (videoHost === 'youtube.com' || videoHost === 'youtu.be');
     const institutionalImage = safeURL(item.image_url);
     const hasMedia = hasYouTube || item.kind === 'video' || !!institutionalImage;
-    const card = make('article', 'news-card' + (hasMedia ? ' news-card--video' : ' news-card--text') + (index === 0 ? ' news-card--latest' : ''));
+    const card = make('article', 'news-card' + (hasMedia ? ' news-card--video' : ' news-card--text') + (index === 0 ? ' news-card--latest' : '') + (item.image_variant === 'poster' ? ' news-card--poster' : ''));
     card.setAttribute('aria-roledescription', 'slide');
     card.setAttribute('aria-label', 'News ' + (index + 1) + ' of ' + count);
 
@@ -87,6 +87,23 @@
         make('span', 'news-poster-detail', 'Martina Rizza & Alberto Vergani'),
         make('span', 'news-poster-play', '▶ Watch interview')
       );
+      card.append(preview);
+    } else if (institutionalImage && item.image_variant === 'poster') {
+      // Full official ERN poster from the event organizer's corrected PDF.
+      const pdfURL = safeURL(item.poster_pdf);
+      const preview = linkTo(pdfURL || item.url, '', 'news-thumbnail news-thumbnail--poster');
+      preview.setAttribute('aria-label', 'View official ERN poster as PDF (opens in a new tab)');
+      const img = make('img', 'news-poster-image');
+      img.src = institutionalImage;
+      img.alt = item.image_alt || 'Official event poster: ' + item.title;
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.width = 720;
+      img.height = 1018;
+      img.addEventListener('error', () => {
+        img.replaceWith(make('strong', 'news-brand-fallback', 'ERN 2026'));
+      });
+      preview.append(img);
       card.append(preview);
     } else if (institutionalImage) {
       // The source image is published by IHME's official GBD Collaborator Portal.
