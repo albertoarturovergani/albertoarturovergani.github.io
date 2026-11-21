@@ -29,7 +29,8 @@
         "neuroengineering",
         "brain-stimulation",
         "tms-eeg"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "DeGrazia2027InSilicoCerebellarTMS",
@@ -61,7 +62,8 @@
         "cerebellum",
         "neuroengineering",
         "brain-stimulation"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "Peroni2027SCN1A",
@@ -91,7 +93,8 @@
         "brain-stimulation",
         "neurodevelopment",
         "epilepsy"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "fabbrizzi2026digitaltwin",
@@ -122,7 +125,8 @@
         "neural-dynamics",
         "neuroengineering",
         "digital-twins"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "Vergani_2026_Matteucci",
@@ -147,7 +151,8 @@
       "repositories": [],
       "keywords": [
         "history-of-neuroscience"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2026lombroso",
@@ -172,7 +177,8 @@
       "repositories": [],
       "keywords": [
         "history-of-neuroscience"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "amato2026gender",
@@ -203,7 +209,8 @@
         "visual-attention",
         "neuroengineering",
         "alzheimer-disease"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2026effective",
@@ -239,7 +246,8 @@
         "neuroengineering",
         "brain-stimulation",
         "tms-eeg"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "Vrizzietal2026",
@@ -265,7 +273,8 @@
       "repositories": [],
       "keywords": [
         "machine-learning"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "rizzaLocatelli",
@@ -289,7 +298,8 @@
       "repositories": [],
       "keywords": [
         "history-of-neuroscience"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "mazzeo2026towards",
@@ -315,7 +325,8 @@
       "keywords": [
         "cognitive-decline",
         "alzheimer-disease"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "Faris2026_cellalterations_prep",
@@ -343,7 +354,8 @@
         "cerebellum",
         "schizophrenia",
         "predictive-modelling"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani_2026_SZ1",
@@ -381,7 +393,8 @@
         "atrophy",
         "spiking-networks",
         "neural-networks"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "amato2026normative",
@@ -414,7 +427,8 @@
         "neurodevelopment",
         "functional-connectivity",
         "autism"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "Lomi2026GRIN",
@@ -449,7 +463,8 @@
         "epilepsy",
         "tms-eeg",
         "functional-connectivity"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "conforti2026prinNEATMOVE",
@@ -482,7 +497,8 @@
         "neuroengineering",
         "brain-stimulation",
         "dosimetry"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "Vergani2026DeepNuclei",
@@ -514,7 +530,8 @@
         "cerebellum",
         "schizophrenia",
         "dopamine"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "Mazzeo2025",
@@ -541,7 +558,8 @@
       "keywords": [
         "cognitive-decline",
         "neuroengineering"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2025hill",
@@ -565,7 +583,8 @@
       "repositories": [],
       "keywords": [
         "history-of-neuroscience"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "amato2025digital",
@@ -600,7 +619,8 @@
         "cognitive-decline",
         "alzheimer-disease",
         "digital-twins"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2025erp",
@@ -638,7 +658,8 @@
         "neuroimaging",
         "erp",
         "neuroengineering"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "taddeini2025extended",
@@ -665,7 +686,8 @@
       "keywords": [
         "eeg",
         "neural-dynamics"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2025galvani",
@@ -690,7 +712,8 @@
       "repositories": [],
       "keywords": [
         "history-of-neuroscience"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "amato2025personalized",
@@ -726,7 +749,8 @@
         "alzheimer-disease",
         "atrophy",
         "digital-twins"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2025stein",
@@ -753,7 +777,8 @@
       "keywords": [
         "neuroengineering",
         "history-of-neuroscience"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "degrazia2025cns",
@@ -781,7 +806,8 @@
       "keywords": [
         "computational-models",
         "cerebellum"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "farisMnesis2025dopamineA",
@@ -808,7 +834,8 @@
       "keywords": [
         "cerebellum",
         "schizophrenia"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "VerganiEbrains2025SchizoCerebellum",
@@ -839,7 +866,8 @@
         "cerebellum",
         "schizophrenia",
         "brain-resilience"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "faris2025cerebellar",
@@ -869,7 +897,8 @@
         "schizophrenia",
         "neural-dynamics",
         "dopamine"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "Faris2025CerebellarDopamine",
@@ -899,7 +928,8 @@
         "schizophrenia",
         "neural-dynamics",
         "dopamine"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2025dcp25",
@@ -931,6 +961,16 @@
         "schizophrenia",
         "neural-dynamics",
         "brain-resilience"
+      ],
+      "videos": [
+        {
+          "youtube_id": "TPR1C_AN_0I",
+          "url": "https://www.youtube.com/watch?v=TPR1C_AN_0I",
+          "title": "Cerebellar Resilience Modulates Deep Nuclei Overdrive and Sensorial Dysmetria Across the Schizophrenia Continuum",
+          "relation": "presentation",
+          "context": "Dynamics and Complexity Workshop (DCP25), Pisa, 2025",
+          "note": "Video recording of the talk corresponding to this DCP25 conference contribution. Link supplied by the CISSC event organizers in November 2026."
+        }
       ]
     },
     {
@@ -962,7 +1002,8 @@
         "cerebellum",
         "schizophrenia",
         "brain-resilience"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "amato2025cns",
@@ -995,7 +1036,8 @@
         "alzheimer-disease",
         "atrophy",
         "digital-twins"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "Faris2025_SIF",
@@ -1027,7 +1069,8 @@
         "schizophrenia",
         "neural-dynamics",
         "dopamine"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2025mnesys",
@@ -1058,7 +1101,8 @@
         "cerebellum",
         "schizophrenia",
         "atrophy"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "farisMnesis2025dopamineB",
@@ -1087,7 +1131,8 @@
         "cerebellum",
         "schizophrenia",
         "dopamine"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2025cobrain",
@@ -1118,7 +1163,8 @@
         "cerebellum",
         "schizophrenia",
         "brain-resilience"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2025cns",
@@ -1149,7 +1195,8 @@
         "cerebellum",
         "schizophrenia",
         "brain-resilience"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2025saccadic",
@@ -1179,7 +1226,8 @@
         "computational-models",
         "cerebellum",
         "schizophrenia"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "peroni2025eccn",
@@ -1209,7 +1257,8 @@
         "brain-stimulation",
         "neurodevelopment",
         "epilepsy"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "Peroni2025TMS_SCN1A",
@@ -1239,7 +1288,8 @@
         "brain-stimulation",
         "neurodevelopment",
         "epilepsy"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "taddeini2024dopaminergic",
@@ -1266,7 +1316,8 @@
       "keywords": [
         "dopamine",
         "parkinson-disease"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2024hans",
@@ -1293,7 +1344,8 @@
       "keywords": [
         "eeg",
         "history-of-neuroscience"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2024louis",
@@ -1320,7 +1372,8 @@
       "keywords": [
         "computational-models",
         "history-of-neuroscience"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "amato2024personalized",
@@ -1352,7 +1405,8 @@
         "eeg",
         "alzheimer-disease",
         "atrophy"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "Vergani2024FENS",
@@ -1383,7 +1437,8 @@
         "visual-attention",
         "erp",
         "neuroengineering"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "amato2024predicting",
@@ -1415,7 +1470,8 @@
         "neuroengineering",
         "alzheimer-disease",
         "predictive-modelling"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2024eventSINDEM",
@@ -1442,7 +1498,8 @@
       "keywords": [
         "cognitive-decline",
         "neuroengineering"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2024eventSIPF",
@@ -1473,7 +1530,8 @@
         "visual-attention",
         "erp",
         "neuroengineering"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2024erice",
@@ -1504,7 +1562,8 @@
         "cerebellum",
         "schizophrenia",
         "atrophy"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "mazzeo2023machine",
@@ -1534,7 +1593,8 @@
         "machine-learning",
         "alzheimer-disease",
         "predictive-modelling"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "lassi2023degradation",
@@ -1570,7 +1630,8 @@
         "eeg",
         "neuroimaging",
         "alzheimer-disease"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "ortone2023dopamine",
@@ -1604,7 +1665,8 @@
         "spiking-networks",
         "neural-networks",
         "parkinson-disease"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "Mazzeo2023",
@@ -1636,7 +1698,8 @@
         "neuroengineering",
         "alzheimer-disease",
         "predictive-modelling"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2023electrophysiology",
@@ -1665,7 +1728,8 @@
         "eeg",
         "visual-attention",
         "neural-dynamics"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2023erpsSIPF",
@@ -1694,7 +1758,8 @@
         "eeg",
         "visual-attention",
         "erp"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2023erpsSINDEM",
@@ -1723,7 +1788,8 @@
         "eeg",
         "visual-attention",
         "erp"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2023p300",
@@ -1751,7 +1817,8 @@
         "cognitive-decline",
         "eeg",
         "erp"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2023study",
@@ -1780,7 +1847,8 @@
         "eeg",
         "visual-attention",
         "erp"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2022solving",
@@ -1807,7 +1875,8 @@
         "machine-learning",
         "clustering",
         "soft-clustering"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2022electrophysiological",
@@ -1835,7 +1904,8 @@
         "cognitive-decline",
         "eeg",
         "visual-attention"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2022event",
@@ -1865,7 +1935,8 @@
         "visual-attention",
         "neural-dynamics",
         "erp"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "amato2022eeg",
@@ -1899,7 +1970,8 @@
         "neuroengineering",
         "alzheimer-disease",
         "digital-twins"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2022temporal",
@@ -1929,7 +2001,8 @@
         "eeg",
         "erp",
         "neuroengineering"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2021modulation",
@@ -1957,7 +2030,8 @@
         "computational-models",
         "visual-attention",
         "predictive-modelling"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2021simulating",
@@ -1988,7 +2062,8 @@
         "history-of-neuroscience",
         "predictive-modelling",
         "spiking-networks"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "huyck2020hot",
@@ -2017,7 +2092,8 @@
         "computational-models",
         "spiking-networks",
         "neural-networks"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2020resting",
@@ -2051,7 +2127,8 @@
         "neuroimaging",
         "fmri",
         "mri"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2020critical",
@@ -2080,7 +2157,8 @@
         "computational-models",
         "spiking-networks",
         "neural-networks"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "huyck2020hotPoster",
@@ -2108,7 +2186,8 @@
       "keywords": [
         "computational-models",
         "spiking-networks"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "temporal_classes_RS-fMRI",
@@ -2136,7 +2215,8 @@
         "neuroimaging",
         "fmri",
         "mri"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "gonella2019cloud",
@@ -2166,7 +2246,8 @@
         "machine-learning",
         "clustering",
         "soft-clustering"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "martinelli2019comparison",
@@ -2201,7 +2282,8 @@
         "fmri",
         "soft-clustering",
         "mri"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "binaghi2018computation",
@@ -2235,6 +2317,16 @@
         "neuroimaging",
         "fmri",
         "mri"
+      ],
+      "videos": [
+        {
+          "youtube_id": "OQ-7-CJT8fI",
+          "url": "https://www.youtube.com/watch?v=OQ-7-CJT8fI",
+          "title": "FMRI data analysis with activation weighted vectors technique in functional neuroradiology",
+          "relation": "related",
+          "context": "Human Brain Project School, Obergurgl, 2016",
+          "note": "Related methodological presentation recorded in 2016. It discusses activation-weighted vectors, but is not the recorded presentation of the 2018 journal article."
+        }
       ]
     },
     {
@@ -2270,7 +2362,8 @@
         "machine-learning",
         "clustering",
         "soft-clustering"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2018clustering",
@@ -2305,7 +2398,8 @@
         "fmri",
         "soft-clustering",
         "mri"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2018resting",
@@ -2343,7 +2437,8 @@
         "soft-clustering",
         "functional-connectivity",
         "mri"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2018contributions",
@@ -2375,6 +2470,16 @@
       "keywords": [
         "neuroimaging",
         "fmri"
+      ],
+      "videos": [
+        {
+          "youtube_id": "ZMNyjm0DYOo",
+          "url": "https://www.youtube.com/watch?v=ZMNyjm0DYOo",
+          "title": "Computational intelligence methodologies applied to fMRI big data",
+          "relation": "related",
+          "context": "Human Brain Project Education Workshop, Manchester, 2016",
+          "note": "Related HBP workshop talk from 2016 on computational intelligence and fMRI, a research direction developed in the subsequent PhD thesis."
+        }
       ]
     },
     {
@@ -2405,7 +2510,8 @@
         "machine-learning",
         "clustering",
         "soft-clustering"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2017cluster",
@@ -2439,7 +2545,8 @@
         "clustering",
         "fmri",
         "soft-clustering"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2017quantitative",
@@ -2475,7 +2582,8 @@
       "keywords": [
         "machine-learning",
         "neuroimaging"
-      ]
+      ],
+      "videos": []
     },
     {
       "id": "vergani2016fsl",
@@ -2511,6 +2619,16 @@
       "keywords": [
         "machine-learning",
         "neuroimaging"
+      ],
+      "videos": [
+        {
+          "youtube_id": "OQ-7-CJT8fI",
+          "url": "https://www.youtube.com/watch?v=OQ-7-CJT8fI",
+          "title": "FMRI data analysis with activation weighted vectors technique in functional neuroradiology",
+          "relation": "related",
+          "context": "Human Brain Project School, Obergurgl, 2016",
+          "note": "A related HBP School presentation about activation-weighted vectors, not a recording of the INCF Neuroinformatics Conference abstract."
+        }
       ]
     },
     {
@@ -2534,7 +2652,8 @@
       "abstract_license": "",
       "abstract_license_url": "",
       "repositories": [],
-      "keywords": []
+      "keywords": [],
+      "videos": []
     },
     {
       "id": "vergani2012bscthesis",
@@ -2559,7 +2678,8 @@
       "repositories": [],
       "keywords": [
         "cognitive-decline"
-      ]
+      ],
+      "videos": []
     }
   ]
 }
