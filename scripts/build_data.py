@@ -26,6 +26,7 @@ WORDCLOUD_FILE = ROOT / 'content' / 'wordcloud.json'
 WORDCLOUD_OUTPUT = ROOT / 'data' / 'wordcloud.json'
 ABSTRACT_SOURCES_FILE = ROOT / 'content' / 'abstract_sources.json'
 REPOSITORIES_FILE = ROOT / 'content' / 'repositories.json'
+PUBLICATION_VIDEOS_FILE = ROOT / 'content' / 'publication_videos.json'
 
 TOPICS = {'neuroscience', 'computer-science', 'computational-intelligence', 'soft-computing', 'medical-informatics', 'history', 'neuroengineering', 'education', 'brain-modelling', 'machine-learning', 'eeg', 'neuroimaging', 'cerebellum', 'cognitive-decline', 'schizophrenia', 'brain-stimulation', 'spiking-networks', 'dopamine', 'neurodevelopment', 'parkinson', 'autism', 'other'}
 
@@ -313,11 +314,11 @@ def normalize(entry: dict[str, str], overrides: dict, topic_overrides: dict) -> 
     return item
 
 
-def add_publication_resources(items: list[dict], sources: dict, repositories: dict) -> None:
+def add_publication_resources(items: list[dict], sources: dict, repositories: dict, videos: dict) -> None:
     known = {item['id'] for item in items}
-    unknown = set(repositories) - known
+    unknown = (set(repositories) | set(videos)) - known
     if unknown:
-        raise ValueError('Repository links have unknown BibTeX keys: ' + ', '.join(sorted(unknown)))
+        raise ValueError('Publication resources have unknown BibTeX keys: ' + ', '.join(sorted(unknown)))
     for item in items:
         source = sources.get(item['id'], {}) if item['abstract'] else {}
         item['abstract_source'] = safe_link(source.get('source_url', ''))
@@ -337,6 +338,36 @@ def add_publication_resources(items: list[dict], sources: dict, repositories: di
             if url not in seen:
                 item['repositories'].append({'url': url, 'label': str(link.get('label') or 'GitHub')})
                 seen.add(url)
+
+
+        item['videos'] = []
+        video_links = videos.get(item['id'], [])
+        if not isinstance(video_links, list):
+            raise ValueError('Video links must be a list for: ' + item['id'])
+        seen_video_ids = set()
+        for video in video_links:
+            if not isinstance(video, dict):
+                raise ValueError('Invalid video entry for: ' + item['id'])
+            video_id = str(video.get('youtube_id', '')).strip()
+            if not re.fullmatch(r'[A-Za-z0-9_-]{11}', video_id):
+                raise ValueError('Invalid YouTube video ID for: ' + item['id'])
+            relation = str(video.get('relation', '')).strip()
+            if relation not in {'presentation', 'related'}:
+                raise ValueError('Video relation must be presentation or related for: ' + item['id'])
+            title = str(video.get('title', '')).strip()
+            if not title:
+                raise ValueError('Video title missing for: ' + item['id'])
+            if video_id in seen_video_ids:
+                continue
+            item['videos'].append({
+                'youtube_id': video_id,
+                'url': 'https://www.youtube.com/watch?v=' + video_id,
+                'title': title,
+                'relation': relation,
+                'context': str(video.get('context', '')).strip(),
+                'note': str(video.get('note', '')).strip(),
+            })
+            seen_video_ids.add(video_id)
 
 
 
@@ -396,6 +427,9 @@ def main() -> int:
     topic_overrides = json.loads(TOPICS_FILE.read_text(encoding='utf-8')) if TOPICS_FILE.exists() else {}
     abstract_sources = json.loads(ABSTRACT_SOURCES_FILE.read_text(encoding='utf-8')).get('items', {}) if ABSTRACT_SOURCES_FILE.exists() else {}
     repositories = json.loads(REPOSITORIES_FILE.read_text(encoding='utf-8')) if REPOSITORIES_FILE.exists() else {}
+    videos = json.loads(PUBLICATION_VIDEOS_FILE.read_text(encoding='utf-8')) if PUBLICATION_VIDEOS_FILE.exists() else {}
+    if not isinstance(videos, dict):
+        raise ValueError('Publication video mapping must be a JSON object keyed by BibTeX ID')
     # A CV may have accidental duplicate keys. Deduplicate equivalent entries,
     # but fail on conflicting records rather than silently publishing the wrong one.
     unique = {}
@@ -412,7 +446,7 @@ def main() -> int:
     if not normalized:
         raise ValueError('No publications were parsed from BibTeX')
     normalized.sort(key=lambda p: (-p['year'], {'journal': 0, 'preprint': 1, 'conference': 2, 'thesis': 3}[p['type']], p['title'].lower()))
-    add_publication_resources(normalized, abstract_sources, repositories)
+    add_publication_resources(normalized, abstract_sources, repositories, videos)
     not_found = set(topic_overrides) - set(unique)
     if not_found:
         print('WARNING: topic metadata has unused keys: ' + ', '.join(sorted(not_found)), file=sys.stderr)
