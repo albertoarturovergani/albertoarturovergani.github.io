@@ -1,10 +1,17 @@
-/* Curated academic news feed: dates are explicit; video thumbnails use YouTube IDs. */
+/* Curated academic news: one visible item at a time, newest first, beginning 19 March 2026. */
 (() => {
   'use strict';
   const target = document.getElementById('latest-news-items');
   if (!target) return;
-
+  const carousel = document.getElementById('latest-news-carousel');
+  const controls = document.getElementById('latest-news-controls');
+  const previous = document.getElementById('latest-news-prev');
+  const next = document.getElementById('latest-news-next');
+  const position = document.getElementById('latest-news-position');
+  const dots = document.getElementById('latest-news-dots');
+  const MIN_DATE = '2026-03-19';
   const CATEGORY = Object.freeze({ video: 'Talk · Video', event: 'Outreach · Event', publication: 'Publication' });
+
   const make = (tag, className, text) => {
     const el = document.createElement(tag);
     if (className) el.className = className;
@@ -15,9 +22,7 @@
     try {
       const url = new URL(String(value || ''));
       return url.protocol === 'https:' || url.protocol === 'http:' ? url.href : '';
-    } catch {
-      return '';
-    }
+    } catch { return ''; }
   };
   const linkTo = (url, label, className) => {
     const a = make('a', className, label);
@@ -34,7 +39,7 @@
     if (!item || !/^\d{4}-\d{2}-\d{2}$/.test(item.date || '') || !CATEGORY[item.kind]) return null;
     const date = new Date(item.date + 'T12:00:00Z');
     if (Number.isNaN(date.valueOf()) || date.toISOString().slice(0, 10) !== item.date) return null;
-    if (item.date > new Date().toISOString().slice(0, 10)) return null;
+    if (item.date < MIN_DATE || item.date > new Date().toISOString().slice(0, 10)) return null;
     if (item.kind === 'publication') {
       const publication = publications.get(item.publication_id);
       if (!publication || publication.type !== 'journal' || publication.status !== 'Journal article') return null;
@@ -47,36 +52,45 @@
     return url && item.title ? { ...item, url } : null;
   }
 
-  function cardFor(item) {
-    const card = make('article', 'news-card' + (item.kind === 'video' ? ' news-card--video' : ''));
-    if (item.kind === 'video' && /^[a-zA-Z0-9_-]{11}$/.test(item.youtube_id || '') &&
-        new URL(item.url).hostname.replace(/^www\./, '') === 'youtube.com') {
-      const preview = linkTo(item.url, '', 'news-thumbnail');
+  function cardFor(item, index, count) {
+    const videoID = /^[a-zA-Z0-9_-]{11}$/.test(item.youtube_id || '') ? item.youtube_id : '';
+    const videoURL = safeURL(item.youtube_url || (item.kind === 'video' ? item.url : ''));
+    const videoHost = videoURL ? new URL(videoURL).hostname.replace(/^www\./, '') : '';
+    const hasYouTube = !!videoID && (videoHost === 'youtube.com' || videoHost === 'youtu.be');
+    const hasMedia = hasYouTube || item.kind === 'video';
+    const card = make('article', 'news-card' + (hasMedia ? ' news-card--video' : ' news-card--text') + (index === 0 ? ' news-card--latest' : ''));
+    card.setAttribute('aria-roledescription', 'slide');
+    card.setAttribute('aria-label', 'News ' + (index + 1) + ' of ' + count);
+
+    if (hasYouTube) {
+      const preview = linkTo(videoURL, '', 'news-thumbnail');
       preview.setAttribute('aria-label', 'Watch ' + item.title + ' on YouTube (opens in a new tab)');
       const img = make('img');
-      img.src = 'https://i.ytimg.com/vi/' + item.youtube_id + '/hqdefault.jpg';
-      img.alt = 'Video thumbnail: ' + item.title;
-      img.loading = 'lazy';
+      img.src = 'https://i.ytimg.com/vi/' + videoID + '/hqdefault.jpg';
+      img.alt = 'YouTube video thumbnail: ' + item.title;
+      img.loading = index === 0 ? 'eager' : 'lazy';
       img.decoding = 'async';
       img.width = 480;
       img.height = 360;
-      preview.append(img, make('span', 'news-play', '▶'));
-      preview.querySelector('.news-play').setAttribute('aria-hidden', 'true');
+      const play = make('span', 'news-play', '▶');
+      play.setAttribute('aria-hidden', 'true');
+      preview.append(img, play);
       card.append(preview);
     } else if (item.kind === 'video') {
-      // A source-linked poster, never a fabricated YouTube thumbnail.
-      // Replace with the real platform image when a direct video ID is verified.
+      // Linked editorial poster, used only when a verified YouTube ID is unavailable.
       const preview = linkTo(item.url, '', 'news-thumbnail news-thumbnail--editorial');
-      preview.setAttribute('aria-label', 'Open the post-talk video interview (opens in a new tab)');
+      preview.setAttribute('aria-label', 'Watch ' + item.title + ' (opens in a new tab)');
       preview.append(
-        make('span', 'news-poster-kicker', 'TEDxPavia · Interview'),
+        make('span', 'news-poster-kicker', 'Video · Interview'),
         make('strong', 'news-poster-heading', 'Beyond the talk'),
         make('span', 'news-poster-detail', 'Martina Rizza & Alberto Vergani'),
         make('span', 'news-poster-play', '▶ Watch interview')
       );
       card.append(preview);
     }
+
     const body = make('div', 'news-card-body');
+    if (index === 0) body.append(make('span', 'news-featured-label', 'Latest update'));
     const meta = make('div', 'news-meta');
     meta.append(make('span', 'news-category', CATEGORY[item.kind]), make('time', 'news-date', displayDate(item.date)));
     meta.querySelector('time').dateTime = item.date;
@@ -85,7 +99,15 @@
     body.append(meta, title);
     if (item.description) body.append(make('p', 'news-summary', item.description));
     const footer = make('div', 'news-footer');
-    footer.append(make('span', 'news-source', item.source || ''), linkTo(item.url, (item.action || 'Read more') + ' ↗', 'news-action'));
+    footer.append(make('span', 'news-source', item.source || ''));
+    const actions = make('div', 'news-actions');
+    const allLinks = [{ url: item.url, label: item.action || 'Read more' }]
+      .concat(Array.isArray(item.links) ? item.links : []);
+    for (const entry of allLinks) {
+      const url = safeURL(entry.url);
+      if (url) actions.append(linkTo(url, (entry.label || 'Open link') + ' ↗', 'news-action'));
+    }
+    footer.append(actions);
     body.append(footer);
     card.append(body);
     return card;
@@ -108,13 +130,63 @@
         ? new Map(pubsResult.value.items.map(p => [p.id, p])) : new Map();
       const entries = newsResult.value.items.map(item => resolveEntry(item, publications))
         .filter(Boolean)
-        .sort((a, b) => b.date.localeCompare(a.date))
-        .slice(0, 4);
-      if (!entries.length) throw new Error('No verified recent items');
-      target.replaceChildren(...entries.map(cardFor));
+        .sort((a, b) => b.date.localeCompare(a.date));
+      if (!entries.length) throw new Error('No verified news items');
+
+      let active = 0;
+      const show = nextIndex => {
+        active = Math.max(0, Math.min(nextIndex, entries.length - 1));
+        target.replaceChildren(cardFor(entries[active], active, entries.length));
+        if (position) position.textContent = (active + 1) + ' / ' + entries.length;
+        if (controls) controls.hidden = entries.length < 2;
+        if (previous) previous.disabled = active === 0;
+        if (next) next.disabled = active === entries.length - 1;
+        if (dots) {
+          dots.hidden = entries.length < 2;
+          Array.from(dots.children).forEach((dot, i) => {
+            dot.setAttribute('aria-pressed', String(i === active));
+            dot.classList.toggle('is-active', i === active);
+          });
+        }
+      };
+
+      if (dots) {
+        dots.replaceChildren(...entries.map((entry, i) => {
+          const dot = make('button', 'news-dot');
+          dot.type = 'button';
+          dot.setAttribute('aria-label', 'Show item ' + (i + 1) + ': ' + entry.title);
+          dot.addEventListener('click', () => show(i));
+          return dot;
+        }));
+      }
+      previous?.addEventListener('click', () => show(active - 1));
+      next?.addEventListener('click', () => show(active + 1));
+      carousel?.addEventListener('keydown', event => {
+        if (event.altKey || event.ctrlKey || event.metaKey || event.target.closest('a, button, input, textarea, select')) return;
+        if (event.key === 'ArrowLeft') { event.preventDefault(); show(active - 1); }
+        if (event.key === 'ArrowRight') { event.preventDefault(); show(active + 1); }
+      });
+      // Touch gesture is optional: vertical scrolling remains unaffected on mobile.
+      let touchStart = null;
+      target.addEventListener('touchstart', event => {
+        const touch = event.touches[0];
+        if (touch) touchStart = { x: touch.clientX, y: touch.clientY };
+      }, { passive: true });
+      target.addEventListener('touchend', event => {
+        if (!touchStart) return;
+        const touch = event.changedTouches[0];
+        const dx = touch ? touch.clientX - touchStart.x : 0;
+        const dy = touch ? touch.clientY - touchStart.y : 0;
+        touchStart = null;
+        if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+          show(active + (dx < 0 ? 1 : -1));
+        }
+      }, { passive: true });
+
+      show(0);
     } catch (error) {
       console.error('Latest news could not be loaded:', error);
-      // Keep server-rendered TEDx and interview links visible when loading fails.
+      // The newest TEDx item remains available as a static fallback.
       target.querySelector('.loading-message')?.remove();
     }
   }
