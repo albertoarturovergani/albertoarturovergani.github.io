@@ -1,6 +1,6 @@
 {
   "updated_on": "2026-11-21",
-  "note": "Editorially curated, dated public research and outreach updates. Video date is release date; event date is event date. Publication metadata is resolved by BibTeX ID.",
+  "note": "Editorially curated public research and outreach updates. Dated video items use release/share dates, events use event dates, and articles use publisher dates; publication metadata is resolved by BibTeX ID. A generic interview preview is shown until its direct YouTube ID is verified.",
   "items": [
     {
       "id": "tedxpavia-official-video-2026",
@@ -12,6 +12,17 @@
       "youtube_id": "Obz2k7YkHy0",
       "source": "TEDx Talks",
       "action": "Watch the talk"
+    },
+    {
+      "id": "tedxpavia-interview-2026",
+      "kind": "video",
+      "date": "2026-10-10",
+      "title": "Dopo il TEDx: intervista a Martina Rizza e Alberto Vergani",
+      "description": "An interview by Chiara Barbati exploring Golgi's curiosity, the human side of scientific research, and why communicating science matters.",
+      "url": "https://lnkd.in/dY-fUcrs",
+      "source": "TEDxPavia · Chiara Barbati",
+      "action": "Watch the interview",
+      "date_note": "Shared by interviewer on 10 October 2026; the TEDx talk took place on 27 May 2026."
     },
     {
       "id": "ern-pavia-2026",
