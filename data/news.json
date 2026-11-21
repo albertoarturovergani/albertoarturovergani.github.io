@@ -1,0 +1,51 @@
+{
+  "updated_on": "2026-11-21",
+  "note": "Editorially curated, dated public research and outreach updates. Video date is release date; event date is event date. Publication metadata is resolved by BibTeX ID.",
+  "items": [
+    {
+      "id": "tedxpavia-official-video-2026",
+      "kind": "video",
+      "date": "2026-11-20",
+      "title": "Il nero che illumina il cervello | TEDxPavia",
+      "description": "Martina Francesca Rizza and Alberto Arturo Vergani revisit Golgi, Ramón y Cajal and the scientific interpretations that shaped modern neuroscience.",
+      "url": "https://www.youtube.com/watch?v=Obz2k7YkHy0",
+      "youtube_id": "Obz2k7YkHy0",
+      "source": "TEDx Talks",
+      "action": "Watch the talk"
+    },
+    {
+      "id": "ern-pavia-2026",
+      "kind": "event",
+      "date": "2026-09-25",
+      "title": "European Researchers’ Night: Modellizzando reti di neuroni",
+      "description": "Public science outreach in Pavia, using computational models and simulations to illustrate how neurons and brain circuits work.",
+      "url": "https://www.unipv.news/notizie/venerdi-25-settembre-torna-la-notte-delle-ricercatrici-e-dei-ricercatori",
+      "source": "University of Pavia",
+      "action": "Explore the event"
+    },
+    {
+      "id": "fede-digital-twin-2026",
+      "kind": "publication",
+      "date": "2026-06-11",
+      "publication_id": "fabbrizzi2026digitaltwin",
+      "description": "A computational approach that brings together subject-specific brain anatomy and neural dynamics in a digital twin.",
+      "action": "Read the publication"
+    },
+    {
+      "id": "lombroso-2026",
+      "kind": "publication",
+      "date": "2026-05-22",
+      "publication_id": "vergani2026lombroso",
+      "description": "A historical profile of Cesare Lombroso for the Pioneers in Neurology series.",
+      "action": "Read the publication"
+    },
+    {
+      "id": "windowed-detrending-2026",
+      "kind": "publication",
+      "date": "2026-05-13",
+      "publication_id": "vergani2026effective",
+      "description": "A windowed detrending method for correcting extreme capacitive artifacts in TMS-EEG recordings.",
+      "action": "Read the publication"
+    }
+  ]
+}
