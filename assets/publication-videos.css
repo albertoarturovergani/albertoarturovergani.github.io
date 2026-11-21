@@ -1,0 +1,30 @@
+/* Bibliography video associations.
+   Video links describe source-verified recordings or clearly labelled related talks. */
+.bib-videos{margin-top:18px;border:1px solid #385340;border-radius:9px;background:#1c2a20;overflow:hidden}
+.bib-videos-heading{display:list-item;padding:13px 18px;min-height:44px;color:#9fe2b5;cursor:pointer;font-size:13px;font-weight:760;line-height:1.5;list-style-position:inside}
+.bib-videos-heading:hover{background:#263b2b;color:#d9f6e2}
+.bib-videos-heading:focus-visible{outline:3px solid #5fd39b;outline-offset:-3px}
+.bib-videos[open]>.bib-videos-heading{border-bottom:1px solid #385340}
+.bib-video-list{padding:18px;display:grid;gap:18px}
+.bib-video-item{display:grid;grid-template-columns:minmax(140px,235px) minmax(0,1fr);gap:19px;align-items:start}
+.bib-video-item+.bib-video-item{border-top:1px solid #385340;padding-top:18px}
+.bib-video-thumb{position:relative;display:block;aspect-ratio:16/9;min-width:0;overflow:hidden;border:1px solid #54735b;border-radius:7px;background:#102018}
+.bib-video-thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.bib-video-thumb:hover{border-color:#5fd39b}
+.bib-video-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#d9252d;color:white;border-radius:9px;min-width:48px;min-height:35px;display:grid;place-items:center;box-shadow:0 3px 15px #0009;font-size:17px}
+.bib-video-information{min-width:0}
+.bib-video-type{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:#8cdbad;font-weight:780;line-height:1.4}
+.bib-video-title{font-family:var(--font-ui,Inter,system-ui,sans-serif);font-size:16px;font-weight:670;letter-spacing:-.01em;line-height:1.4;color:#f2f5f3;margin:7px 0 9px}
+.bib-video-title a{color:inherit;text-decoration:none}
+.bib-video-title a:hover{text-decoration:underline;text-underline-offset:3px}
+.bib-video-context{margin:0 0 9px;color:#dce8df;font-size:12px;line-height:1.6}
+.bib-video-note{margin:0 0 12px;color:#b7c8bb;font-size:12px;line-height:1.65}
+.bib-video-watch{display:inline-block;margin:2px 0 0;color:#9fe2b5;font-size:12px;font-weight:760;text-decoration:underline;text-underline-offset:3px}
+.bib-video-watch:hover{color:#fff}
+@media(max-width:640px){
+  .bib-video-list{padding:14px}
+  .bib-video-item{grid-template-columns:minmax(0,1fr)}
+  .bib-video-thumb{max-width:350px}
+  .bib-videos-heading{padding:13px 14px}
+}
+@media(prefers-reduced-motion:reduce){.bib-video-thumb img{transition:none}}
