@@ -1,6 +1,6 @@
 {
   "updated_on": "2026-11-21",
-  "note": "Editorially curated public research and outreach updates. Dated video items use release/share dates, events use event dates, and articles use publisher dates; publication metadata is resolved by BibTeX ID. A generic interview preview is shown until its direct YouTube ID is verified.",
+  "note": "Editorially curated research and outreach updates, presented newest first, beginning with Brain Awareness Week on 19 March 2026. Videos use verified YouTube thumbnails; event press links refer to publisher articles. Publications are resolved by bibliography ID.",
   "items": [
     {
       "id": "tedxpavia-official-video-2026",
@@ -57,6 +57,28 @@
       "publication_id": "vergani2026effective",
       "description": "A windowed detrending method for correcting extreme capacitive artifacts in TMS-EEG recordings.",
       "action": "Read the publication"
+    },
+    {
+      "id": "golgi-cajal-on-stage-2026",
+      "kind": "event",
+      "date": "2026-03-19",
+      "title": "Golgi & Cajal on Stage: 120 anni dal Nobel",
+      "description": "For Brain Awareness Week, Martina Francesca Rizza, Alberto Arturo Vergani and Simona Tritto organized a lecture-performance on the 1906 Nobel Prize, with theatre by Luca Munaretto and music by Renato Caruso.",
+      "url": "https://www.unipv.news/eventi/golgi-cajal-stage-120-anni-dal-nobel-fisiologia-o-medicina",
+      "youtube_id": "jeAkx0XvEGo",
+      "youtube_url": "https://www.youtube.com/watch?v=jeAkx0XvEGo",
+      "source": "Brain Awareness Week · University of Pavia",
+      "action": "Event details",
+      "links": [
+        {
+          "label": "VareseNews article",
+          "url": "https://www.varesenews.it/2026/03/golgi-cajal-on-stage-120-anni-dal-nobel-in-fisiologia-o-medicina/2516944/"
+        },
+        {
+          "label": "Watch full video",
+          "url": "https://www.youtube.com/watch?v=jeAkx0XvEGo"
+        }
+      ]
     }
   ]
 }
