@@ -63,6 +63,18 @@
       preview.append(img, make('span', 'news-play', '▶'));
       preview.querySelector('.news-play').setAttribute('aria-hidden', 'true');
       card.append(preview);
+    } else if (item.kind === 'video') {
+      // A source-linked poster, never a fabricated YouTube thumbnail.
+      // Replace with the real platform image when a direct video ID is verified.
+      const preview = linkTo(item.url, '', 'news-thumbnail news-thumbnail--editorial');
+      preview.setAttribute('aria-label', 'Open the post-talk video interview (opens in a new tab)');
+      preview.append(
+        make('span', 'news-poster-kicker', 'TEDxPavia · Interview'),
+        make('strong', 'news-poster-heading', 'Beyond the talk'),
+        make('span', 'news-poster-detail', 'Martina Rizza & Alberto Vergani'),
+        make('span', 'news-poster-play', '▶ Watch interview')
+      );
+      card.append(preview);
     }
     const body = make('div', 'news-card-body');
     const meta = make('div', 'news-meta');
@@ -97,12 +109,12 @@
       const entries = newsResult.value.items.map(item => resolveEntry(item, publications))
         .filter(Boolean)
         .sort((a, b) => b.date.localeCompare(a.date))
-        .slice(0, 3);
+        .slice(0, 4);
       if (!entries.length) throw new Error('No verified recent items');
       target.replaceChildren(...entries.map(cardFor));
     } catch (error) {
       console.error('Latest news could not be loaded:', error);
-      // Keep the server-rendered TEDx link visible when JavaScript or data fetching fails.
+      // Keep server-rendered TEDx and interview links visible when loading fails.
       target.querySelector('.loading-message')?.remove();
     }
   }
