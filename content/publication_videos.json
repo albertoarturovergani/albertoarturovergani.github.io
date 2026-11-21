@@ -1,0 +1,38 @@
+{
+  "vergani2025dcp25": [
+    {
+      "youtube_id": "TPR1C_AN_0I",
+      "title": "Cerebellar Resilience Modulates Deep Nuclei Overdrive and Sensorial Dysmetria Across the Schizophrenia Continuum",
+      "relation": "presentation",
+      "context": "Dynamics and Complexity Workshop (DCP25), Pisa, 2025",
+      "note": "Video recording of the talk corresponding to this DCP25 conference contribution. Link supplied by the CISSC event organizers in November 2026."
+    }
+  ],
+  "binaghi2018computation": [
+    {
+      "youtube_id": "OQ-7-CJT8fI",
+      "title": "FMRI data analysis with activation weighted vectors technique in functional neuroradiology",
+      "relation": "related",
+      "context": "Human Brain Project School, Obergurgl, 2016",
+      "note": "Related methodological presentation recorded in 2016. It discusses activation-weighted vectors, but is not the recorded presentation of the 2018 journal article."
+    }
+  ],
+  "vergani2016fsl": [
+    {
+      "youtube_id": "OQ-7-CJT8fI",
+      "title": "FMRI data analysis with activation weighted vectors technique in functional neuroradiology",
+      "relation": "related",
+      "context": "Human Brain Project School, Obergurgl, 2016",
+      "note": "A related HBP School presentation about activation-weighted vectors, not a recording of the INCF Neuroinformatics Conference abstract."
+    }
+  ],
+  "vergani2018contributions": [
+    {
+      "youtube_id": "ZMNyjm0DYOo",
+      "title": "Computational intelligence methodologies applied to fMRI big data",
+      "relation": "related",
+      "context": "Human Brain Project Education Workshop, Manchester, 2016",
+      "note": "Related HBP workshop talk from 2016 on computational intelligence and fMRI, a research direction developed in the subsequent PhD thesis."
+    }
+  ]
+}
