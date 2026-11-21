@@ -1,6 +1,6 @@
 {
   "updated_on": "2026-11-21",
-  "note": "Editorially curated research and outreach updates, presented newest first, beginning with Brain Awareness Week on 19 March 2026. Videos use verified YouTube thumbnails; event press links refer to publisher articles. Publications are resolved by bibliography ID.",
+  "note": "Editorially curated research, outreach and professional milestones, newest first, dating back to GBD Collaborator Network membership on 23 December 2025. Videos use verified YouTube thumbnails; events include publisher links; the GBD card uses an IHME image from its official portal. Publications are resolved by bibliography ID.",
   "items": [
     {
       "id": "tedxpavia-official-video-2026",
@@ -79,6 +79,18 @@
           "url": "https://www.youtube.com/watch?v=jeAkx0XvEGo"
         }
       ]
+    },
+    {
+      "id": "gbd-collaborator-membership-2025",
+      "kind": "membership",
+      "date": "2025-12-23",
+      "title": "Joined the Global Burden of Disease Collaborator Network",
+      "description": "Alberto Arturo Vergani joined the Global Burden of Disease (GBD) Collaborator Network, coordinated by the Institute for Health Metrics and Evaluation (IHME) at the University of Washington. The network brings together researchers contributing to global health metrics and population health evidence.",
+      "url": "https://healthdata.org/gbd",
+      "image_url": "https://gbdcollaboratorportal.healthdata.org/Contents/Assets/images/IHME_Logo_full_color.png",
+      "image_alt": "Official logo of the Institute for Health Metrics and Evaluation (IHME)",
+      "source": "IHME · University of Washington",
+      "action": "Explore the GBD network"
     }
   ]
 }
