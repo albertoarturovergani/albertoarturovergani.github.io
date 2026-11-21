@@ -1,4 +1,4 @@
-/* Curated academic news: one visible item at a time, newest first, beginning 19 March 2026. */
+/* Curated academic news: one visible item at a time, newest first, beginning 23 December 2025. */
 (() => {
   'use strict';
   const target = document.getElementById('latest-news-items');
@@ -9,8 +9,8 @@
   const next = document.getElementById('latest-news-next');
   const position = document.getElementById('latest-news-position');
   const dots = document.getElementById('latest-news-dots');
-  const MIN_DATE = '2026-03-19';
-  const CATEGORY = Object.freeze({ video: 'Talk · Video', event: 'Outreach · Event', publication: 'Publication' });
+  const MIN_DATE = '2025-12-23';
+  const CATEGORY = Object.freeze({ video: 'Talk · Video', event: 'Outreach · Event', publication: 'Publication', membership: 'Professional · Membership' });
 
   const make = (tag, className, text) => {
     const el = document.createElement(tag);
@@ -57,7 +57,8 @@
     const videoURL = safeURL(item.youtube_url || (item.kind === 'video' ? item.url : ''));
     const videoHost = videoURL ? new URL(videoURL).hostname.replace(/^www\./, '') : '';
     const hasYouTube = !!videoID && (videoHost === 'youtube.com' || videoHost === 'youtu.be');
-    const hasMedia = hasYouTube || item.kind === 'video';
+    const institutionalImage = safeURL(item.image_url);
+    const hasMedia = hasYouTube || item.kind === 'video' || !!institutionalImage;
     const card = make('article', 'news-card' + (hasMedia ? ' news-card--video' : ' news-card--text') + (index === 0 ? ' news-card--latest' : ''));
     card.setAttribute('aria-roledescription', 'slide');
     card.setAttribute('aria-label', 'News ' + (index + 1) + ' of ' + count);
@@ -86,6 +87,21 @@
         make('span', 'news-poster-detail', 'Martina Rizza & Alberto Vergani'),
         make('span', 'news-poster-play', '▶ Watch interview')
       );
+      card.append(preview);
+    } else if (institutionalImage) {
+      // The source image is published by IHME's official GBD Collaborator Portal.
+      // A legible text fallback is provided in case the external logo does not load.
+      const preview = linkTo(item.url, '', 'news-thumbnail news-thumbnail--institutional');
+      preview.setAttribute('aria-label', 'Learn about the Global Burden of Disease Collaborator Network (opens in a new tab)');
+      const img = make('img', 'news-institutional-logo');
+      img.src = institutionalImage;
+      img.alt = item.image_alt || 'Institute for Health Metrics and Evaluation';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.addEventListener('error', () => {
+        img.replaceWith(make('strong', 'news-brand-fallback', 'IHME'));
+      });
+      preview.append(img, make('span', 'news-institutional-caption', 'Global Burden of Disease · Collaborator Network'));
       card.append(preview);
     }
 
