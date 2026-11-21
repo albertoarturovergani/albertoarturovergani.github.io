@@ -94,3 +94,12 @@
   .news-card--text .news-card-body{min-height:300px}
 }
 @media(prefers-reduced-motion:reduce){.news-nav,.news-dot,.news-card{transition:none}}
+
+/* Official IHME image and accessible text fallback for the GBD membership milestone. */
+.news-thumbnail--institutional{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:34px 30px;background:radial-gradient(circle at 18% 15%,#d2f7df 0,transparent 48%),linear-gradient(140deg,#f8fcf8,#dcefe5);color:#204e43;border-right:1px solid #c5ded2}
+.news-thumbnail--institutional .news-institutional-logo{width:min(100%,380px);height:auto;max-height:230px;object-fit:contain;transform:none;transition:none}
+.news-thumbnail--institutional:hover .news-institutional-logo{transform:none}
+.news-institutional-caption{font-size:13px;line-height:1.5;letter-spacing:.07em;text-transform:uppercase;font-weight:780;text-align:center;color:#215b4b;max-width:430px}
+.news-brand-fallback{display:block;font-size:clamp(65px,9vw,112px);line-height:1;letter-spacing:-.07em;font-weight:760;color:#258267;text-align:center}
+@media(max-width:900px){.news-thumbnail--institutional{min-height:250px;aspect-ratio:auto}}
+@media(max-width:540px){.news-thumbnail--institutional{min-height:225px;padding:26px 19px;gap:14px}.news-thumbnail--institutional .news-institutional-logo{max-height:170px}}
