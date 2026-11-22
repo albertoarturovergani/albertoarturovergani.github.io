@@ -1,4 +1,4 @@
-/* Curated academic news: one visible item at a time, newest first, beginning 23 December 2025. */
+/* Curated academic news: one visible item at a time, newest first, beginning 11 July 2025. */
 (() => {
   'use strict';
   const target = document.getElementById('latest-news-items');
@@ -9,7 +9,7 @@
   const next = document.getElementById('latest-news-next');
   const position = document.getElementById('latest-news-position');
   const dots = document.getElementById('latest-news-dots');
-  const MIN_DATE = '2025-12-23';
+  const MIN_DATE = '2025-07-11';
   const CATEGORY = Object.freeze({ video: 'Talk · Video', event: 'Outreach · Event', publication: 'Publication', award: 'Recognition · Award', membership: 'Professional · Membership' });
 
   const make = (tag, className, text) => {
