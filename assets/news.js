@@ -10,7 +10,7 @@
   const position = document.getElementById('latest-news-position');
   const dots = document.getElementById('latest-news-dots');
   const MIN_DATE = '2025-12-23';
-  const CATEGORY = Object.freeze({ video: 'Talk · Video', event: 'Outreach · Event', publication: 'Publication', membership: 'Professional · Membership' });
+  const CATEGORY = Object.freeze({ video: 'Talk · Video', event: 'Outreach · Event', publication: 'Publication', award: 'Recognition · Award', membership: 'Professional · Membership' });
 
   const make = (tag, className, text) => {
     const el = document.createElement(tag);
