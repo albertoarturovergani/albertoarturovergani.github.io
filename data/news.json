@@ -1,6 +1,6 @@
 {
-  "updated_on": "2026-11-21",
-  "note": "Editorially curated research, outreach and professional milestones, newest first, dating back to GBD Collaborator Network membership on 23 December 2025. Videos show verified YouTube thumbnails; ERN 2026 shows the official corrected university poster as its preview with a downloadable PDF; publications are resolved by bibliography ID.",
+  "updated_on": "2026-11-22",
+  "note": "Editorially curated research, outreach, publications, awards and professional milestones, newest first, dating back to GBD Collaborator Network membership on 23 December 2025. Videos show verified YouTube thumbnails; ERN 2026 shows the official corrected university poster and a PDF; publications are resolved by bibliography ID. APS award date refers to the public announcement on 4 May 2026.",
   "items": [
     {
       "id": "tedxpavia-official-video-2026",
@@ -67,6 +67,17 @@
       "publication_id": "vergani2026effective",
       "description": "A windowed detrending method for correcting extreme capacitive artifacts in TMS-EEG recordings.",
       "action": "Read the publication"
+    },
+    {
+      "id": "aps-best-review-article-award-2026",
+      "kind": "award",
+      "date": "2026-05-04",
+      "title": "2026 Best Review Article Award for the Hans Berger paper",
+      "description": "The American Physiological Society awarded Alberto Arturo Vergani the 2026 Best Review Article Award of Advances in Physiology Education for his 2024 historical review on Hans Berger and the first human EEG recordings.",
+      "url": "https://doi.org/10.1152/advan.00119.2024",
+      "source": "American Physiological Society · Advances in Physiology Education",
+      "action": "Read the award-winning article",
+      "date_note": "Winner notified on 18 March 2026; the American Physiological Society publicly highlighted the award on 4 May 2026."
     },
     {
       "id": "golgi-cajal-on-stage-2026",
