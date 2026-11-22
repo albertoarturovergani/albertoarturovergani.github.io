@@ -1,6 +1,6 @@
 {
   "updated_on": "2026-11-22",
-  "note": "Editorially curated research, outreach, publications, awards and professional milestones, newest first, dating back to GBD Collaborator Network membership on 23 December 2025. Videos show verified YouTube thumbnails; ERN 2026 shows the official corrected university poster and a PDF; publications are resolved by bibliography ID. APS award date refers to the public announcement on 4 May 2026.",
+  "note": "Curated research, outreach, publications, awards and professional milestones, newest first, dating back to the DCP25 Best Poster Award on 11 July 2025. Videos show verified YouTube thumbnails; ERN 2026 uses the official corrected poster and PDF; publications are resolved by bibliography ID. Award dates use the event or publication date, as documented.",
   "items": [
     {
       "id": "tedxpavia-official-video-2026",
@@ -112,6 +112,17 @@
       "image_alt": "Official logo of the Institute for Health Metrics and Evaluation (IHME)",
       "source": "IHME · University of Washington",
       "action": "Explore the GBD network"
+    },
+    {
+      "id": "dcp25-best-poster-award-2025",
+      "kind": "award",
+      "date": "2025-07-11",
+      "title": "Best Poster Award at Dynamics and Complexity Pisa 2025 (DCP25)",
+      "description": "Alberto Arturo Vergani received the DCP25 Best Poster Award in Pisa for research on cerebellar resilience and schizophrenia. The prize was sponsored by the journal Chaos, Solitons & Fractals (Elsevier). His poster contribution was also selected for an oral presentation.",
+      "url": "https://www.cissc.unipi.it/dcp25/",
+      "source": "DCP25 · Dynamics and Complexity Pisa",
+      "action": "Explore the conference",
+      "date_note": "Best Poster Award session held on 11 July 2025, the conference's final day; the prize was subsequently confirmed in correspondence with the organizers and Elsevier."
     }
   ]
 }
